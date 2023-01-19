@@ -8,22 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MI_Eyeslash
-  m_Shader: {fileID: 4800000, guid: 347c0824551033c459bd39de4fcde046, type: 3}
+  m_Shader: {fileID: 4800000, guid: 33b5a0927a8e2ef43a270537befe9f78, type: 3}
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ADD_PRECOMPUTED_VELOCITY
-  - _ALPHATEST_ON
-  - _BLENDMODE_ALPHA
-  - _DISABLE_SSR_TRANSPARENT
-  - _ENABLE_FOG_ON_TRANSPARENT
-  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap:
     MotionVector: User
-    RenderType: Transparent
   disabledShaderPasses:
   - TransparentBackface
   m_SavedProperties:
@@ -160,6 +153,7 @@ Material:
     - _Emiss: 0.3
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
+    - _EnvironmentReflections: 1
     - _Gloss: 0.901
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -176,6 +170,9 @@ Material:
     - _OpacityBoots: 0.48
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 5

@@ -8,26 +8,25 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MI_Hairs
-  m_Shader: {fileID: 4800000, guid: 4bcbb9639e2460242b97b7c83a4bbfad, type: 3}
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ADD_PRECOMPUTED_VELOCITY
-  - _ALPHATEST_ON
-  - _DISABLE_SSR_TRANSPARENT
-  - _DOUBLESIDED_ON
+  m_Shader: {fileID: 4800000, guid: fb0991e7a4007d54487263085f6f46fa, type: 3}
+  m_ValidKeywords:
   - _ISDYED_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: 2475
+  m_CustomRenderQueue: -1
   stringTagMap:
     MotionVector: User
-    RenderType: TransparentCutout
   disabledShaderPasses:
   - TransparentBackface
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AO:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Alpha:
         m_Texture: {fileID: 2800000, guid: 347bee86d8ff03845bfdb6e6cac93870, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -96,6 +95,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalTex:
         m_Texture: {fileID: 2800000, guid: 153012c3a787e124188a8b3a44cb90c7, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -161,6 +164,7 @@ Material:
     - _Emiss: 0.3
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
+    - _EnvironmentReflections: 1
     - _Gloss: 0.942
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -177,6 +181,9 @@ Material:
     - _OpacityBoots: 0.15
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 1
@@ -223,6 +230,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 1
     - _isDyed: 1
+    - _isNormalID1: 0
     - _useFlowMapTexture: 0
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0}

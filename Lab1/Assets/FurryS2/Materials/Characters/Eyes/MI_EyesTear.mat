@@ -8,23 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MI_EyesTear
-  m_Shader: {fileID: 4800000, guid: 6bc2d7fbe274fde44b7eb1dad2c8eef4, type: 3}
-  m_ValidKeywords:
-  - _ENABLE_FOG_ON_TRANSPARENT
-  - _SURFACE_TYPE_TRANSPARENT
-  m_InvalidKeywords:
-  - _ADD_PRECOMPUTED_VELOCITY
-  - _ALPHABLEND_ON
-  - _BLENDMODE_ADD
-  - _DISABLE_SSR_TRANSPARENT
-  - _INVERTMAP_ON
+  m_Shader: {fileID: 4800000, guid: 6928876b52e876949b6c67adce9521a8, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3400
+  m_CustomRenderQueue: -1
   stringTagMap:
     MotionVector: User
-    RenderType: Transparent
   disabledShaderPasses:
   - TransparentBackface
   m_SavedProperties:
@@ -134,6 +126,7 @@ Material:
     - _EmissiveIntensity: 1
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
+    - _EnvironmentReflections: 1
     - _Gloss: 0.8
     - _GlossMapScale: 1
     - _Glossiness: 0.127
@@ -144,9 +137,13 @@ Material:
     - _Mode: 2
     - _NormalIntensity: 1
     - _OcclusionStrength: 1
+    - _Opacity: 0
     - _OpacityBoost: 0.02
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 5

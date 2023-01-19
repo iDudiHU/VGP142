@@ -8,22 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MI_Teeth
-  m_Shader: {fileID: 4800000, guid: defb5648a3859a84aad0a4053a6f0189, type: 3}
+  m_Shader: {fileID: 4800000, guid: c6710fc4925049b489716304e8c8a7d9, type: 3}
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ADD_PRECOMPUTED_VELOCITY
-  - _ALPHATEST_ON
-  - _DISABLE_SSR_TRANSPARENT
-  - _METALLICGLOSSMAP
-  - _NORMALMAP
-  - _SPECGLOSSMAP
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2475
+  m_CustomRenderQueue: -1
   stringTagMap:
     MotionVector: User
-    RenderType: TransparentCutout
   disabledShaderPasses:
   - TransparentBackface
   m_SavedProperties:
@@ -192,6 +185,7 @@ Material:
     - _Emissivepowerboost1: 100
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
+    - _EnvironmentReflections: 1
     - _Float0: 0
     - _Float1: 0
     - _GlossMapScale: 1
@@ -208,6 +202,9 @@ Material:
     - _OpacityBoosts: 9.5
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 1

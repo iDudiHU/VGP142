@@ -16,6 +16,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
 
+		[SerializeField] GameObject m_Bow;
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
 		bool m_IsGrounded;
@@ -198,6 +199,18 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				// we preserve the existing y part of the current velocity.
 				v.y = m_Rigidbody.velocity.y;
 				m_Rigidbody.velocity = v;
+			}
+		}
+
+		public void Pickup(GameObject Item)
+		{
+			m_Animator.Play("Pickup");
+			if (m_Animator.GetBool("HasBow") == false) {
+				m_Animator.SetBool("HasBow", true);
+				m_Bow.SetActive(true);
+			} else {
+				m_Animator.SetBool("HasBow", false);
+				m_Bow.SetActive(false);
 			}
 		}
 
