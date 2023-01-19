@@ -102,7 +102,7 @@
                 #define REQUIRE_OPAQUE_TEXTURE
             #endif
 
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+            //#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"

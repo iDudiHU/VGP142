@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4715692061676735295}
   - component: {fileID: 4715692061676735288}
   - component: {fileID: 4715692061676735289}
+  - component: {fileID: 464992777912697484}
   m_Layer: 0
   m_Name: EnemyFishmanLP
   m_TagString: Untagged
@@ -69,6 +70,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  deathEffect: {fileID: 1651363388222792, guid: a32d87b33cadfed4b83eeaa564eb7724, type: 3}
+--- !u!136 &464992777912697484
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4715692061676735290}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.62
+  m_Height: 2.3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.88, z: 0}
 --- !u!1 &8434142626735357440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,7 +1469,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 6a4111bb54c9565418c4b1e0a5d4b1a3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

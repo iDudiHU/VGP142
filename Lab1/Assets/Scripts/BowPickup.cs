@@ -17,6 +17,7 @@ public class BowPickup : MonoBehaviour, IPickup
 			OnPickup();
 			other.gameObject.GetComponent<ThirdPersonCharacter>().Pickup(gameObject);
 			Destroy(gameObject);
+			throw new System.Exception("Collision occurred with player!");
 		}
 	}
 
