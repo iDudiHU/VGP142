@@ -202,7 +202,6 @@ public class BlendShapesPresetManagerEditor : Editor
                     EditorGUI.indentLevel++;
                     Manager.showHelpBoxes = EditorGUILayout.Toggle("Show help boxes", Manager.showHelpBoxes);
                     Manager.showFullInspector = EditorGUILayout.Toggle("Show full inspector", Manager.showFullInspector);
-                    Manager.lerpSeconds = EditorGUILayout.FloatField("Transition Seconds", Manager.lerpSeconds);
                     
                     EditorGUI.indentLevel--;
                 }

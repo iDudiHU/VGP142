@@ -71,19 +71,6 @@ namespace InfinityPBR
         public static void EquipObjectToParent(GameObject equipmentGameObject, EquipmentObject equipmentObject, Transform rootBoneTransform, SkinnedMeshRenderer targetSkinnedMeshRenderer)
         {
             if (equipmentObject == null) return;
-            
-            if (equipmentObject.skinnedMeshRenderer == null)
-                equipmentObject.PopulateSkinnedMeshRenderer(); // Last ditch attempt
-                
-            if (equipmentObject.skinnedMeshRenderer == null)
-            {
-                Debug.Log($"{equipmentGameObject.name} seems to not have a skinned mesh renderer.");
-                return;
-            }
-
-            if (equipmentObject.boneRoot == null)
-                equipmentObject.PopulateRootBone("BoneRoot"); // Last ditch attempt
-            
             if (equipmentObject.boneRoot == null)
             {
                 Debug.Log($"No bone root assigned on object {equipmentGameObject.name}! Make sure the bone is selected on the prefab.");
@@ -105,8 +92,6 @@ namespace InfinityPBR
 
             DeleteOldBonesAndRemoveComponent(equipmentObject); // Delete the bone objects from the equipment
 
-            
-            
             Transform[] childBoneArray = equipmentObject.skinnedMeshRenderer.bones;
             //Debug.Log($"END: childBoneArray has {childBoneArray.Length} bones");
             //Debug.Log($"And the first one is {childBoneArray[0].name}");
@@ -128,13 +113,12 @@ namespace InfinityPBR
             if (PrefabUtility.IsAnyPrefabInstanceRoot(equipmentGameObject))
             {
                 Debug.Log($"Will try to unpack prefab {equipmentGameObject.name}");
-                PrefabUtility.UnpackPrefabInstance(PrefabUtility.GetOutermostPrefabInstanceRoot(equipmentGameObject), 
+                PrefabUtility.UnpackPrefabInstance(equipmentGameObject, 
                     PrefabUnpackMode.Completely, 
                     InteractionMode.AutomatedAction);
             }
 #endif
         }
-        
 
         /// <summary>
         /// This will relink the SkinnedMeshRenderer bons and rootBone to the parent object
@@ -143,8 +127,6 @@ namespace InfinityPBR
         /// <param name="targetSkinnedMeshRenderer"></param>
         private static void MigrateBoneLinks(EquipmentObject equipmentObject, SkinnedMeshRenderer targetSkinnedMeshRenderer)
         {
-            if (equipmentObject.skinnedMeshRenderer == null) return;
-            
             Transform[] equipmentObjectBoneArray = equipmentObject.skinnedMeshRenderer.bones;
             //Debug.Log($"equipmentObjectBoneArray has {equipmentObjectBoneArray.Length} bones");
             
@@ -272,7 +254,6 @@ namespace InfinityPBR
             var boneTransforms = skinnedMeshRenderer.rootBone.GetComponentsInChildren<Transform>();
             foreach (Transform bone in boneTransforms)
             {
-                if (newBoneMap.ContainsKey(bone.name)) continue; // July 9, 2022 -- added this as an error was coming up saying bone had already been added
                 newBoneMap.Add(bone.name, bone);
             }
             

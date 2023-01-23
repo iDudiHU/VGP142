@@ -12,8 +12,8 @@ public class SFB_DemoControl_v2 : MonoBehaviour {
 	public Slider heightBar;
 
 	public GameObject canvas;
-	public Button superRandomButton;
-
+	
+	
 	/// <summary>
 	/// Simply sets the .y value of the camera transform
 	/// </summary>
@@ -54,11 +54,6 @@ public class SFB_DemoControl_v2 : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.C))
 		{
 			canvas.SetActive(!canvas.activeSelf);
-		}
-		
-		if (Input.GetKeyDown(KeyCode.R))
-		{
-			superRandomButton.onClick.Invoke();
 		}
 	}
 }

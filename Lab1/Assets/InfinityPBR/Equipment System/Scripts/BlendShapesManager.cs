@@ -49,7 +49,6 @@ namespace InfinityPBR
                 return;
             if (!obj.smr) // If the object doesn't have a skinned mesh renderer, return
                 return;
-            if (!obj.smr.sharedMesh) return;
 
             var targetShapeIndex = obj.smr.sharedMesh.GetBlendShapeIndex(value.fullName);
             if (targetShapeIndex == -1) return;
@@ -82,10 +81,8 @@ namespace InfinityPBR
             {
                 for (int i = 0; i < blendShapeGameObjects[o].blendShapeValues.Count; i++)
                 {
-                    if (blendShapeGameObjects[o] == null) continue;
                     if (blendShapeGameObjects[o].blendShapeValues[i].triggerName == triggerName)
                     {
-                        if (blendShapeGameObjects[o].blendShapeValues[i] == null) continue;
                         //Debug.Log("Auto: " + blendShapeGameObjects[o].gameObjectName + " | " + blendShapeGameObjects[o].blendShapeValues[i].triggerName);
                         blendShapeGameObjects[o].blendShapeValues[i].value = blendShapeGameObjects[o].blendShapeValues[i].isMinus ? -value : value;
                         TriggerShape(blendShapeGameObjects[o], blendShapeGameObjects[o].blendShapeValues[i], false, false);
@@ -165,68 +162,6 @@ namespace InfinityPBR
                         BlendShapeValue value = obj.blendShapeValues[i];
                         if (value.display && !value.matchAnotherValue)
                         {
-                            TriggerShape(obj, value);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void SetToAndFromValues(BlendShapePreset preset)
-        {
-            SaveAllShapeValuesInFromField();
-            SaveAllShapeValuesInToField(preset);
-        }
-
-        public void SaveAllShapeValuesInFromField()
-        {
-            var c = 0;
-            for (int o = 0; o < blendShapeGameObjects.Count; o++)
-            {
-                BlendShapeGameObject obj = blendShapeGameObjects[o];
-                if (obj.displayableValues > 0)
-                {
-                    for (int i = 0; i < obj.blendShapeValues.Count; i++)
-                    {
-                        BlendShapeValue value = obj.blendShapeValues[i];
-                        if (value.display && !value.matchAnotherValue)
-                        {
-                            value.FromValue = value.value;
-                            c++;
-                        }
-                    }
-                }
-            }
-            //Debug.Log($"Set {c} from values");
-        }
-
-        public void SaveAllShapeValuesInToField(BlendShapePreset preset)
-        {
-            var c = 0;
-            foreach (var presetValue in preset.presetValues)
-            {
-                GetBlendShapeValue(presetValue.objectName, presetValue.valueTriggerName).ToValue 
-                    = presetValue.onTriggerMode == "Explicit"
-                    ? presetValue.shapeValue
-                    : Random.Range(presetValue.limitMin, presetValue.limitMax);
-                c++;
-            }
-            //Debug.Log($"Set {c} to values");
-        }
-        
-        public void LerpToValue(float lerpValue)
-        {
-            for (int o = 0; o < blendShapeGameObjects.Count; o++)
-            {
-                BlendShapeGameObject obj = blendShapeGameObjects[o];
-                if (obj.displayableValues > 0)
-                {
-                    for (int i = 0; i < obj.blendShapeValues.Count; i++)
-                    {
-                        BlendShapeValue value = obj.blendShapeValues[i];
-                        if (value.display && !value.matchAnotherValue)
-                        {
-                            value.value = Mathf.Lerp(value.FromValue, value.ToValue, lerpValue);
                             TriggerShape(obj, value);
                         }
                     }
@@ -633,10 +568,6 @@ namespace InfinityPBR
         [HideInInspector] public float lastValue = 0f;
         [HideInInspector] public bool showValueOptions = false;
         [HideInInspector] public bool isOpen = false;
-
-        public float FromValue { get; set; }
-        public float ToValue { get; set; }
-        
 
         // If this is being controlled by another shape, set these
         public int matchThisObjectIndex = 0;

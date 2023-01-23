@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class BowPickup : MonoBehaviour, IPickup
+public class BowPickup : MonoBehaviour, IPickupable
 {
     // Start is called before the first frame update
     void Start()
@@ -11,19 +11,10 @@ public class BowPickup : MonoBehaviour, IPickup
         
     }
 
-	void OnTriggerEnter(Collider other)
+	public void Pickup()
 	{
-		if (other.CompareTag("Player")) {
-			OnPickup();
-			other.gameObject.GetComponent<ThirdPersonCharacter>().Pickup(gameObject);
-			Destroy(gameObject);
-			throw new System.Exception("Collision occurred with player!");
-		}
-	}
-
-	public void OnPickup()
-	{
-
+		Destroy(gameObject);
+		throw new System.Exception("Collision occurred with player!");
 	}
 
 	// Update is called once per frame

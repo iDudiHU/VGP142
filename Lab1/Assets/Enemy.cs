@@ -14,7 +14,13 @@ public class Enemy : MonoBehaviour
 		navMeshAgent = GetComponent<NavMeshAgent>();
 		target = GameObject.FindWithTag("Player");
 		animator = GetComponentInChildren<Animator>();
-		animator.SetFloat("Locomotion", 1);
+		try {
+			animator.SetFloat("locomotion", 1);
+		} catch (System.Exception) {
+
+			throw;
+		}
+		
 	}
 
 	void Update()
@@ -25,7 +31,7 @@ public class Enemy : MonoBehaviour
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player")) {
-			other.gameObject.GetComponent<ThirdPersonCharacter>().Pickup(gameObject);
+			//other.gameObject.GetComponent<ThirdPersonCharacter>().Pickup(gameObject);
 			GameObject go = Instantiate(deathEffect, gameObject.transform);
 			go.transform.SetParent(null);
 			Destroy(gameObject);

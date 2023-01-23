@@ -55,6 +55,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
 		}
 
+		private void OnTriggerEnter(Collider other)
+		{
+			IPickupable pickupable = other.GetComponent<IPickupable>();
+			if (pickupable != null) {
+				PickupBow();
+				pickupable.Pickup();
+			}
+		}
+
 
 		public void Move(Vector3 move, bool crouch, bool jump)
 		{
@@ -214,7 +223,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-		public void Pickup(GameObject Item)
+		public void PickupBow()
 		{
 			m_Animator.Play("Pickup");
 			if (m_Animator.GetBool("HasBow") == false) {

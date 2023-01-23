@@ -184,15 +184,9 @@ namespace InfinityPBR
                                      "be presented.");
                     return;
                 }
-
-                var groupIndex = GetGroupIndex(blendShapeGroups[g].prefabGroup.name);
-                if (groupIndex < 0) continue;
                 
                 foreach (var groupObject in PrefabAndObjectManager.prefabGroups[GetGroupIndex(blendShapeGroups[g].prefabGroup.name)].groupObjects)
                 {
-                    if (groupObject.objectToHandle == null) continue;
-                    if (!groupObject.objectToHandle.TryGetComponent(out SkinnedMeshRenderer skinnedMeshRenderer)) continue;
-                    
                     SkinnedMeshRenderer[] renderers = groupObject.objectToHandle.GetComponentsInChildren<SkinnedMeshRenderer>(true);
                     foreach (SkinnedMeshRenderer smr in renderers)
                     {

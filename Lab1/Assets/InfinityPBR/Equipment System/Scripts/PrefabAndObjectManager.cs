@@ -26,7 +26,6 @@ namespace InfinityPBR
         public bool onlyOneGroupActivePerType = true;
         public bool unpackPrefabs = true;
         public bool revertToDefaultGroupByType = true;
-        public string objectFit = "";
 
         public WardrobePrefabManager WardrobePrefabManager => GetWardrobePrefabManager();
         private WardrobePrefabManager _wardrobePrefabManager;
@@ -56,8 +55,7 @@ namespace InfinityPBR
         [HideInInspector] public bool showFullInspector = false;
         [HideInInspector] public bool showPrefabGroups = true;
         [HideInInspector] public bool instantiatePrefabsAsAdded = true;
-        [HideInInspector] public List<GameObject> equipmentObjects = new List<GameObject>();
-
+        
         public List<string> GroupTypeNames => GetGroupTypeNames();
         private List<string> _groupTypeNames = new List<string>();
         public bool cacheTypes = true;
@@ -70,13 +68,12 @@ namespace InfinityPBR
             cacheTypes = true; // Set true on start, so this will trigger the first time it's called.
         }
 
-        public PrefabGroup CreateNewPrefabGroup(string groupType = null)
+        public void CreateNewPrefabGroup(string groupType = null)
         {
             var newGroup = new PrefabGroup {name = GetNextDefaultName(), groupType = groupType};
             newGroup.CreateNewUid();
 
             prefabGroups.Add(newGroup);
-            return newGroup;
         }
 
         private string GetNextDefaultName()
@@ -109,10 +106,7 @@ namespace InfinityPBR
         public void ActivateRandomAllGroups()
         { 
             foreach (var groupType in GroupTypeNames)
-            {
-                if (!CanRandomize(groupType)) continue;
                 ActivateRandomGroup(groupType);
-            }
         }
 
         /// <summary>
@@ -120,17 +114,12 @@ namespace InfinityPBR
         /// </summary>
         /// <param name="type"></param>
         /// <param name="allTypes"></param>
-        public void ActivateRandomGroup(string type, bool excludeActive = true)
+        public void ActivateRandomGroup(string type)
         {
             if (string.IsNullOrWhiteSpace(type)) return;
             
-            ActivateGroup(GetGroupsOfType(type)
-                .Where(x => !x.isActive && x.canRandomize)
-                .ToList()
-                .TakeRandom());
-            
-            //var groupsOfType = GetGroupsOfType(type);
-            //ActivateGroup(groupsOfType[UnityEngine.Random.Range(0, groupsOfType.Count)]);
+            var groupsOfType = GetGroupsOfType(type);
+            ActivateGroup(groupsOfType[UnityEngine.Random.Range(0, groupsOfType.Count)]);
         }
 
         /// <summary>
@@ -183,21 +172,14 @@ namespace InfinityPBR
             {
                 if (groupObject.isPrefab && groupObject.inGameObject == groupObject.objectToHandle)
                     groupObject.inGameObject = null;
-
-                if (!groupObject.render) continue; // Do not render this!
+                
+                //groupObject.inGameObject = null;
 
                 // This is where we instantiate the prefab
-                if (groupObject.isPrefab 
-                    && groupObject.objectToHandle 
-                    && groupObject.inGameObject == null)
+                if (groupObject.isPrefab && groupObject.objectToHandle && groupObject.inGameObject == null)
                 {
                     // Instantiate the object, set it's transform info, and make sure it's active.
                     groupObject.inGameObject = Instantiate(groupObject.objectToHandle, groupObject.parentTransform.position, groupObject.parentTransform.rotation, groupObject.parentTransform);
-                    //groupObject.inGameObject.AddComponent<DeleteMeIfPrefabGroupIsNotActive>();
-                    //groupObject.inGameObject.GetComponent<DeleteMeIfPrefabGroupIsNotActive>().prefabGroup = group;
-#if UNITY_EDITOR
-                    Undo.RegisterCreatedObjectUndo (groupObject.inGameObject, "Created go");
-#endif
                     groupObject.inGameObject.SetActive(true);
 #if UNITY_EDITOR
                     // If we are in the editor, then we will unpack this prefab
@@ -279,10 +261,7 @@ namespace InfinityPBR
             }
 
             if (checkForDefault && !String.IsNullOrWhiteSpace(group.groupType))
-            {
-                Debug.Log($"Check for default is true and group type is {group.groupType}");
                 CheckForDefaultGroup(group.groupType);
-            }
         }
 
         /// <summary>
@@ -357,23 +336,7 @@ namespace InfinityPBR
             if (inGameObject)
             {
 #if UNITY_EDITOR
-                // July 9, 2022 - Can't do this, as it unpacks the prefab...need to fix the issue another way
-                bool wasPrefab = false;
-                if (PrefabUtility.IsPartOfAnyPrefab(inGameObject))
-                {
-                    wasPrefab = true;
-                    inGameObject.SetActive(false);
-                }
-                else
-                {
-                    DestroyImmediate(inGameObject);
-                }
-                    Debug.LogWarning($"<color=ffff00>Prefab and Object Manager:</color> One or more object managed " +
-                                     $"by the script was saved as a prefab. In edit mode, this keeps the script from destroying " +
-                                     $"them as usual. For now, these will be turned off rather than destroyed.\n\nIn play mode, " +
-                                     $"objects will be destroyed as expected. This is only a problem if the prefab is continuously saved," +
-                                     $" as more and more objects will be turned off and saved with the prefab, requiring manual " +
-                                     $"cleanup later.");
+                DestroyImmediate(inGameObject);
 #else
                 Destroy(inGameObject);
 #endif
@@ -382,18 +345,6 @@ namespace InfinityPBR
 
         public int GroupIsActive(PrefabGroup group)
         {
-            var renderableObjects = group.groupObjects.Count(x => x.render);
-            var livePrefabObjects = group.groupObjects.Count(x => x.isPrefab && x.inGameObject != null);
-            var liveObjectObjects = group.groupObjects.Count(x => !x.isPrefab && x.objectToHandle.activeSelf);
-            var liveObjects = liveObjectObjects + livePrefabObjects;
-
-            if (renderableObjects == 0) return 0;
-            if (renderableObjects == liveObjects) return 2;
-            if (renderableObjects > liveObjects && liveObjects > 0) return 1;
-            return 0;
-            
-            
-            
             int prefabs = 0;
             int inGameObjects = 0;
             
@@ -402,10 +353,8 @@ namespace InfinityPBR
                 if (!group.groupObjects[i].objectToHandle)
                     continue;
                 
-                // If render is true, then increase the count of prefabs for this group                
-                if (group.groupObjects[i].render)
-                    prefabs++;
-                else if (group.groupObjects[i].isPrefab && group.groupObjects[i].inGameObject)
+                prefabs++;
+                if (group.groupObjects[i].isPrefab && group.groupObjects[i].inGameObject)
                     inGameObjects++;
                 else if (!group.groupObjects[i].isPrefab && group.groupObjects[i].objectToHandle.activeSelf)
                     inGameObjects++;
@@ -422,11 +371,11 @@ namespace InfinityPBR
         public int GroupIsActive(int groupIndex) => GroupIsActive(prefabGroups[groupIndex]);
         public int GroupIsActive(string groupName) => GroupIsActive(GetPrefabGroup(groupName));
 
-        public void AddPrefabToGroup(PrefabGroup group, GameObject prefab = null)
+        public void AddPrefabToGroup(GameObject prefab, PrefabGroup group)
         {
             var newGroupObject = new GroupObject
             {
-                objectToHandle = prefab == null ? group.newPrefab : prefab, parentTransform = thisTransform, isPrefab = true
+                objectToHandle = group.newPrefab, parentTransform = thisTransform, isPrefab = true
             };
             group.groupObjects.Add(newGroupObject);
         }
@@ -445,15 +394,26 @@ namespace InfinityPBR
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public List<string> GetGroupNamesOfType(string type) => prefabGroups
-            .Where(x => x.groupType == type)
-            .Select(x => x.name)
-            .ToList();
+        public List<string> GetGroupsOfType(string type)
+        {
+            return prefabGroups
+                .Where(x => x.groupType == type)
+                .Select(x => x.name)
+                .ToList();
+            
+            /*
+            List<string> newList = new List<string>();
+            for (int i = 0; i < prefabGroups.Count; i++)
+            {
+                if (prefabGroups[i].groupType != type) 
+                    continue;
+                
+                newList.Add(prefabGroups[i].name);
+            }
 
-        public List<PrefabGroup> GetGroupsOfType(string type, bool excludeActive = true) => prefabGroups
-            .Where(x => x.groupType == type)
-            .ToList();
-        
+            return newList;
+            */
+        }
         
         public void MarkPrefabs ()
         {
@@ -524,36 +484,6 @@ namespace InfinityPBR
                     group.CreateNewUid();
             }
         }
-
-        public void CopyGroup(PrefabGroup group)
-        {
-            var clone = JsonUtility.FromJson<PrefabGroup>(JsonUtility.ToJson(group));
-            clone.isDefault = false; // Copy should not be default
-            clone.name = $"{clone.name} Copy"; // Add this to the name
-            clone.name = clone.name.Replace("Copy Copy", "Copy"); // Avoid duplicate copy in name
-            foreach (var obj in clone.groupObjects)
-                obj.inGameObject = null; // Make sure all inGameObjects are null (in case of copying active group)
-            prefabGroups.Add(clone); // Add the group
-        }
-
-        public bool CanRandomize(string typeName)
-        {
-            if (prefabGroups.Count(x => x.groupType == typeName) < 2) return false;
-            if (prefabGroups.Count(x => x.canRandomize) < 2) return false;
-
-            return true;
-        }
-
-        /*
-        public void RandomGroup(string typeName, bool excludeActive = true)
-        {
-            List<PrefabGroup> groups = prefabGroups.Where(x => x.groupType == typeName).ToList();
-            if (excludeActive) groups = groups.Where(x => !x.isActive).ToList();
-            groups = groups.ToList();
-
-            ActivateGroup(groups[UnityEngine.Random.Range(0, groups.Count)]);
-        }
-        */
     }
 
     [System.Serializable]
@@ -573,17 +503,7 @@ namespace InfinityPBR
 
         [HideInInspector] public GameObject newPrefab;
         [HideInInspector] public GameObject newGameObject;
-        
-        // EDITOR SCRIPT FOR SELECTING NEW EQUIPMENT OBJECTS
-        [HideInInspector] public List<GameObject> equipmentObjectObjects = new List<GameObject>();
-        [HideInInspector] public List<string> equipmentObjectObjectNames = new List<string>();
-        [HideInInspector] public int equipmentObjectIndex;
-        [HideInInspector] public List<string> equipmentObjectTypes = new List<string>();
-        [HideInInspector] public int equipmentObjectTypeIndex;
-        [FormerlySerializedAs("excludeFromRandom")] [HideInInspector] public bool canRandomize = true;
 
-        public bool GroupObjectsContain(GameObject obj) => groupObjects.FirstOrDefault(x => x.objectToHandle == obj) != null;
-        
         public void RemoveGroupObject(GroupObject groupObject) => groupObjects.Remove(groupObject);
 
         public void CreateNewUid(bool forceNew = false)
@@ -607,7 +527,6 @@ namespace InfinityPBR
         [FormerlySerializedAs("prefab")] public GameObject objectToHandle;
         public Transform parentTransform;
         public GameObject inGameObject;
-        public bool render = true;
         public MeshRenderer meshRenderer;
         public SkinnedMeshRenderer skinnedMeshRenderer;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace InfinityPBR
@@ -19,14 +17,7 @@ namespace InfinityPBR
         [HideInInspector] public bool showHelpBoxes = true;
         [HideInInspector] public bool showFullInspector = false;
         [HideInInspector] public bool showSetup = true;
-        [HideInInspector] public bool lerp = true;
-        [HideInInspector] public float lerpSeconds = 2;
-
-        private float _lerpValue;
-        private float _lerpTime;
-        private bool _isLerping;
         
-
         public BlendShapesManager BlendShapesManager => GetBlendShapesManager();
         private BlendShapesManager _blendShapesManager;
         private BlendShapesManager GetBlendShapesManager()
@@ -35,60 +26,6 @@ namespace InfinityPBR
             if (TryGetComponent(out BlendShapesManager foundManager))
                 _blendShapesManager = foundManager;
             return _blendShapesManager;
-        }
-
-        public void StartTransitionToPreset(BlendShapePreset preset)
-        {
-            Debug.Log($"Start Transition to Preset {preset.name}");
-            SetToAndFromValues(preset); // save the current value and the "to" value on this preset
-            _lerpValue = 0f; // reset this
-            _lerpTime = 0f; // reset this
-            _isLerping = true; // set this on
-            StartCoroutine(nameof(LerpToPreset)); // Start the coroutine
-        }
-
-        public void StartTransitionToPreset(int presetIndex)
-        {
-            if (presetIndex < 0 || presets.Count <= presetIndex)
-            {
-                Debug.LogError($"Index {presetIndex} is out of range");
-                return;
-            }   
-            
-            StartTransitionToPreset(presets[presetIndex]);
-        }
-
-        public void StartTransitionToPreset(string presetName)
-        {
-            var foundPreset = presets.FirstOrDefault(x => x.name == presetName);
-            if (foundPreset == null)
-            {
-                Debug.LogError($"No preset found named {presetName}");
-                return;
-            }
-
-            StartTransitionToPreset(foundPreset);
-        }
-
-        IEnumerator LerpToPreset()
-        {
-            while (_isLerping)
-            {
-                _lerpTime += Time.deltaTime / lerpSeconds;
-                _lerpValue = Mathf.Lerp(0, 1, _lerpTime);
-                BlendShapesManager.LerpToValue(_lerpValue);
-
-                if (_lerpValue >= 1)
-                    break;
-
-                yield return null;
-            }
-            
-        }
-
-        public void ValueBetweenTwoPresets(float value, BlendShapePreset from, BlendShapePreset to)
-        {
-            
         }
         
         /// <summary>
@@ -108,11 +45,6 @@ namespace InfinityPBR
                     : Random.Range(presetValue.limitMin, presetValue.limitMax);
                 BlendShapesManager.TriggerShape(obj,value);
             }
-        }
-
-        public void SetToAndFromValues(BlendShapePreset preset)
-        {
-            BlendShapesManager.SetToAndFromValues(preset);
         }
 
         /// <summary>
