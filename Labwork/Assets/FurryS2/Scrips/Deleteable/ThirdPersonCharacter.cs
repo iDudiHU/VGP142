@@ -18,6 +18,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_SprintSpeedMultiplier = 1.5f;
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
+		[SerializeField]  GameObject m_ShootPosition;
+		[SerializeField]  GameObject m_ProjectilePrefab;
 
 		[SerializeField] GameObject m_Bow;
 		Rigidbody m_Rigidbody;
@@ -32,6 +34,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
+		private bool m_IsHandEmpty = true;
 
 
 		void Start()
@@ -61,6 +64,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			if (pickupable != null) {
 				PickupBow();
 				pickupable.Pickup();
+
+			}
+		}
+
+		public void Shoot()
+		{
+			if (!m_IsHandEmpty) {
+				Instantiate(m_ProjectilePrefab, m_ShootPosition.transform.position, m_ShootPosition.transform.rotation);
 			}
 		}
 
@@ -229,9 +240,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			if (m_Animator.GetBool("HasBow") == false) {
 				m_Animator.SetBool("HasBow", true);
 				m_Bow.SetActive(true);
+				m_IsHandEmpty = false;
 			} else {
 				m_Animator.SetBool("HasBow", false);
 				m_Bow.SetActive(false);
+				m_IsHandEmpty = true;
 			}
 		}
 

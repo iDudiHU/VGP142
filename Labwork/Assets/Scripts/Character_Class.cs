@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//[RequireComponent(typeof(CharacterController))]
-public class Character : MonoBehaviour
+public class Character_Class : MonoBehaviour
 {
     public float moveSpeed = 10.0f;
     public float gravity = 9.81f;
