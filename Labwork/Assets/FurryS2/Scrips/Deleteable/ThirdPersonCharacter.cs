@@ -56,6 +56,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_MoveSpeedMultiplier = m_SprintSpeedMultiplier;
 			if (Input.GetKeyUp(KeyCode.LeftShift))
 				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
+			if (Input.GetMouseButtonDown(0)) {
+				m_Animator.SetBool("Normal Attack", true);
+			}
 		}
 
 		private void OnTriggerEnter(Collider other)
