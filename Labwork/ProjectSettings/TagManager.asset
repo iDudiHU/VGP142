@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Projectile
   - Proj
+  - AOE
+  - Punch
+  - Patrol
   layers:
   - Default
   - TransparentFX

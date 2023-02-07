@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_StationaryTurnSpeed = 180;
 		[SerializeField] float m_JumpPower = 12f;
 		[Range(1f, 4f)][SerializeField] float m_GravityMultiplier = 2f;
-		[SerializeField] float m_RunCycleLegOffset = 0.2f; //specific to the character in sample assets, will need to be modified to work with others
+		[SerializeField] float m_RunCycleLegOffset = 0.2f;
 		[SerializeField] float m_MoveSpeedMultiplier = 1f;
 		float m_OrigMoveSpeedMultiplier = 1f;
 		[SerializeField] float m_SprintSpeedMultiplier = 1.5f;
@@ -20,6 +20,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
 		[SerializeField]  GameObject m_ShootPosition;
 		[SerializeField]  GameObject m_ProjectilePrefab;
+		[SerializeField] private GameObject m_AOE_Go;
+		[SerializeField] private GameObject m_Punch_Go;
 
 		[SerializeField] GameObject m_Bow;
 		Rigidbody m_Rigidbody;
@@ -35,6 +37,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
 		private bool m_IsHandEmpty = true;
+		private static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
 
 
 		void Start()
@@ -48,6 +51,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
+			m_AOE_Go.SetActive(false);
+			m_Punch_Go.SetActive(false);
 		}
 
 		private void Update()
@@ -57,8 +62,32 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			if (Input.GetKeyUp(KeyCode.LeftShift))
 				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
 			if (Input.GetMouseButtonDown(0)) {
-				m_Animator.SetBool("Normal Attack", true);
+				m_Animator.SetTrigger(NormalAttack);
+			}else if (Input.GetMouseButtonDown(1)) {
+				m_Animator.SetTrigger("SpecialAttack");
+			} else if (Input.GetKey(KeyCode.E)) {
+				m_Animator.SetTrigger("Punch");
 			}
+		}
+
+		public void Punch()
+		{
+			m_Punch_Go.SetActive(true);
+		}
+
+		public void EndPunch()
+		{
+			m_Punch_Go.SetActive(false);
+		}
+
+		public void SpecialAttack()
+		{
+			m_AOE_Go.SetActive(true);
+		}
+
+		public void EndSpecialAttack()
+		{
+			m_AOE_Go.SetActive(false);
 		}
 
 		private void OnTriggerEnter(Collider other)
@@ -123,7 +152,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 			else
 			{
-				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * m_Capsule.radius * k_Half, Vector3.up);
+				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * (m_Capsule.radius * k_Half), Vector3.up);
 				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
 				if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
 				{
@@ -141,7 +170,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// prevent standing up in crouch-only zones
 			if (!m_Crouching)
 			{
-				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * m_Capsule.radius * k_Half, Vector3.up);
+				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * (m_Capsule.radius * k_Half), Vector3.up);
 				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
 				if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
 				{
@@ -249,6 +278,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Bow.SetActive(false);
 				m_IsHandEmpty = true;
 			}
+		}
+
+		public void Die()
+		{
+			m_Animator.SetTrigger("Death");
+			CapsuleCollider capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
+			capsuleCollider.isTrigger = true;
+			capsuleCollider.GetComponent<Rigidbody>().isKinematic = true;
+			Destroy(transform.parent.gameObject, 5.0f);
 		}
 
 

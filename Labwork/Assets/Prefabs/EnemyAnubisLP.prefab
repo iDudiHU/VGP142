@@ -149,6 +149,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   deathEffect: {fileID: 1651363388222792, guid: a32d87b33cadfed4b83eeaa564eb7724, type: 3}
+  player: {fileID: 0}
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 129
+  chaseDefaultLength: 2
+  currentState: 1
+  vision: 8
+  path: []
+  pathIndex: 0
+  distThreshhold: 0
+  coneAngle: 45
 --- !u!136 &2559952793062879261
 CapsuleCollider:
   m_ObjectHideFlags: 0

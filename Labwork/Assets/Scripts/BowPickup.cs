@@ -14,7 +14,6 @@ public class BowPickup : MonoBehaviour, IPickupable
 	public void Pickup()
 	{
 		Destroy(gameObject);
-		throw new System.Exception("Collision occurred with player!");
 	}
 
 	// Update is called once per frame

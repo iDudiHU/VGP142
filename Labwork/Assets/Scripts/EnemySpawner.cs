@@ -6,6 +6,8 @@ public class EnemySpawner : MonoBehaviour
 {
 	public GameObject[] enemyPrefabs;
 	public float spawnInterval = 5f;
+	private int m_EnemySpawned = 0;
+	public int MaxEnemyToSpawn = 5;
 
 	private float lastSpawnTime;
 
@@ -14,6 +16,8 @@ public class EnemySpawner : MonoBehaviour
 		if (Time.time - lastSpawnTime > spawnInterval) {
 			lastSpawnTime = Time.time;
 			SpawnEnemy();
+			if (m_EnemySpawned > MaxEnemyToSpawn)
+				Destroy(gameObject);
 		}
 	}
 
@@ -21,6 +25,7 @@ public class EnemySpawner : MonoBehaviour
 	{
 		Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-.5f, .5f), 0, Random.Range(-.5f, .5f));
 		Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
+		m_EnemySpawned++;
 	}
 
 	private void OnDrawGizmos()
