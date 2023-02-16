@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Schoolwork.Systems;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
@@ -18,7 +19,7 @@ namespace Schoolwork
       private void OnTriggerEnter(Collider other)
       {
           if (other.CompareTag("Player")) {
-              other.gameObject.GetComponent<ThirdPersonCharacter>().Die();
+              other.gameObject.GetComponent<HealthSystem>().TakeDamage(enemy.Damage);
           }
       }
   }  

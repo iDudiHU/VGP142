@@ -1,5 +1,6 @@
 using System;
 using Schoolwork.UI;
+using Schoolwork.UI.Element;
 using TMPro;
 using UnityEngine;
 
@@ -15,9 +16,13 @@ namespace Schoolwork.Systems
         [Header("Systems")]
         public int level = 0;
         [Tooltip("The current experience of the player")]
-        public float experience;
+        private float experience;
+        public float Experience => experience;
+
+
         [Tooltip("The experience needed for the next level")]
-        public float experienceToNextLevel;
+        private float experienceToNextLevel = 100.0f;
+        public float ExperienceToNextLevel => experienceToNextLevel;
         [Tooltip("The experience scale factor")]
         private float experienceScaleFactor = 1.1f;
 
@@ -45,7 +50,7 @@ namespace Schoolwork.Systems
             if (experience >= experienceToNextLevel) {
                 LevelUp();
             }
-            if (OnExperienceChanged != null) OnExperienceChanged(this, EventArgs.Empty);
+            GameManager.UpdateUIElements();
         }
 
         void LevelUp()
@@ -56,7 +61,8 @@ namespace Schoolwork.Systems
             CalculateNextLevel();
             SetLevelNumber(level);
             
-            if (OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
+            GameManager.UpdateUIElements();
+            if(OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
             if (experience >= experienceToNextLevel)
             {
                 LevelUp();

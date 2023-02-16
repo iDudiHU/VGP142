@@ -14,6 +14,8 @@ namespace Schoolwork.Helpers
         public float rotationSpeed = 90.0f;
         // The starting position of the object.
         private Vector3 startPosition;
+        private Vector3 originalPosition;
+        [SerializeField] private bool isMovable;
 
         /// <summary>
         /// Description:
@@ -23,7 +25,7 @@ namespace Schoolwork.Helpers
         /// </summary>
         private void Start()
         {
-            startPosition = transform.localPosition;
+            startPosition = originalPosition = transform.localPosition;
         }
 
         /// <summary>
@@ -34,6 +36,9 @@ namespace Schoolwork.Helpers
         /// </summary>
         private void LateUpdate()
         {
+            if (isMovable) {
+                startPosition = new Vector3(transform.localPosition.x,originalPosition.y,transform.localPosition.z);
+            }
             transform.localPosition = startPosition + (Vector3.up * oscillationHeight * Mathf.Cos(Time.timeSinceLevelLoad * oscillationSpeed));
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + Vector3.up * Time.deltaTime * rotationSpeed);
         }

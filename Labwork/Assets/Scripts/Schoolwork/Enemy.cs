@@ -27,6 +27,11 @@ namespace Schoolwork
 	AnimatorClipInfo[] m_CurrentClipInfo;
 	float m_CurrentClipLength;
 	private float m_attackDelay;
+	[SerializeField]
+	private float m_damage;
+
+	public float Damage => m_damage;
+
 	public LayerMask playerLayerMask;
 	public enum EnemyState
 	{
@@ -172,15 +177,17 @@ namespace Schoolwork
 
 	private bool IsPlayerVisible()
 	{
-		Vector3 forward = transform.forward;
-		Vector3 playerPos = player.transform.position;
-		Vector3 currentPos = transform.position;
-		Vector3 toPlayer = (playerPos - currentPos);
-		float angle = Vector3.Angle(forward, toPlayer.normalized);
-		if (!(angle < coneAngle / 2)) return false;
-		RaycastHit hit;
-		if (Physics.Raycast(currentPos, toPlayer.normalized * vision, out hit, vision,playerLayerMask)) {
-			return hit.collider.gameObject.CompareTag("Player");
+		if (!isPlayerDead) {
+			Vector3 forward = transform.forward;
+			Vector3 playerPos = player.transform.position;
+			Vector3 currentPos = transform.position;
+			Vector3 toPlayer = (playerPos - currentPos);
+			float angle = Vector3.Angle(forward, toPlayer.normalized);
+			if (!(angle < coneAngle / 2)) return false;
+			RaycastHit hit;
+			if (Physics.Raycast(currentPos, toPlayer.normalized * vision, out hit, vision,playerLayerMask)) {
+				return hit.collider.gameObject.CompareTag("Player");
+			}
 		}
 		return false;
 	}
@@ -205,6 +212,11 @@ namespace Schoolwork
 		if (other.CompareTag("AOE") || other.CompareTag("Punch")) {
 			Die();
 		}
+	}
+
+	private void OnDestroy()
+	{
+		TPC.OnPlayerDeath -= TPCOnPlayerDeath;
 	}
 }
 }

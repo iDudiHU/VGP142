@@ -1,5 +1,7 @@
 using System;
 using Schoolwork.Helpers;
+using Schoolwork.Systems;
+using Schoolwork;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -29,6 +31,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] GameObject m_Bow;
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
+		HealthSystem m_HealthSystem;
 		bool m_IsGrounded;
 		float m_OrigGroundCheckDistance;
 		const float k_Half = 0.5f;
@@ -52,6 +55,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Animator = GetComponent<Animator>();
 			m_Rigidbody = GetComponent<Rigidbody>();
 			m_Capsule = GetComponent<CapsuleCollider>();
+			m_HealthSystem = GetComponent<HealthSystem>();
 			m_CapsuleHeight = m_Capsule.height;
 			m_CapsuleCenter = m_Capsule.center;
 			m_OrigMoveSpeedMultiplier = m_MoveSpeedMultiplier;
@@ -309,9 +313,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				CapsuleCollider capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
 				capsuleCollider.isTrigger = true;
 				capsuleCollider.GetComponent<Rigidbody>().isKinematic = true;
-				Time.timeScale = 0.1f;
-				CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
-				FindObjectOfType<UIManager>().GoToPageByName("LosePage");
+				GameManager.Instance.uiManager.ToggleDeathScreen();
 				isAlive = false;
 				if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
 				Destroy(transform.parent.gameObject, 5.0f);

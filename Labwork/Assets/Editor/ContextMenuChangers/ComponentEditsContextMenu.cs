@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Schoolwork.Systems;
 using UnityEditor;
 
 /// <summary>
@@ -141,10 +142,10 @@ public class ComponentEditsContextMenu
             }
 
             // Set up Health Script
-            Health gameObjectHealth = gameObject.GetComponent<Health>();
+            HealthSystem gameObjectHealth = gameObject.GetComponent<HealthSystem>();
             if (gameObjectHealth == null)
             {
-                gameObjectHealth = gameObject.AddComponent<Health>();
+                gameObjectHealth = gameObject.AddComponent<HealthSystem>();
             }
 
             // -1 team id for environment

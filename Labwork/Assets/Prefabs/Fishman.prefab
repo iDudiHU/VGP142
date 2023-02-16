@@ -8832,7 +8832,8 @@ MonoBehaviour:
   player: {fileID: 0}
   experienceDrop: {fileID: 5175686087464223680, guid: 2b4d872ba9bca374cbb9d6d96deaf6d9, type: 3}
   experienceDropValue: 10
-  attackCollider: {fileID: 0}
+  attackCollider: {fileID: 3464501105705006030}
+  m_damage: 3
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 129
