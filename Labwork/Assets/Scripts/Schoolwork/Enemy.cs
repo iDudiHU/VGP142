@@ -14,6 +14,7 @@ namespace Schoolwork
 	public Transform target; // The player's transform
 	public GameObject deathEffect;
 	public GameObject player;
+	private ThirdPersonCharacter TPC;
 	public GameObject experienceDrop;
 	[SerializeField]
 	private float experienceDropValue;
@@ -43,10 +44,13 @@ namespace Schoolwork
 	public int pathIndex;
 	public float distThreshhold;
 	public float coneAngle = 120f;
+	private bool isPlayerDead;
 	void Start()
 	{
 		navMeshAgent = GetComponent<NavMeshAgent>();
 		player = GameObject.FindGameObjectWithTag("Player");
+		TPC = player.GetComponent<ThirdPersonCharacter>();
+		TPC.OnPlayerDeath += TPCOnPlayerDeath;
 		//attackCollider =
 		m_Animator = GetComponentInChildren<Animator>();
 		UpdateAnimClipTimes();
@@ -77,6 +81,17 @@ namespace Schoolwork
 			distThreshhold = 0.25f;
 		}
 
+	}
+
+	private void TPCOnPlayerDeath(object sender, EventArgs e)
+	{
+		navMeshAgent.ResetPath();
+		isPlayerDead = true;
+		target = null;
+		currentState = EnemyState.Patrol;
+		target = path[0].transform;
+		TPC.OnPlayerDeath -= TPCOnPlayerDeath;
+		
 	}
 
 	public void UpdateAnimClipTimes()
@@ -111,7 +126,7 @@ namespace Schoolwork
 
 				target = path[pathIndex].transform;
 			}
-			if (navMeshAgent.velocity.magnitude > 0) {
+			if (navMeshAgent.velocity.magnitude > 0 && !isPlayerDead) {
 				currentState = IsPlayerVisible() ? EnemyState.Chase : EnemyState.Patrol;
 			}
 		}
@@ -138,7 +153,8 @@ namespace Schoolwork
 				m_attackDelay = m_CurrentClipLength;
 				timeSinceLastAttack = Time.time + m_attackDelay; //Set timer to current game time plus our delay;
 			}
-
+			if (!TPC.IsAlive)
+				currentState = EnemyState.Patrol;
 			if (Time.time - timeSinceLastAttack > m_attackDelay) {
 				
 			}

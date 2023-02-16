@@ -363,6 +363,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ToggleWinScreen()
+    {
+        CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
+        GoToPageByName("WinPage");
+        Time.timeScale = 0.0f;
+    }
+
     /// <summary>
     /// Description:
     /// Turns all stored pages on or off depending on parameters

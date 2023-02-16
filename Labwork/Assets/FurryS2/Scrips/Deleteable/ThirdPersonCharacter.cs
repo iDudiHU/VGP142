@@ -24,6 +24,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField]  GameObject m_ProjectilePrefab;
 		[SerializeField] private GameObject m_AOE_Go;
 		[SerializeField] private GameObject m_Punch_Go;
+		public event EventHandler OnPlayerDeath;
 
 		[SerializeField] GameObject m_Bow;
 		Rigidbody m_Rigidbody;
@@ -39,6 +40,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
 		private bool m_IsHandEmpty = true;
+		private bool isAlive = true;
+
+		public bool IsAlive => isAlive;
+
 		private static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
 
 
@@ -56,6 +61,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_AOE_Go.SetActive(false);
 			m_Punch_Go.SetActive(false);
 		}
+		
+		
 
 		private void Update()
 		{
@@ -297,11 +304,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public void Die()
 		{
-			m_Animator.SetTrigger("Death");
-			CapsuleCollider capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
-			capsuleCollider.isTrigger = true;
-			capsuleCollider.GetComponent<Rigidbody>().isKinematic = true;
-			Destroy(transform.parent.gameObject, 5.0f);
+			if (isAlive) {
+				m_Animator.SetTrigger("Death");
+				CapsuleCollider capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
+				capsuleCollider.isTrigger = true;
+				capsuleCollider.GetComponent<Rigidbody>().isKinematic = true;
+				Time.timeScale = 0.1f;
+				CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
+				FindObjectOfType<UIManager>().GoToPageByName("LosePage");
+				isAlive = false;
+				if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
+				Destroy(transform.parent.gameObject, 5.0f);
+				GetComponent<ThirdPersonUserControl>().enabled = false;
+				this.enabled = false;
+			}
 		}
 
 
