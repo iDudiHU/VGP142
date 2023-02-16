@@ -1,3 +1,4 @@
+using System;
 using Schoolwork.Helpers;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -64,9 +65,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
 			if (Input.GetMouseButtonDown(0)) {
 				m_Animator.SetTrigger(NormalAttack);
-			}else if (Input.GetMouseButtonDown(1)) {
+			} else if (Input.GetMouseButtonDown(1)) {
 				m_Animator.SetTrigger("SpecialAttack");
-			} else if (Input.GetKey(KeyCode.E)) {
+			} else if (Input.GetKeyDown(KeyCode.E)) {
 				m_Animator.SetTrigger("Punch");
 			}
 		}
@@ -93,12 +94,22 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		private void OnTriggerEnter(Collider other)
 		{
-			IPickupable pickupable = other.GetComponent<IPickupable>();
+			
+		}
+
+		private void OnCollisionEnter(Collision collision)
+		{
+			IPickupable pickupable = collision.gameObject.GetComponent<IPickupable>();
 			if (pickupable != null) {
-				PickupBow();
-				pickupable.Pickup();
+				//PickupBow();
+				pickupable.DoOnPickup(GetComponent<Collider>());
 
 			}
+		}
+
+		public void CollidedWithPickup(Collider other)
+		{
+			other.gameObject.GetComponent<IPickupable>().DoInRange();
 		}
 
 		public void Shoot()

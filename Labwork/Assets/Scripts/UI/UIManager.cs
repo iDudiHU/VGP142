@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System.Linq;
+using Schoolwork.Systems;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -47,6 +49,22 @@ public class UIManager : MonoBehaviour
     // The Input Manager to listen for pausing
     [SerializeField]
     private InputManager inputManager;
+
+    [SerializeField] 
+    private LevelSystem levelSystem;
+
+    private bool isLevelingUp;
+
+    private void Awake()
+    {
+        levelSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<LevelSystem>();
+        levelSystem.OnLevelChanged += LevelSystem_OnLevelChanged;
+    }
+
+    private void LevelSystem_OnLevelChanged(object sender, EventArgs e)
+    {
+        ToggleLevelUp();
+    }
 
     /// <summary>
     /// Description:
@@ -285,6 +303,12 @@ public class UIManager : MonoBehaviour
                 TogglePause();
             }
         }
+        else {
+            if (Input.GetKeyDown(KeyCode.Escape)) 
+            {
+                TogglePause();
+            }
+        }
     }
     /// <summary>
     /// Description:
@@ -319,6 +343,24 @@ public class UIManager : MonoBehaviour
         UIPage page = pages.Find(item => item.name == pageName);
         int pageIndex = pages.IndexOf(page);
         GoToPage(pageIndex);
+    }
+    
+    public void ToggleLevelUp()
+    {
+        if (isLevelingUp)
+        {
+            CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.FPS);
+            GoToPage(0);
+            Time.timeScale = 1;
+            isLevelingUp = false;
+        }
+        else
+        {
+            CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
+            GoToPageByName("LevelUpPage");
+            Time.timeScale = 0.01f;
+            isLevelingUp = true;
+        }
     }
 
     /// <summary>

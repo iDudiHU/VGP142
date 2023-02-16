@@ -1,8 +1,12 @@
+using UnityEngine;
+
 namespace Schoolwork.Helpers
 {
 	public interface IPickupable
 	{
-	void Pickup();
-	}	
+		void DoOnPickup(Collider collider);
+		void DoInRange();
+	}
+	
 }
 
