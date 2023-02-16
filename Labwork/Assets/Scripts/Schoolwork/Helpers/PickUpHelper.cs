@@ -8,8 +8,11 @@ namespace Schoolwork.Helpers
         public ThirdPersonCharacter TPC;
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("PickUp"))
+            if (other.CompareTag("PickUp")) {
                 TPC.CollidedWithPickup(other);
+                Debug.Log("works");
+            }
+                
         }
     }
 }

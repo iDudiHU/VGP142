@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.AI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityStandardAssets.Characters.ThirdPerson;
+using Random = UnityEngine.Random;
 
 namespace Schoolwork
 {
@@ -12,6 +14,9 @@ namespace Schoolwork
 	public Transform target; // The player's transform
 	public GameObject deathEffect;
 	public GameObject player;
+	public GameObject experienceDrop;
+	[SerializeField]
+	private float experienceDropValue;
 	[FormerlySerializedAs("AttackCollider")] public GameObject attackCollider;
 	private NavMeshAgent navMeshAgent;
 	Animator m_Animator;
@@ -31,11 +36,13 @@ namespace Schoolwork
 	private float timeSinceLastAttack;
 	public EnemyState currentState = EnemyState.Patrol;
 	public float vision = 8f;
+	[SerializeField]
+	private GameObject WaypointHolder;
 
-	public GameObject[] path;
+	public List<GameObject> path = new List<GameObject>();
 	public int pathIndex;
 	public float distThreshhold;
-	public float coneAngle = 60f;
+	public float coneAngle = 120f;
 	void Start()
 	{
 		navMeshAgent = GetComponent<NavMeshAgent>();
@@ -49,9 +56,20 @@ namespace Schoolwork
 
 			throw;
 		}
-		if (path.Length <= 0)
-		{
-			path = GameObject.FindGameObjectsWithTag("Patrol");
+
+		if (path.Count <= 0) {
+			Transform parentTransform = WaypointHolder.transform;
+
+			// Iterate over all of the child transforms
+			for (int i = 0; i < parentTransform.childCount; i++) {
+				Transform childTransform = parentTransform.GetChild(i);
+
+				// Check if the child has the "patrol" tag
+				if (childTransform.CompareTag("Patrol")) {
+					GameObject patrolObject = childTransform.gameObject;
+					path.Add(patrolObject);
+				}
+			}
 		}
 
 		if (distThreshhold <= 0)
@@ -89,7 +107,7 @@ namespace Schoolwork
 			if (navMeshAgent.remainingDistance < distThreshhold && !navMeshAgent.pathPending)
 			{
 				pathIndex++;
-				pathIndex %= path.Length;
+				pathIndex %= path.Count;
 
 				target = path[pathIndex].transform;
 			}
@@ -153,6 +171,12 @@ namespace Schoolwork
 	public void Die()
 	{
 		GameObject go = Instantiate(deathEffect, gameObject.transform);
+		if (Random.Range(0.0f, 1.0f) > 0.2f) {
+			GameObject Exp = Instantiate(experienceDrop, gameObject.transform.position + new Vector3(.0f,1.0f,.0f),gameObject.transform.rotation);
+			Exp.GetComponent<ExpPickUp>().Init(experienceDropValue);
+			Exp.transform.SetParent(null);
+		}
+		
 		go.transform.SetParent(null);
 		GetComponent<CapsuleCollider>().enabled = false;
 		m_Animator.Play("Death");

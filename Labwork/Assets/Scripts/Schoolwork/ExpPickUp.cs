@@ -14,12 +14,17 @@ namespace Schoolwork
         private float lerpDuration = 1.5f;
         private GameObject player;
         private bool isPickedUp;
+        public AnimationCurve animCurve;
 
         private void Awake()
         {
             player = GameObject.FindGameObjectWithTag("Player");
         }
 
+        public void Init(float expValue)
+        {
+            experienceValue = expValue;
+        }
         public  override void DoOnPickup(Collider collision)
         {
             if (collision.CompareTag("Player")) {
@@ -31,15 +36,16 @@ namespace Schoolwork
 
         public override void DoInRange()
         {
-            StartCoroutine(LerpFunction( lerpDuration));
+            StartCoroutine(LerpFunction(lerpDuration));
         }
         IEnumerator LerpFunction( float duration)
         {
             float time = 0;
             Vector3 startPosition = transform.position;
-            while (time < duration)
-            {
-                transform.position = Vector3.Lerp(startPosition, player.transform.position + new Vector3(.0f,1.0f,.0f), time / lerpDuration);
+            while (time < duration) {
+                float t = time / lerpDuration;
+                t = animCurve.Evaluate(t);
+                transform.position = Vector3.Lerp(startPosition, player.transform.position + new Vector3(.0f,1.0f,.0f),  t);
                 time += Time.deltaTime;
                 yield return null;
             }

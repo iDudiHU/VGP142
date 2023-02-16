@@ -64,7 +64,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			if (Input.GetKeyUp(KeyCode.LeftShift))
 				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
 			if (Input.GetMouseButtonDown(0)) {
-				m_Animator.SetTrigger(NormalAttack);
+				if (!m_IsHandEmpty) {
+					m_Animator.SetTrigger(NormalAttack);
+				}
 			} else if (Input.GetMouseButtonDown(1)) {
 				m_Animator.SetTrigger("SpecialAttack");
 			} else if (Input.GetKeyDown(KeyCode.E)) {
@@ -94,16 +96,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		private void OnTriggerEnter(Collider other)
 		{
-			
 		}
 
 		private void OnCollisionEnter(Collision collision)
 		{
 			IPickupable pickupable = collision.gameObject.GetComponent<IPickupable>();
 			if (pickupable != null) {
-				//PickupBow();
 				pickupable.DoOnPickup(GetComponent<Collider>());
-
+			}
+			if (pickupable != null && collision.gameObject.CompareTag("Weapon")) {
+				PickupBow();
+				pickupable.DoOnPickup(GetComponent<Collider>());
 			}
 		}
 

@@ -90,6 +90,7 @@ public class Door : MonoBehaviour
     /// <returns>bool: Whether or not the player has the necessary key</returns>
     public bool CheckPlayerHasKey()
     {
+        Debug.Log(KeyRing.HasKey(this));
         return KeyRing.HasKey(this);
     }
 

@@ -16,6 +16,8 @@ public class PickupAnimation : MonoBehaviour
     // The starting position of the object.
     private Vector3 startPosition;
 
+    [SerializeField] private bool isMovable;
+
     /// <summary>
     /// Description:
     /// When this script starts up, save the starting position of the object
@@ -35,6 +37,9 @@ public class PickupAnimation : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
+        if (isMovable) {
+            startPosition = new Vector3(transform.localPosition.x,startPosition.y,transform.localPosition.z);
+        }
         transform.localPosition = startPosition + (Vector3.up * oscillationHeight * Mathf.Cos(Time.timeSinceLevelLoad * oscillationSpeed));
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + Vector3.up * Time.deltaTime * rotationSpeed);
     }

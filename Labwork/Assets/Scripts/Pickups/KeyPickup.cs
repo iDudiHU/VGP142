@@ -24,7 +24,7 @@ public class KeyPickup : Pickup
     /// <param name="collision">The collider that picked up this key</param>
     public override void DoOnPickup(Collider collision)
     {
-        if (collision.tag == "Player" && collision.gameObject.GetComponent<Health>() != null)
+        if (collision.tag == "Player")
         {
             KeyRing.AddKey(keyID);
         }
