@@ -48,6 +48,18 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public bool IsAlive => isAlive;
 
 		private static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
+		private void OnEnable()
+		{
+			SetupGameManagerPlayer();
+		}
+		
+		private void SetupGameManagerPlayer()
+		{
+			if (GameManager.Instance != null && GameManager.Instance.player == null)
+			{
+				GameManager.Instance.player = this.transform.gameObject;
+			}
+		}
 
 
 		void Start()
@@ -113,17 +125,25 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		{
 			IPickupable pickupable = collision.gameObject.GetComponent<IPickupable>();
 			if (pickupable != null) {
-				pickupable.DoOnPickup(GetComponent<Collider>());
+				pickupable.DoOnPickup();
 			}
 			if (pickupable != null && collision.gameObject.CompareTag("Weapon")) {
 				PickupBow();
-				pickupable.DoOnPickup(GetComponent<Collider>());
+				pickupable.DoOnPickup();
 			}
 		}
 
-		public void CollidedWithPickup(Collider other)
+		public void ItemInRangeCollision(Collider other)
 		{
 			other.gameObject.GetComponent<IPickupable>().DoInRange();
+		}
+
+		public void PickUpItem(Collider other)
+		{
+			IPickupable pickupable = other.gameObject.GetComponent<IPickupable>();
+			if (pickupable != null) {
+				other.gameObject.GetComponent<IPickupable>().DoOnPickup();
+			}
 		}
 
 		public void Shoot()

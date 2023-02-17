@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -50,6 +51,18 @@ namespace Schoolwork.Systems
     void Start()
     {
         SetRespawnPoint(transform.position);
+    }
+
+    private void OnEnable()
+    {
+        SetupGameManagerHealthSystem();
+    }
+    private void SetupGameManagerHealthSystem()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.healthSystem == null)
+        {
+            GameManager.Instance.healthSystem = this;
+        }
     }
 
     /// <summary>

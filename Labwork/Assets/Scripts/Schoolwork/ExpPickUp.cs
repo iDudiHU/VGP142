@@ -15,6 +15,7 @@ namespace Schoolwork
         private GameObject player;
         private bool isPickedUp;
         public AnimationCurve animCurve;
+        public LayerMask layerMask;
 
         private void Awake()
         {
@@ -25,13 +26,11 @@ namespace Schoolwork
         {
             experienceValue = expValue;
         }
-        public  override void DoOnPickup(Collider collision)
+        public  override void DoOnPickup()
         {
-            if (collision.CompareTag("Player")) {
-                collision.GetComponent<LevelSystem>().AddExperience(experienceValue);
-                base.DoOnPickup(collision);
+                GameManager.Instance.levelSystem.AddExperience(experienceValue);
+                base.DoOnPickup();
                 Destroy(gameObject);
-            }
         }
 
         public override void DoInRange()
@@ -49,7 +48,8 @@ namespace Schoolwork
                 time += Time.deltaTime;
                 yield return null;
             }
-            transform.position = player.transform.position + new Vector3(.0f,1.0f,.0f); 
+            transform.position = player.transform.position + new Vector3(.0f,1.0f,.0f);
+            gameObject.layer = 9;
         }
     }
 }

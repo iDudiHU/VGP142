@@ -6,7 +6,7 @@ namespace Schoolwork.Helpers
     {   [Header("Settings")]
         [Tooltip("The effect to create when this pickup is collected")]
         public GameObject pickUpEffect;
-        public virtual void DoOnPickup(Collider collision)
+        public virtual void DoOnPickup()
         {
             if (pickUpEffect != null)
             {

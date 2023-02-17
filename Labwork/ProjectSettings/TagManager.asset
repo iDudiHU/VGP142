@@ -12,6 +12,8 @@ TagManager:
   - EnemyAttack
   - PickUp
   - Weapon
+  - DamagePlayerZone
+  - HealPlayerZone
   layers:
   - Default
   - TransparentFX
@@ -21,8 +23,8 @@ TagManager:
   - UI
   - Enemy
   - Player
-  - Item
-  - 
+  - AOECollect
+  - CloseCollect
   - 
   - 
   - 

@@ -6,13 +6,10 @@ namespace Schoolwork.Helpers
     public class PickUpHelper : MonoBehaviour
     {
         public ThirdPersonCharacter TPC;
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("PickUp")) {
-                TPC.CollidedWithPickup(other);
-                Debug.Log("works");
-            }
-                
+            TPC.PickUpItem(other);
         }
     }
 }

@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class WeaponSystem : MonoBehaviour
+namespace Schoolwork.Systems
 {
-    // Start is called before the first frame update
-    void Start()
+    public class WeaponSystem : MonoBehaviour
     {
-        
-    }
+        private void OnEnable()
+        {
+            SetupGameManagerWeaponSystem();
+        }
+        private void SetupGameManagerWeaponSystem()
+        {
+            if (GameManager.Instance != null && GameManager.Instance.weaponSystem == null)
+            {
+                GameManager.Instance.weaponSystem = this;
+            }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Start()
+        {
+            SetupGameManagerWeaponSystem();
+        }
     }
 }

@@ -5,12 +5,10 @@ namespace Schoolwork
 {
 	public class BowPickup : PickUp
 	{
-		public  override void DoOnPickup(Collider collision)
+		public  override void DoOnPickup()
 		{
-			if (collision.CompareTag("Player")) {
-				base.DoOnPickup(collision);
-				Destroy(gameObject, 0.5f);
-			}
+			base.DoOnPickup();
+			Destroy(gameObject, 0.5f);
 		}
 	}
 }

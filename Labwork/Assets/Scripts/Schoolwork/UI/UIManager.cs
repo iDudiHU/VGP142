@@ -213,7 +213,7 @@ namespace Schoolwork.UI
         /// </summary>
         public void UpdateUI()
         {
-            foreach (Schoolwork.UI.UIelement uiElement in UIelements)
+            foreach (UIelement uiElement in UIelements)
             {
                 uiElement.UpdateUI();
             }

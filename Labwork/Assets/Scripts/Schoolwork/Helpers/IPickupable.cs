@@ -4,7 +4,7 @@ namespace Schoolwork.Helpers
 {
 	public interface IPickupable
 	{
-		void DoOnPickup(Collider collider);
+		void DoOnPickup();
 		void DoInRange();
 	}
 	

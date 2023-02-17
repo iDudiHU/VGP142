@@ -139,6 +139,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &6345293109345231262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f225d6712df1cd342b24ae5e1f4d0c1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oscillationHeight: 0.2
+  oscillationHeight: 0.3
   oscillationSpeed: 2
-  rotationSpeed: 90
+  rotationSpeed: 720
   isMovable: 1

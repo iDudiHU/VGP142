@@ -3,6 +3,7 @@ using Schoolwork.Systems;
 using Schoolwork;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Schoolwork.UI.Element
@@ -17,20 +18,16 @@ namespace Schoolwork.UI.Element
         public HealthSystem displayedHealth = null;
         [Tooltip("The image which represents one unit of health")]
         public Slider healthDisplaySlider = null;
-        [Tooltip("The TMP to display the number")]
-        public TextMeshProUGUI healthNumberDisplay = null;
-        [Tooltip("The maximum health to display")]
-        public int maximumHealthToDisplay = 100;
-
+        [Tooltip("The TMP to display the current health")]
+        public TextMeshProUGUI healthNumberTMP = null;
+        [Tooltip("The TMP to display the max health")]
+        public TextMeshProUGUI healthMaxTMP = null;
         public float updateSpeedSeconds = 0.5f;
     
 
         private void Start()
         {
-            if (displayedHealth == null && (GameManager.Instance != null && GameManager.Instance.player != null))
-            {
-                displayedHealth = GameManager.Instance.player.GetComponentInChildren<HealthSystem>();
-            }
+            displayedHealth = GameManager.Instance.healthSystem;
             UpdateUI();
         }
 
@@ -70,35 +67,44 @@ namespace Schoolwork.UI.Element
         private void SetChildHealthDisplay(float targetHealthNumber)
         {
             if (healthDisplaySlider != null) {
-                if (maximumHealthToDisplay <= targetHealthNumber)
+                if (healthNumberTMP == null)
                     return;
-                if (healthNumberDisplay == null)
-                    return;
-                StartCoroutine(ChangeToPct(targetHealthNumber));
-                StartCoroutine(AnimateNumber(targetHealthNumber));
+                SetHealthBarSize(targetHealthNumber);
+                SetHealthNumber(targetHealthNumber);
+
             }
+        }
+        private void SetHealthBarSize(float targetHealthNumber)
+        {
+            StartCoroutine(ChangeToPct(targetHealthNumber));
+        }
+
+        private void SetHealthNumber(float targetHealthNumber)
+        {
+            StartCoroutine(AnimateNumber(targetHealthNumber));
         }
         private IEnumerator AnimateNumber(float target)
         {
             float startHealth;
             float currentHealth;
-            float.TryParse(healthNumberDisplay.text, out startHealth);
+            float.TryParse(healthNumberTMP.text, out startHealth);
             float elapsed = .0f;
             while (elapsed < updateSpeedSeconds) {
                 elapsed += Time.deltaTime;
                 currentHealth = Mathf.Lerp(startHealth, target, elapsed / updateSpeedSeconds);
-                healthNumberDisplay.text = Mathf.RoundToInt(currentHealth) + "/100";
+                healthNumberTMP.text = Mathf.RoundToInt(currentHealth).ToString();
+                healthMaxTMP.text = "/" + Mathf.RoundToInt(displayedHealth.maximumHealth);
             
                 yield return null;
             }
 
             currentHealth = target;
-            healthNumberDisplay.text = Mathf.RoundToInt(currentHealth) + "/100";
+            healthNumberTMP.text = Mathf.RoundToInt(currentHealth).ToString();
         }
         private IEnumerator ChangeToPct(float targetHealth)
         {
             float preChangePct = healthDisplaySlider.value;
-            float targetPct = targetHealth / maximumHealthToDisplay;
+            float targetPct = targetHealth / displayedHealth.maximumHealth;
             float elapsed = .0f;
             while (elapsed < updateSpeedSeconds) {
                 elapsed += Time.deltaTime;

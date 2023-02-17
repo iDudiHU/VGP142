@@ -23,13 +23,10 @@ namespace Schoolwork
         /// void (no return)
         /// </summary>
         /// <param name="collision">The collider that picked up this key</param>
-        public override void DoOnPickup(Collider collision)
+        public override void DoOnPickup()
         {
-            if (collision.CompareTag("Player"))
-            {
-                KeyRing.AddKey(keyID);
-            }
-            base.DoOnPickup(collision);
+            KeyRing.AddKey(keyID);
+            base.DoOnPickup();
             Destroy(gameObject);
         }
     }   

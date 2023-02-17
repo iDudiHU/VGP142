@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Schoolwork.Helpers;
+using Schoolwork.Systems;
 using Schoolwork.UI;
 using UnityEngine;
 
@@ -11,6 +12,13 @@ namespace Schoolwork
 		[Header("References:")]
 		[Tooltip("The UIManager component which manages the current scene's UI")]
 		public UIManager uiManager = null;
+		[Tooltip("The HealthSystem component which manages the current players health")]
+		public HealthSystem healthSystem = null;
+		[Tooltip("The HealthSystem component which manages the current players health")]
+		public WeaponSystem weaponSystem = null;
+		[Tooltip("The HealthSystem component which manages the current players health")]
+		public LevelSystem levelSystem = null;
+		
 		[Tooltip("The player gameobject")]
 		public GameObject player = null;
     

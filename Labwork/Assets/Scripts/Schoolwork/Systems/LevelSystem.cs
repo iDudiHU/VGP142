@@ -42,6 +42,17 @@ namespace Schoolwork.Systems
             levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
             SetLevelNumber(level);
         }
+        private void OnEnable()
+        {
+            SetupGameManagerLevelSystem();
+        }
+        private void SetupGameManagerLevelSystem()
+        {
+            if (GameManager.Instance != null && GameManager.Instance.levelSystem == null)
+            {
+                GameManager.Instance.levelSystem = this;
+            }
+        }
         public void AddExperience(float enemyExperience)
         {
             experience += enemyExperience * Mathf.Pow(experienceScaleFactor, level/2.0f);

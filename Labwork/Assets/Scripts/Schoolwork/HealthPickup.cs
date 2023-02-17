@@ -11,7 +11,7 @@ namespace Schoolwork
     {
         [Header("Healing Settings")]
         [Tooltip("The healing to apply")]
-        public int healingAmount = 1;
+        public int healingAmount = 10;
 
         /// <summary>
         /// Description:
@@ -23,15 +23,11 @@ namespace Schoolwork
         /// void (no return)
         /// </summary>
         /// <param name="collision">The collider that is picking up this pickup</param>
-        public override void DoOnPickup(Collider collision)
+        public override void DoOnPickup()
         {
-            if (collision.tag == "Player" && collision.gameObject.GetComponent<HealthSystem>() != null)
-            {
-                HealthSystem playerHealth = collision.gameObject.GetComponent<HealthSystem>();
-                playerHealth.ReceiveHealing(healingAmount);
-                GameManager.UpdateUIElements();
-            }
-            base.DoOnPickup(collision);
+            GameManager.Instance.healthSystem.ReceiveHealing(healingAmount);
+            GameManager.UpdateUIElements();
+            base.DoOnPickup();
         }
     }
 }
