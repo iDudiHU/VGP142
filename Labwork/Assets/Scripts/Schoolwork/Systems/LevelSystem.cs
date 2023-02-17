@@ -71,8 +71,8 @@ namespace Schoolwork.Systems
             experience -= experienceToNextLevel;
             CalculateNextLevel();
             SetLevelNumber(level);
-            
             GameManager.UpdateUIElements();
+            GameManager.Instance.uiManager.ToggleLevelUp();
             if(OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
             if (experience >= experienceToNextLevel)
             {

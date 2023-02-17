@@ -14,7 +14,7 @@ namespace Schoolwork.UI
 
         private void Awake()
         {
-            _LevelSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<LevelSystem>();
+            _LevelSystem = GameManager.Instance.levelSystem;
             SetLevelNumber(_LevelSystem.GetLevelNumber());
             //attributePoints = transform.Find("AttributePoints").Find("AttributePointsText").GetComponent<TextMeshProUGUI>();
         }

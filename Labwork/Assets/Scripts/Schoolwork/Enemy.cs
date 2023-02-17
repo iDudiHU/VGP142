@@ -54,9 +54,8 @@ namespace Schoolwork
 	{
 		navMeshAgent = GetComponent<NavMeshAgent>();
 		player = GameObject.FindGameObjectWithTag("Player");
-		TPC = player.GetComponent<ThirdPersonCharacter>();
+		TPC = GameManager.Instance.player.GetComponent<ThirdPersonCharacter>();
 		TPC.OnPlayerDeath += TPCOnPlayerDeath;
-		//attackCollider =
 		m_Animator = GetComponentInChildren<Animator>();
 		UpdateAnimClipTimes();
 		try {
@@ -136,10 +135,11 @@ namespace Schoolwork
 			}
 		}
 
-		if (currentState == EnemyState.Chase) {
-			target = player.transform;
-			if (Vector3.Distance(player.transform.position,transform.position) <= 2 && Time.time - timeSinceLastAttack > m_attackDelay) {
-				switch (UnityEngine.Random.Range(1, 4)) {
+		if (!isPlayerDead) {
+			if (currentState == EnemyState.Chase) {
+				target = player.transform;
+				if (Vector3.Distance(player.transform.position,transform.position) <= 2 && Time.time - timeSinceLastAttack > m_attackDelay) {
+					switch (UnityEngine.Random.Range(1, 4)) {
 						case 1:
 							m_Animator.SetTrigger("attack1");
 							break;
@@ -152,25 +152,29 @@ namespace Schoolwork
 						case 4:
 							m_Animator.SetTrigger("attack4");
 							break;
+					}
+					m_CurrentClipInfo = m_Animator.GetCurrentAnimatorClipInfo(0);
+					m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
+					m_attackDelay = m_CurrentClipLength;
+					timeSinceLastAttack = Time.time + m_attackDelay; //Set timer to current game time plus our delay;
 				}
-				m_CurrentClipInfo = m_Animator.GetCurrentAnimatorClipInfo(0);
-				m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
-				m_attackDelay = m_CurrentClipLength;
-				timeSinceLastAttack = Time.time + m_attackDelay; //Set timer to current game time plus our delay;
-			}
-			if (!TPC.IsAlive)
-				currentState = EnemyState.Patrol;
-			if (Time.time - timeSinceLastAttack > m_attackDelay) {
+				if (Time.time - timeSinceLastAttack > m_attackDelay) {
 				
-			}
-			if (Time.time - timeSinceLastChase > chaseDefaultLength) {
-				timeSinceLastChase = IsPlayerVisible() ? 0 : Time.time;
-			}
-			else {
-				currentState = EnemyState.Patrol;
-				target = path[pathIndex].transform;
+				}
+				if (Time.time - timeSinceLastChase > chaseDefaultLength) {
+					timeSinceLastChase = IsPlayerVisible() ? 0 : Time.time;
+				}
+				else {
+					currentState = EnemyState.Patrol;
+					target = path[pathIndex].transform;
+				}
 			}
 		}
+		else {
+			currentState = EnemyState.Patrol;
+			target = path[pathIndex].transform;
+		}
+		
 		if (target)
 			navMeshAgent.SetDestination(target.position);
 	}

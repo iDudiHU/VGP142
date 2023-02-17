@@ -29,6 +29,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public event EventHandler OnPlayerDeath;
 
 		[SerializeField] GameObject m_Bow;
+		[SerializeField] GameObject m_Staff;
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
 		HealthSystem m_HealthSystem;
@@ -128,7 +129,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				pickupable.DoOnPickup();
 			}
 			if (pickupable != null && collision.gameObject.CompareTag("Weapon")) {
-				PickupBow();
 				pickupable.DoOnPickup();
 			}
 		}
@@ -314,32 +314,49 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public void PickupBow()
 		{
+			UnequipAllWeapons();
 			m_Animator.Play("Pickup");
-			if (m_Animator.GetBool("HasBow") == false) {
-				m_Animator.SetBool("HasBow", true);
-				m_Bow.SetActive(true);
-				m_IsHandEmpty = false;
-			} else {
-				m_Animator.SetBool("HasBow", false);
-				m_Bow.SetActive(false);
-				m_IsHandEmpty = true;
-			}
+			m_Animator.SetBool("HasBow", true);
+			m_Bow.SetActive(true);
+			m_IsHandEmpty = false;
+		}
+
+		public void PickupUpStaff()
+		{
+			UnequipAllWeapons();
+			m_Animator.Play("Pickup");
+			m_Animator.SetBool("HasStaff", true);
+			m_Staff.SetActive(true);
+			m_IsHandEmpty = false;
+		}
+
+		public void UnequipAllWeapons()
+		{
+			m_Staff.SetActive(false);
+			m_Animator.SetBool("HasStaff", false);
+			m_Bow.SetActive(false);
+			m_Animator.SetBool("HasBow", false);
+			m_IsHandEmpty = true;
+		}
+
+		public void EquipAllWeapons()
+		{
+			UnequipAllWeapons();
+			m_Animator.Play("Pickup");
+			m_Animator.SetBool("HasBow", true);
+			m_Animator.SetBool("HasStaff", true);
+			m_Bow.SetActive(true);
+			m_Staff.SetActive(true);
+			m_IsHandEmpty = false;
 		}
 
 		public void Die()
 		{
-			if (isAlive) {
 				m_Animator.SetTrigger("Death");
-				CapsuleCollider capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
-				capsuleCollider.isTrigger = true;
-				capsuleCollider.GetComponent<Rigidbody>().isKinematic = true;
-				GameManager.Instance.uiManager.ToggleDeathScreen();
+				GetComponent<Rigidbody>().isKinematic = true;
 				isAlive = false;
 				if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
-				Destroy(transform.parent.gameObject, 5.0f);
-				GetComponent<ThirdPersonUserControl>().enabled = false;
-				this.enabled = false;
-			}
+				Destroy(transform.parent, 3);
 		}
 
 

@@ -4,6 +4,7 @@ using Schoolwork.Helpers;
 using Schoolwork.Systems;
 using Schoolwork.UI;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace Schoolwork
 {
@@ -83,7 +84,7 @@ namespace Schoolwork
 				CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
 				Instance.uiManager.allowPause = false;
 				Instance.uiManager.GoToPageByName("LosePage");
-				//Add player death .................
+				Instance.player.GetComponent<ThirdPersonCharacter>().Die();
 			}
 		}
 	}	

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -10,9 +11,6 @@ namespace Schoolwork.UI.Element
 {
     [Header("References")]
     [Tooltip("The UI Image to display the weapon silouette to")]
-    public Sprite unarmedSprite;
-    public Sprite bowSprite;
-    public Sprite staffSprite;
     public Image imageToDisplayOn;
 
     /// <summary>
@@ -24,9 +22,9 @@ namespace Schoolwork.UI.Element
     /// Return:
     /// void (no return)
     /// </summary>
-    public void DisplayGunInformation()
+    public void DisplayWeaponInformation()
     {
-        imageToDisplayOn.sprite = unarmedSprite;
+        imageToDisplayOn.sprite = GameManager.Instance.weaponSystem.displaySprite;
         /*Shooter playerShooter = GameManager.Instance.player.GetComponentInChildren<PlayerController>().playerShooter;
 
         if (ammoText != null && playerShooter.guns[playerShooter.equippedGunIndex].useAmmo)
@@ -64,7 +62,7 @@ namespace Schoolwork.UI.Element
         base.UpdateUI();
 
         // The remaining code is only called for this sub-class of UIelement and not others
-        DisplayGunInformation();
+        DisplayWeaponInformation();
     }
 }
 }

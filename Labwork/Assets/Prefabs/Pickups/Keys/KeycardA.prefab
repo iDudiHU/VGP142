@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7689549177085302207}
   - component: {fileID: 3253916990979709202}
   - component: {fileID: 4305343337784991953}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7255657315825697595}
   - component: {fileID: 646776788273526496}
   - component: {fileID: 320353810802893625}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: KeycardA
   m_TagString: PickUp
   m_Icon: {fileID: 0}
