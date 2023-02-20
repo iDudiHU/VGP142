@@ -25,9 +25,9 @@ TagManager:
   - Player
   - AOECollect
   - CloseCollect
-  - 
-  - 
-  - 
+  - PlayerProjectile
+  - EnemyProjectile
+  - IgnoreAll
   - 
   - 
   - 
