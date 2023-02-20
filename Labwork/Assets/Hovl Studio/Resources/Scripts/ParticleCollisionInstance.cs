@@ -17,6 +17,11 @@ public class ParticleCollisionInstance : MonoBehaviour
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem ps;
 
+    [SerializeField]
+    private float m_DamageAmmount;
+
+    public float MDamageAmmount => m_DamageAmmount;
+
     void Start()
     {
         part = GetComponent<ParticleSystem>();

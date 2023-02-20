@@ -8768,6 +8768,7 @@ GameObject:
   - component: {fileID: 8936569896815075768}
   - component: {fileID: 8936569896815075769}
   - component: {fileID: 4253489865265014796}
+  - component: {fileID: 6686765190126051044}
   m_Layer: 6
   m_Name: EnemyFishmanLP
   m_TagString: Untagged
@@ -8859,3 +8860,41 @@ CapsuleCollider:
   m_Height: 2.3
   m_Direction: 1
   m_Center: {x: 0, y: 0.88, z: 0}
+--- !u!114 &6686765190126051044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8936569896815075770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602ad56f23d4d02428bbe98bfa8871ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamId: 1
+  defaultHealth: 10
+  maximumHealth: 10
+  currentHealth: 10
+  invincibilityTime: 0.01
+  isAlwaysInvincible: 0
+  deathEffect: {fileID: 0}
+  hitEffect: {fileID: 0}
+  eventsOnDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8936569896815075769}
+        m_TargetAssemblyTypeName: Schoolwork.Enemy, Assembly-CSharp
+        m_MethodName: Die
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  eventsOnHit:
+    m_PersistentCalls:
+      m_Calls: []

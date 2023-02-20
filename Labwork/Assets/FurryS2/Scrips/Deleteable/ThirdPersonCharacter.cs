@@ -10,7 +10,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	[RequireComponent(typeof(Rigidbody))]
 	[RequireComponent(typeof(CapsuleCollider))]
 	[RequireComponent(typeof(Animator))]
-	public class ThirdPersonCharacter : MonoBehaviour
+	public class ThirdPersonCharacter : MonoBehaviour, IDamageable
 	{
 		[SerializeField] float m_MovingTurnSpeed = 360;
 		[SerializeField] float m_StationaryTurnSpeed = 180;
@@ -128,9 +128,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			if (pickupable != null) {
 				pickupable.DoOnPickup();
 			}
-			if (pickupable != null && collision.gameObject.CompareTag("Weapon")) {
-				pickupable.DoOnPickup();
-			}
 		}
 
 		public void ItemInRangeCollision(Collider other)
@@ -142,7 +139,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		{
 			IPickupable pickupable = other.gameObject.GetComponent<IPickupable>();
 			if (pickupable != null) {
-				other.gameObject.GetComponent<IPickupable>().DoOnPickup();
+				pickupable.DoOnPickup();
 			}
 		}
 
@@ -381,6 +378,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_GroundNormal = Vector3.up;
 				m_Animator.applyRootMotion = false;
 			}
+		}
+
+		public void OnDamage(float damageAmount)
+		{
+			GameManager.Instance.healthSystem.TakeDamage(damageAmount);
 		}
 	}
 }

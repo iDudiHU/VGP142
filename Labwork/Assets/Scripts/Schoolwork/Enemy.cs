@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Schoolwork.Helpers;
+using Schoolwork.Systems;
 using Unity.VisualScripting;
 using UnityEngine.AI;
 using UnityEngine;
@@ -9,7 +11,7 @@ using Random = UnityEngine.Random;
 
 namespace Schoolwork
 {
-	public class Enemy : MonoBehaviour
+	public class Enemy : MonoBehaviour, IDamageable
 {
 	public Transform target; // The player's transform
 	public GameObject deathEffect;
@@ -29,6 +31,8 @@ namespace Schoolwork
 	private float m_attackDelay;
 	[SerializeField]
 	private float m_damage;
+
+	private EnemyHealthSystem enemyHealthSystem;
 
 	public float Damage => m_damage;
 
@@ -57,6 +61,7 @@ namespace Schoolwork
 		TPC = GameManager.Instance.player.GetComponent<ThirdPersonCharacter>();
 		TPC.OnPlayerDeath += TPCOnPlayerDeath;
 		m_Animator = GetComponentInChildren<Animator>();
+		enemyHealthSystem = GetComponent<EnemyHealthSystem>();
 		UpdateAnimClipTimes();
 		try {
 			m_Animator.SetFloat("locomotion", 1);
@@ -138,7 +143,7 @@ namespace Schoolwork
 		if (!isPlayerDead) {
 			if (currentState == EnemyState.Chase) {
 				target = player.transform;
-				if (Vector3.Distance(player.transform.position,transform.position) <= 2 && Time.time - timeSinceLastAttack > m_attackDelay) {
+				if (Vector3.Distance(player.transform.position,transform.position) <= 2 && (Time.time - timeSinceLastAttack > m_attackDelay)) {
 					switch (UnityEngine.Random.Range(1, 4)) {
 						case 1:
 							m_Animator.SetTrigger("attack1");
@@ -221,6 +226,11 @@ namespace Schoolwork
 	private void OnDestroy()
 	{
 		TPC.OnPlayerDeath -= TPCOnPlayerDeath;
+	}
+
+	public void OnDamage(float damageAmount)
+	{
+		enemyHealthSystem.TakeDamage(damageAmount);
 	}
 }
 }

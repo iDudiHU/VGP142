@@ -55,7 +55,9 @@ namespace Schoolwork.Systems
 
     private void OnEnable()
     {
-        SetupGameManagerHealthSystem();
+        if (gameObject.CompareTag("Player")) {
+            SetupGameManagerHealthSystem();
+        }
     }
     private void SetupGameManagerHealthSystem()
     {

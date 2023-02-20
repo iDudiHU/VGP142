@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 3981388119657365846}
   - component: {fileID: 3981388119657365847}
   - component: {fileID: 8089247648582174946}
+  - component: {fileID: 6753967604217106457}
   m_Layer: 6
   m_Name: EnemyAnubisLP
   m_TagString: Untagged
@@ -213,6 +214,44 @@ CapsuleCollider:
   m_Height: 2.3
   m_Direction: 1
   m_Center: {x: 0, y: 0.88, z: 0}
+--- !u!114 &6753967604217106457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3981388119657365844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602ad56f23d4d02428bbe98bfa8871ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamId: 1
+  defaultHealth: 50
+  maximumHealth: 50
+  currentHealth: 50
+  invincibilityTime: 0.01
+  isAlwaysInvincible: 0
+  deathEffect: {fileID: 0}
+  hitEffect: {fileID: 0}
+  eventsOnDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3981388119657365847}
+        m_TargetAssemblyTypeName: Schoolwork.Enemy, Assembly-CSharp
+        m_MethodName: Die
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  eventsOnHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5104013536966807393
 GameObject:
   m_ObjectHideFlags: 0

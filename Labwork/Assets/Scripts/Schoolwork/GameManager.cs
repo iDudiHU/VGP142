@@ -4,6 +4,7 @@ using Schoolwork.Helpers;
 using Schoolwork.Systems;
 using Schoolwork.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace Schoolwork
@@ -19,6 +20,8 @@ namespace Schoolwork
 		public WeaponSystem weaponSystem = null;
 		[Tooltip("The HealthSystem component which manages the current players health")]
 		public LevelSystem levelSystem = null;
+
+		[FormerlySerializedAs("m_mainCamera")] public Camera mainCamera = null;
 		
 		[Tooltip("The player gameobject")]
 		public GameObject player = null;
@@ -29,6 +32,9 @@ namespace Schoolwork
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			KeyRing.ClearKeyRing();
+			if (mainCamera == null) {
+				mainCamera = Camera.main;
+			}
 		}
 		
 
