@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Schoolwork.Systems;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Schoolwork.UI.Element
         public void SetHealth(EnemyHealthSystem health)
         {
             this.health = health;
-            health.OnEnemyHealthPctChanged += HandleHealthChanged;
+            this.health.OnEnemyHealthPctChanged += HandleHealthChanged;
         }
 
         private void HandleHealthChanged(float pct)

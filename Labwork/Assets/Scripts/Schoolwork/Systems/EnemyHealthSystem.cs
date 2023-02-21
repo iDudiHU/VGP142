@@ -25,9 +25,20 @@ namespace Schoolwork.Systems
         [Tooltip("The maximum health value")] public float maximumHealth = 100.0f;
 
         [Tooltip("The current in game health value")]
-        public float currentHealth = 100.0f;
+        [SerializeField]
+        private float m_CurrentHealth = 100.0f;
 
-        public float CurrentHealth { get; private set; }
+        public float CurrentHealth
+		{
+			get
+			{
+                return m_CurrentHealth;
+			}
+			set
+			{
+                m_CurrentHealth = value;
+			}
+		}
         public event Action<float> OnEnemyHealthPctChanged = delegate { };
 
             [Tooltip("Invulnerability duration, in seconds, after taking damage")]
@@ -102,7 +113,7 @@ namespace Schoolwork.Systems
         /// <param name="damageAmount">The amount of damage to take</param>
         public void TakeDamage(float damageAmount)
         {
-            if (isInvincableFromDamage || currentHealth <= 0 || isAlwaysInvincible) {
+            if (isInvincableFromDamage || m_CurrentHealth <= 0 || isAlwaysInvincible) {
                 return;
             }
             else {
@@ -113,8 +124,8 @@ namespace Schoolwork.Systems
                 eventsOnHit?.Invoke();
                 timeToBecomeDamagableAgain = Time.time + invincibilityTime;
                 isInvincableFromDamage = true;
-                currentHealth = Mathf.Clamp(currentHealth - damageAmount, 0, maximumHealth);
-                float currentHealthPct = CurrentHealth / maximumHealth;
+                m_CurrentHealth = Mathf.Clamp(m_CurrentHealth - damageAmount, 0, maximumHealth);
+                float currentHealthPct = m_CurrentHealth / maximumHealth;
                 OnEnemyHealthPctChanged(currentHealthPct);
                 CheckDeath();
             }
@@ -131,9 +142,9 @@ namespace Schoolwork.Systems
         /// <param name="healingAmount">How much healing to apply</param>
         public void ReceiveHealing(float healingAmount)
         {
-            currentHealth += healingAmount;
-            if (currentHealth > maximumHealth) {
-                currentHealth = maximumHealth;
+            m_CurrentHealth += healingAmount;
+            if (m_CurrentHealth > maximumHealth) {
+                m_CurrentHealth = maximumHealth;
             }
 
             GameManager.UpdateUIElements();
@@ -174,7 +185,7 @@ namespace Schoolwork.Systems
         /// <returns>bool: A boolean value representing if the health has died or not (true for dead)</returns>
         bool CheckDeath()
         {
-            if (currentHealth <= 0) {
+            if (m_CurrentHealth <= 0) {
                 Die();
                 return true;
             }

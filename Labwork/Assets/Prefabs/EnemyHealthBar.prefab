@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateSpeedSeconds: 0.5
-  positionOffset: 1
+  positionOffset: 2
   maskImage: {fileID: 4714484402140206412}
 --- !u!1 &4819159626189133442
 GameObject:
