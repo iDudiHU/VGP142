@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6602635155702295618}
   - component: {fileID: 6602635155702295619}
   - component: {fileID: 6602635155702295620}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RightSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 6602635155921628380}
   - component: {fileID: 6602635155921628381}
   - component: {fileID: 5793968391259229270}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1469,7 +1469,7 @@ GameObject:
   - component: {fileID: 6602635156466136359}
   - component: {fileID: 6602635156466136360}
   - component: {fileID: 6602635156466136361}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LeftSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -29,7 +29,7 @@ namespace Schoolwork.UI
       private void RemoveHealthBar(EnemyHealthSystem health)
       {
          if (healthBars.ContainsKey(health)) {
-            Destroy(healthBars[health].gameObject);
+            Destroy(healthBars[health].gameObject, 0.3f);
             healthBars.Remove(health);
          }
       }

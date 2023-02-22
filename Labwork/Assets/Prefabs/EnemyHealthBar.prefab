@@ -114,6 +114,9 @@ MonoBehaviour:
   updateSpeedSeconds: 0.5
   positionOffset: 2
   maskImage: {fileID: 4714484402140206412}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &4819159626189133442
 GameObject:
   m_ObjectHideFlags: 0

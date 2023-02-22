@@ -25,6 +25,15 @@ namespace Schoolwork
             if (damageable != null && other.CompareTag("Player")) {
                 damageable.OnDamage(enemy.Damage);
             }
+            if (other.CompareTag("AOE"))
+            {
+                enemy.OnDamage(UnityEngine.Random.Range(400, 800));
+            }
+            if (other.CompareTag("Punch"))
+            {
+                enemy.OnDamage(UnityEngine.Random.Range(100, 200));
+            }
+
         }
     }
 }

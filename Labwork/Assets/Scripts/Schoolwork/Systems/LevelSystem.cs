@@ -56,28 +56,25 @@ namespace Schoolwork.Systems
         public void AddExperience(float enemyExperience)
         {
             experience += enemyExperience * Mathf.Pow(experienceScaleFactor, level/2.0f);
-
-
+            GameManager.UpdateUIElements();
             if (experience >= experienceToNextLevel) {
                 LevelUp();
             }
-            GameManager.UpdateUIElements();
         }
 
         void LevelUp()
         {
-            level++;
-            attributePoints++;
-            experience -= experienceToNextLevel;
-            CalculateNextLevel();
-            SetLevelNumber(level);
-            GameManager.UpdateUIElements();
-            GameManager.Instance.uiManager.ToggleLevelUp();
-            if(OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
-            if (experience >= experienceToNextLevel)
+            while (experience >= experienceToNextLevel)
             {
-                LevelUp();
+                level++;
+                attributePoints++;
+                experience -= experienceToNextLevel;
+                CalculateNextLevel();
+                SetLevelNumber(level);
+                if (OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
             }
+
+            GameManager.Instance.uiManager.ToggleLevelUp();
         }
 
         void CalculateNextLevel()

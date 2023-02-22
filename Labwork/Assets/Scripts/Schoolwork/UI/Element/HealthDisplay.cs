@@ -66,12 +66,9 @@ namespace Schoolwork.UI.Element
         /// <param name="targetHealthNumber">The number of images that this object should have as children</param>
         private void SetChildHealthDisplay(float targetHealthNumber)
         {
-            if (healthDisplaySlider != null) {
-                if (healthNumberTMP == null)
-                    return;
+            if (healthDisplaySlider != null && healthNumberTMP != null && gameObject.activeSelf) {
                 SetHealthBarSize(targetHealthNumber);
                 SetHealthNumber(targetHealthNumber);
-
             }
         }
         private void SetHealthBarSize(float targetHealthNumber)
@@ -114,5 +111,10 @@ namespace Schoolwork.UI.Element
 
             healthDisplaySlider.value = targetPct;
         }
-    }
+
+		private void OnDisable()
+		{
+            StopAllCoroutines();
+		}
+	}
 }

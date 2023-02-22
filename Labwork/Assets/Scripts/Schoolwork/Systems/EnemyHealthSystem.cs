@@ -1,3 +1,4 @@
+using Schoolwork.UI.Element;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -118,7 +119,9 @@ namespace Schoolwork.Systems
             }
             else {
                 if (hitEffect != null) {
-                    Instantiate(hitEffect, transform.position, transform.rotation, null);
+                    var go = Instantiate(hitEffect, transform.position + Vector3.up * 1.5f, transform.rotation, null);
+                    go.GetComponent<DamageNumberIndicator>().Initialize(damageAmount);
+                    go.transform.SetParent(null);
                 }
 
                 eventsOnHit?.Invoke();
@@ -217,11 +220,6 @@ namespace Schoolwork.Systems
             
             OnEnemyHealthSystemRemoved(this);
 
-        }
-
-        private void OnDisable()
-        {
-            OnEnemyHealthSystemRemoved(this);
         }
     }
 }

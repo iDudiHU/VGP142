@@ -208,19 +208,15 @@ namespace Schoolwork
 			Exp.GetComponent<ExpPickUp>().Init(experienceDropValue);
 			Exp.transform.SetParent(null);
 		}
-		
+		navMeshAgent.ResetPath();
+		target = null;
+
 		go.transform.SetParent(null);
 		GetComponent<CapsuleCollider>().enabled = false;
 		m_Animator.Play("Death");
 		m_CurrentClipInfo = this.m_Animator.GetCurrentAnimatorClipInfo(0);
 		m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
 		Destroy(gameObject, m_CurrentClipLength);
-	}
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.CompareTag("AOE") || other.CompareTag("Punch")) {
-			Die();
-		}
 	}
 
 	private void OnDestroy()

@@ -295,6 +295,19 @@ namespace Schoolwork.UI
             }
         }
 
+        public void GoToDefaultPage()
+		{
+            for (int i = 0; i < pages.Count; i++)
+            {
+                UIPage pg = pages[i];
+                if (pg != null && i != 0)
+                {
+                    pg.gameObject.SetActive(false);
+                }
+            }
+            pages[0].SetSelectedUIToDefault();
+        }
+
         /// <summary>
         /// Description:
         /// Goes to a page by that page's name
@@ -306,17 +319,38 @@ namespace Schoolwork.UI
         /// <param name="pageName">The name of the page in the game you want to go to, if their are duplicates this picks the first found</param>
         public void GoToPageByName(string pageName)
         {
+            GoToPageByName(pageName, true);
+        }
+
+        public void GoToPageByName(string pageName, bool deactivateHud)
+        {
             UIPage page = pages.Find(item => item.name == pageName);
             int pageIndex = pages.IndexOf(page);
-            GoToPage(pageIndex);
+            if (pageIndex < pages.Count && pages[pageIndex] != null)
+            {
+                if (pages != null)
+                {
+                    for (int i = 0; i < pages.Count; i++)
+                    {
+                        UIPage pg = pages[i];
+                        if (pg != null && (deactivateHud && i != 0))
+                        {
+                            pg.gameObject.SetActive(false);
+                        }
+                    }
+                }
+                pages[pageIndex].gameObject.SetActive(true);
+                pages[pageIndex].SetSelectedUIToDefault();
+            }
         }
-    
+
         public void ToggleLevelUp()
         {
             if (isLevelingUp)
             {
                 CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.FPS);
-                GoToPage(0);
+                GoToDefaultPage();
+                GameManager.UpdateUIElements();
                 Time.timeScale = 1;
                 allowPause = true;
                 isLevelingUp = false;
@@ -324,8 +358,8 @@ namespace Schoolwork.UI
             else
             {
                 CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
-                GoToPageByName("LevelUpPage");
-                Time.timeScale = 0.01f;
+                GoToPageByName("LevelUpPage", false);
+                Time.timeScale = .0f;
                 allowPause = false;
                 isLevelingUp = true;
             }

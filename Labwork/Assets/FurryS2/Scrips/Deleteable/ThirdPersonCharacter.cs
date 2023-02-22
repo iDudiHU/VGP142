@@ -4,6 +4,7 @@ using Schoolwork.Systems;
 using Schoolwork;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Schoolwork.Systems.WeaponSystem;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -87,11 +88,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_MoveSpeedMultiplier = m_SprintSpeedMultiplier;
 			if (Input.GetKeyUp(KeyCode.LeftShift))
 				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
-			if (Input.GetMouseButtonDown(0)) {
-				if (!m_IsHandEmpty) {
+			if (Input.GetMouseButtonDown(0) && (GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Bow
+				|| GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Combined)) {
 					m_Animator.SetTrigger(NormalAttack);
-				}
-			} else if (Input.GetMouseButtonDown(1)) {
+			} else if (Input.GetMouseButtonDown(1) && (GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Staff
+				|| GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Combined)) {
 				m_Animator.SetTrigger("SpecialAttack");
 			} else if (Input.GetKeyDown(KeyCode.E)) {
 				m_Animator.SetTrigger("Punch");
@@ -140,6 +141,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			IPickupable pickupable = other.gameObject.GetComponent<IPickupable>();
 			if (pickupable != null) {
 				pickupable.DoOnPickup();
+				GameManager.UpdateUIElements();
 			}
 		}
 

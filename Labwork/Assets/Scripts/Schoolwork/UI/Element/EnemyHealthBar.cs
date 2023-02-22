@@ -12,12 +12,14 @@ namespace Schoolwork.UI.Element
         [SerializeField] private float updateSpeedSeconds = 0.5f;
         [SerializeField] private float positionOffset;
         [SerializeField] private Image maskImage;
+        [SerializeField] private LayerMask layerMask;
 
         private EnemyHealthSystem health;
 
         public void OnEnable()
         {
             healthSlider = GetComponent<Slider>();
+            maskImage.color = new Color(maskImage.color.r, maskImage.color.g, maskImage.color.b, 0f);
         }
 
         public void SetHealth(EnemyHealthSystem health)
@@ -46,12 +48,37 @@ namespace Schoolwork.UI.Element
 
         private void LateUpdate()
         {
-            transform.position = GameManager.Instance.mainCamera.WorldToScreenPoint(health.transform.position + Vector3.up * positionOffset);
+            // Get the position of the target in the viewport
+            Vector3 targetViewportPos = GameManager.Instance.mainCamera.WorldToViewportPoint(health.transform.position);
+
+            // Check if the target is within the camera's field of view
+            bool targetIsVisible = targetViewportPos.x > 0 && targetViewportPos.x < 1
+                                && targetViewportPos.y > 0 && targetViewportPos.y < 1
+                                && targetViewportPos.z > 0 && !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask)
+                                && health.CurrentHealth < health.maximumHealth;
+
+            // Set the alpha value of the mask image based on whether the target is visible or not
+            Color maskColor = maskImage.color;
+            maskColor.a = targetIsVisible ? 1f : 0f;
+            maskImage.color = maskColor;
+
+            if (targetIsVisible)
+            {
+                // Do something if the target is visible
+                transform.position = GameManager.Instance.mainCamera.WorldToScreenPoint(health.transform.position + Vector3.up * positionOffset);
+            }
         }
 
         private void OnDestroy()
         {
+            StopAllCoroutines();
             health.OnEnemyHealthPctChanged -= HandleHealthChanged;
         }
-    }
+
+		private void OnDisable()
+		{
+            StopAllCoroutines();
+            health.OnEnemyHealthPctChanged -= HandleHealthChanged;
+        }
+	}
 }

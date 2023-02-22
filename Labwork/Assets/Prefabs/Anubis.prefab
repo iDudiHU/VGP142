@@ -227,13 +227,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamId: 1
-  defaultHealth: 50
-  maximumHealth: 50
-  currentHealth: 50
+  defaultHealth: 1300
+  maximumHealth: 1300
+  m_CurrentHealth: 1300
   invincibilityTime: 0.01
   isAlwaysInvincible: 0
   deathEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
+  hitEffect: {fileID: 126561616101054280, guid: 5160cf2ab3945f84fb0a566a2f91eaaf, type: 3}
   eventsOnDeath:
     m_PersistentCalls:
       m_Calls:

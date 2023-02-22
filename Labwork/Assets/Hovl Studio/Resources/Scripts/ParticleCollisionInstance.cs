@@ -24,6 +24,7 @@ public class ParticleCollisionInstance : MonoBehaviour
 
     void Start()
     {
+        m_DamageAmmount = Random.Range(312, 666);
         part = GetComponent<ParticleSystem>();
     }
     void OnParticleCollision(GameObject other)

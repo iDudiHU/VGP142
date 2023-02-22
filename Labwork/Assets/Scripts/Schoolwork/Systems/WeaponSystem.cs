@@ -17,6 +17,13 @@ namespace Schoolwork.Systems
             Unarmed, Bow, Staff, Combined
         }
         public WeaponTypes currentWeapon = WeaponTypes.Unarmed;
+        public string CurrentWeaponName
+		{
+			get
+			{
+                return Enum.GetName(typeof(WeaponTypes), currentWeapon);
+			}
+		}
         private void OnEnable()
         {
             SetupGameManagerWeaponSystem();

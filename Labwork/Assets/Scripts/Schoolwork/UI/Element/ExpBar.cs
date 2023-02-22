@@ -31,7 +31,7 @@ namespace Schoolwork.UI.Element
         
         public override void UpdateUI()
         {
-            if (_LevelSystem != null)
+            if (_LevelSystem != null && currentExpTMP != null && gameObject.activeSelf)
             {
                 SetExperienceBarSize(_LevelSystem.GetExperienceNormalized());
                 SetExperienceNumber(_LevelSystem.Experience, _LevelSystem.ExperienceToNextLevel);
@@ -77,7 +77,10 @@ namespace Schoolwork.UI.Element
 
             expSlider.value = targetExp;
         }
+		private void OnDisable()
+		{
+            StopAllCoroutines();
+        }
 
-
-    }
+	}
 }
