@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityStandardAssets.Characters.ThirdPerson;
 using Random = UnityEngine.Random;
+using System.Collections;
 
 namespace Schoolwork
 {
@@ -20,7 +21,6 @@ namespace Schoolwork
 	public GameObject experienceDrop;
 	[SerializeField]
 	private float experienceDropValue;
-	[FormerlySerializedAs("AttackCollider")] public GameObject attackCollider;
 	private NavMeshAgent navMeshAgent;
 	Animator m_Animator;
 	private string m_currentAnimationClipName;
@@ -31,6 +31,8 @@ namespace Schoolwork
 	private float m_attackDelay;
 	[SerializeField]
 	private float m_damage;
+	[SerializeField]
+	private Collider m_AttackCollider;
 
 	private EnemyHealthSystem enemyHealthSystem;
 
@@ -39,7 +41,7 @@ namespace Schoolwork
 	public LayerMask playerLayerMask;
 	public enum EnemyState
 	{
-		Chase, Patrol
+		Chase, Patrol, Attacking, Die
 	}
 	public float chaseDefaultLength = 2f;
 	private float timeSinceLastChase;
@@ -126,6 +128,11 @@ namespace Schoolwork
 
 	void Update()
 	{
+		if (currentState == EnemyState.Die)
+			{
+				navMeshAgent.ResetPath();
+				target = null;
+			}
 		if (currentState == EnemyState.Patrol)
 		{
 			if (navMeshAgent.remainingDistance < distThreshhold && !navMeshAgent.pathPending)
@@ -141,41 +148,36 @@ namespace Schoolwork
 		}
 
 		if (!isPlayerDead) {
-			if (currentState == EnemyState.Chase) {
-				target = player.transform;
-				if (Vector3.Distance(player.transform.position,transform.position) <= 2 && (Time.time - timeSinceLastAttack > m_attackDelay)) {
-					switch (UnityEngine.Random.Range(1, 4)) {
-						case 1:
-							m_Animator.SetTrigger("attack1");
-							break;
-						case 2:
-							m_Animator.SetTrigger("attack2");
-							break;
-						case 3:
-							m_Animator.SetTrigger("attack3");
-							break;
-						case 4:
-							m_Animator.SetTrigger("attack4");
-							break;
+				if (currentState == EnemyState.Chase)
+				{
+					target = player.transform;
+					if (Vector3.Distance(player.transform.position, transform.position) <= 2 && (Time.time - timeSinceLastAttack > m_attackDelay))
+					{
+						StartCoroutine(AttackCoroutine("attack" + Random.Range(1, 4).ToString()));
+						m_CurrentClipInfo = m_Animator.GetCurrentAnimatorClipInfo(0);
+						m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
+						m_attackDelay = m_CurrentClipLength;
+						timeSinceLastAttack = Time.time + m_attackDelay; //Set timer to current game time plus our delay;
 					}
-					m_CurrentClipInfo = m_Animator.GetCurrentAnimatorClipInfo(0);
-					m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
-					m_attackDelay = m_CurrentClipLength;
-					timeSinceLastAttack = Time.time + m_attackDelay; //Set timer to current game time plus our delay;
+
+					if (IsPlayerVisible())
+					{
+						timeSinceLastChase = Time.time;
+					}
+
+					if (Time.time - timeSinceLastChase > chaseDefaultLength)
+					{
+						currentState = EnemyState.Patrol;
+						target = path[pathIndex].transform;
+					}
 				}
-				if (Time.time - timeSinceLastAttack > m_attackDelay) {
-				
-				}
-				if (Time.time - timeSinceLastChase > chaseDefaultLength) {
-					timeSinceLastChase = IsPlayerVisible() ? 0 : Time.time;
-				}
-				else {
+				else
+				{
 					currentState = EnemyState.Patrol;
 					target = path[pathIndex].transform;
 				}
 			}
-		}
-		else {
+			else {
 			currentState = EnemyState.Patrol;
 			target = path[pathIndex].transform;
 		}
@@ -208,8 +210,7 @@ namespace Schoolwork
 			Exp.GetComponent<ExpPickUp>().Init(experienceDropValue);
 			Exp.transform.SetParent(null);
 		}
-		navMeshAgent.ResetPath();
-		target = null;
+			currentState = EnemyState.Die;
 
 		go.transform.SetParent(null);
 		GetComponent<CapsuleCollider>().enabled = false;
@@ -217,6 +218,21 @@ namespace Schoolwork
 		m_CurrentClipInfo = this.m_Animator.GetCurrentAnimatorClipInfo(0);
 		m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
 		Destroy(gameObject, m_CurrentClipLength);
+	}
+	private IEnumerator AttackCoroutine(string attackString)
+	{
+		m_Animator.SetTrigger(attackString);
+		m_CurrentClipInfo = m_Animator.GetCurrentAnimatorClipInfo(0);
+		m_CurrentClipLength = m_CurrentClipInfo[0].clip.length;
+		m_attackDelay = m_CurrentClipLength;
+		// Set the attack indicator to active
+		m_AttackCollider.gameObject.SetActive(true);
+
+		// Wait for the attack to finish
+		yield return new WaitForSeconds(m_CurrentClipLength);
+
+		// Set the attack indicator back to inactive
+		m_AttackCollider.gameObject.SetActive(false);
 	}
 
 	private void OnDestroy()

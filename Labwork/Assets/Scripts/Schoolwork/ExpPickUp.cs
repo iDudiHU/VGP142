@@ -41,14 +41,17 @@ namespace Schoolwork
         {
             float time = 0;
             Vector3 startPosition = transform.position;
-            while (time < duration) {
+            Vector3 targetPosition = player.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
+            while (time < duration)
+            {
                 float t = time / lerpDuration;
                 t = animCurve.Evaluate(t);
-                transform.position = Vector3.Lerp(startPosition, player.transform.position + new Vector3(.0f,1.0f,.0f),  t);
+                targetPosition = player.transform.position + new Vector3(0.0f, 1.0f, 0.0f); // update target position
+                transform.position = Vector3.Lerp(startPosition, targetPosition, t);
                 time += Time.deltaTime;
                 yield return null;
             }
-            transform.position = player.transform.position + new Vector3(.0f,1.0f,.0f);
+            transform.position = targetPosition;
             gameObject.layer = 9;
         }
     }

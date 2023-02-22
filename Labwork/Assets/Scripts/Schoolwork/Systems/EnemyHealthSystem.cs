@@ -59,11 +59,15 @@ namespace Schoolwork.Systems
         /// </summary>
         void Start()
         {
-            OnEnemyHealthSystemAdded(this);
+            HealthSetup();
         }
 
         private void OnEnable()
         {
+        }
+
+        private void HealthSetup()
+		{
             CurrentHealth = maximumHealth;
             OnEnemyHealthSystemAdded(this);
         }

@@ -234,6 +234,12 @@ namespace Schoolwork.Systems
         GameManager.UpdateUIElements();
     }
 
+    public void AddMaxHealth(int level)
+    {
+            maximumHealth += 20 * Mathf.Pow(1.3f, level);
+            currentHealth = maximumHealth;
+    }
+
 
     [Header("Effects & Polish")]
     [Tooltip("The effect to create when this health dies")]

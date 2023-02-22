@@ -48,23 +48,19 @@ namespace Schoolwork.UI.Element
 
         private void LateUpdate()
         {
-            // Get the position of the target in the viewport
-            Vector3 targetViewportPos = GameManager.Instance.mainCamera.WorldToViewportPoint(health.transform.position);
 
-            // Check if the target is within the camera's field of view
-            bool targetIsVisible = targetViewportPos.x > 0 && targetViewportPos.x < 1
+            Vector3 targetViewportPos = GameManager.Instance.mainCamera.WorldToViewportPoint(health.transform.position);
+            bool targetIsVisible = (targetViewportPos.x > 0 && targetViewportPos.x < 1
                                 && targetViewportPos.y > 0 && targetViewportPos.y < 1
                                 && targetViewportPos.z > 0 && !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask)
-                                && health.CurrentHealth < health.maximumHealth;
+                                && health.CurrentHealth < health.maximumHealth);
 
-            // Set the alpha value of the mask image based on whether the target is visible or not
             Color maskColor = maskImage.color;
             maskColor.a = targetIsVisible ? 1f : 0f;
             maskImage.color = maskColor;
 
             if (targetIsVisible)
             {
-                // Do something if the target is visible
                 transform.position = GameManager.Instance.mainCamera.WorldToScreenPoint(health.transform.position + Vector3.up * positionOffset);
             }
         }

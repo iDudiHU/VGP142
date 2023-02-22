@@ -170,7 +170,7 @@ Material:
     - _HairCapLongColorPower: 0
     - _HairCapRoughness: 0.6
     - _HairCapShortColorPower: 0
-    - _LipNailColorPower: 0.5
+    - _LipNailColorPower: 0.636
     - _LipsNailRoughnessBoost: 0.75
     - _Metallic: 0
     - _Mode: 0
@@ -185,15 +185,15 @@ Material:
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 1
-    - _SSSPower: 1
+    - _SSSPower: 2.1
     - _SSSonoff: 1.2
     - _SkinBlendColorPower01: 0.356
     - _SkinBlendColorPower02: 0
     - _SkinBlendColorPower03: 0
     - _SkinBlendColorPower04: 0
-    - _SkinPore_Power: 0.25
+    - _SkinPore_Power: 0.303
     - _SkinPore_Tilling: 55
-    - _SkinRounghnessBoots: 0.7
+    - _SkinRounghnessBoots: 0.683
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

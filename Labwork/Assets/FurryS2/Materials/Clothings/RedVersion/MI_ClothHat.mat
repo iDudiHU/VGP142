@@ -198,10 +198,10 @@ Material:
     - _GlossyReflections: 1
     - _IsDoubleSide: 0
     - _Metallic: 0
-    - _MetallicBoots01: 1
-    - _MetallicBoots02: 1
-    - _MetallicBoots03: 1
-    - _MetallicBoots04: 1
+    - _MetallicBoots01: 0
+    - _MetallicBoots02: 0
+    - _MetallicBoots03: 0
+    - _MetallicBoots04: 0.03
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OnOffOpacity: 0
@@ -216,10 +216,10 @@ Material:
     - _ReceivesSSRTransparent: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _RoughnessBoost01: 1
-    - _RoughnessBoost02: 1
-    - _RoughnessBoost03: 1
-    - _RoughnessBoost04: 1
+    - _RoughnessBoost01: 1.16
+    - _RoughnessBoost02: 0.65
+    - _RoughnessBoost03: 0.12
+    - _RoughnessBoost04: 0.15
     - _SSSon1: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

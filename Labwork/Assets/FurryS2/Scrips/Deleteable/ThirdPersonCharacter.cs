@@ -15,18 +15,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	{
 		[SerializeField] float m_MovingTurnSpeed = 360;
 		[SerializeField] float m_StationaryTurnSpeed = 180;
-		[SerializeField] float m_JumpPower = 12f;
+		[SerializeField] float m_JumpPower = 6f;
 		[Range(1f, 4f)][SerializeField] float m_GravityMultiplier = 2f;
 		[SerializeField] float m_RunCycleLegOffset = 0.2f;
 		[SerializeField] float m_MoveSpeedMultiplier = 1f;
 		float m_OrigMoveSpeedMultiplier = 1f;
 		[SerializeField] float m_SprintSpeedMultiplier = 1.5f;
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
+		[SerializeField] float m_AttackAnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
 		[SerializeField]  GameObject m_ShootPosition;
 		[SerializeField]  GameObject m_ProjectilePrefab;
 		[SerializeField] private GameObject m_AOE_Go;
 		[SerializeField] private GameObject m_Punch_Go;
+		[SerializeField] private LayerMask m_crouchLayermask;
 		public event EventHandler OnPlayerDeath;
 
 		[SerializeField] GameObject m_Bow;
@@ -46,6 +48,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		bool m_Crouching;
 		private bool m_IsHandEmpty = true;
 		private bool isAlive = true;
+		private bool isAttacking = false;
 
 		public bool IsAlive => isAlive;
 
@@ -84,18 +87,29 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		private void Update()
 		{
-			if (Input.GetKey(KeyCode.LeftShift))
-			m_MoveSpeedMultiplier = m_SprintSpeedMultiplier;
-			if (Input.GetKeyUp(KeyCode.LeftShift))
-				m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
-			if (Input.GetMouseButtonDown(0) && (GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Bow
-				|| GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Combined)) {
+			if (isAlive)
+			{
+				if (Input.GetKey(KeyCode.LeftShift))
+					m_MoveSpeedMultiplier = m_SprintSpeedMultiplier;
+				if (Input.GetKeyUp(KeyCode.LeftShift))
+					m_MoveSpeedMultiplier = m_OrigMoveSpeedMultiplier;
+				if (Input.GetMouseButton(0) && !isAttacking && (GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Bow
+					|| GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Combined))
+				{
 					m_Animator.SetTrigger(NormalAttack);
-			} else if (Input.GetMouseButtonDown(1) && (GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Staff
-				|| GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Combined)) {
-				m_Animator.SetTrigger("SpecialAttack");
-			} else if (Input.GetKeyDown(KeyCode.E)) {
-				m_Animator.SetTrigger("Punch");
+					isAttacking = true;
+				}
+				else if (Input.GetMouseButton(1) && !isAttacking && (GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Staff
+				  || GameManager.Instance.weaponSystem.currentWeapon == WeaponTypes.Combined))
+				{
+					m_Animator.SetTrigger("SpecialAttack");
+					isAttacking = true;
+				}
+				else if (Input.GetKey(KeyCode.E) && !isAttacking)
+				{
+					m_Animator.SetTrigger("Punch");
+					isAttacking = true;
+				}
 			}
 		}
 
@@ -107,6 +121,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public void EndPunch()
 		{
 			m_Punch_Go.SetActive(false);
+			isAttacking = false;
 		}
 
 		public void SpecialAttack()
@@ -117,6 +132,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public void EndSpecialAttack()
 		{
 			m_AOE_Go.SetActive(false);
+			isAttacking = false;
 		}
 
 		private void OnTriggerEnter(Collider other)
@@ -145,11 +161,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-		public void Shoot()
+		public void StartShoot()
 		{
 			if (!m_IsHandEmpty) {
 				Instantiate(m_ProjectilePrefab, m_ShootPosition.transform.position, m_ShootPosition.transform.rotation);
 			}
+		}
+		public void EndShoot()
+		{
+			isAttacking = false;
 		}
 
 
@@ -199,7 +219,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			{
 				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * (m_Capsule.radius * k_Half), Vector3.up);
 				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
-				if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+				if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, m_crouchLayermask, QueryTriggerInteraction.Ignore))
 				{
 					m_Crouching = true;
 					return;
@@ -217,7 +237,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			{
 				Ray crouchRay = new Ray(m_Rigidbody.position + Vector3.up * (m_Capsule.radius * k_Half), Vector3.up);
 				float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
-				if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+				if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, m_crouchLayermask, QueryTriggerInteraction.Ignore))
 				{
 					m_Crouching = true;
 				}
@@ -357,8 +377,24 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
 				Destroy(transform.parent, 3);
 		}
-
-
+		public void IncreaseAttackAnimationSpeed()
+		{
+			GameManager.Instance.levelSystem.SpendAttribute();
+			m_AttackAnimSpeedMultiplier += .3f;
+			m_Animator.SetFloat("AttackSpeed", m_AttackAnimSpeedMultiplier);
+		}
+		public void IncreaseWalkSpeed()
+		{
+			GameManager.Instance.levelSystem.SpendAttribute();
+			m_MoveSpeedMultiplier += 0.1f;
+			m_OrigMoveSpeedMultiplier = m_MoveSpeedMultiplier;
+			m_SprintSpeedMultiplier += 0.3f;
+		}
+		public void IncreaseJumpHeight()
+		{
+			GameManager.Instance.levelSystem.SpendAttribute();
+			m_JumpPower += 3f;
+		}
 		void CheckGroundStatus()
 		{
 			RaycastHit hitInfo;

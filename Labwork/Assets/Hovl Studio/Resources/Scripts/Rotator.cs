@@ -10,6 +10,16 @@ public class Rotator : MonoBehaviour
     {
 		InvokeRepeating("Rotate", 0f, 0.0167f);
 	}
+
+	private void Start()
+	{
+		CancelInvoke();
+		InvokeRepeating("Rotate", 0f, 0.0167f);
+	}
+	private void Update()
+	{
+		transform.Rotate(x, y * Time.deltaTime, z);
+	}
 	void OnDisable()
     {
 		CancelInvoke();

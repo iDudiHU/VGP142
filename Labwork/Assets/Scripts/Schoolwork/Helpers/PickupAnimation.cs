@@ -36,10 +36,15 @@ namespace Schoolwork.Helpers
         /// </summary>
         private void LateUpdate()
         {
-            if (isMovable) {
-                startPosition = new Vector3(transform.localPosition.x,originalPosition.y,transform.localPosition.z);
+            if (isMovable)
+            {
+                startPosition = new Vector3(transform.localPosition.x, originalPosition.y, transform.localPosition.z);
             }
-            transform.localPosition = startPosition + (Vector3.up * oscillationHeight * Mathf.Cos(Time.timeSinceLevelLoad * oscillationSpeed));
+            // Calculate the vertical offset using the oscillation pattern
+            float yOffset = oscillationHeight * Mathf.Cos(Time.timeSinceLevelLoad * oscillationSpeed);
+            // Update the position using the vertical offset
+            transform.localPosition = startPosition + Vector3.up * yOffset;
+            // Update the rotation based on the rotation speed
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + Vector3.up * Time.deltaTime * rotationSpeed);
         }
     }

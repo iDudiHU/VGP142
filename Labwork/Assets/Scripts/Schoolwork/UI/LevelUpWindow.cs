@@ -9,6 +9,7 @@ namespace Schoolwork.UI
     {
         [SerializeField]
         private TextMeshProUGUI levelText;
+        [SerializeField]
         private TextMeshProUGUI attributePoints;
         private LevelSystem _LevelSystem;
 
@@ -16,7 +17,6 @@ namespace Schoolwork.UI
         {
             _LevelSystem = GameManager.Instance.levelSystem;
             SetLevelNumber(_LevelSystem.GetLevelNumber());
-            //attributePoints = transform.Find("AttributePoints").Find("AttributePointsText").GetComponent<TextMeshProUGUI>();
         }
 
         private	void SetLevelNumber (int levelNumber)
@@ -27,8 +27,8 @@ namespace Schoolwork.UI
         private void OnEnable()
         {
             SetLevelNumber(_LevelSystem.GetLevelNumber());
-            //SetAtrributePoints(_LevelSystem.GetAttributePoints());
-            //_LevelSystem.OnAttributeSpent += _LevelSystem_OnAttributeSpent;
+            SetAtrributePoints(_LevelSystem.GetAttributePoints());
+            _LevelSystem.OnAttributeSpent += _LevelSystem_OnAttributeSpent;
         }
 
         private void _LevelSystem_OnAttributeSpent(object sender, System.EventArgs e)
@@ -38,8 +38,12 @@ namespace Schoolwork.UI
 
         private void SetAtrributePoints (int attributePointsNumber)
         {
-            attributePoints.text = "Attributes:\n" + (attributePointsNumber);
+            attributePoints.text = $"Chose {attributePointsNumber} Attribute";
         }
 
+		private void OnDisable()
+		{
+            _LevelSystem.OnAttributeSpent -= _LevelSystem_OnAttributeSpent;
+        }
     }
 }

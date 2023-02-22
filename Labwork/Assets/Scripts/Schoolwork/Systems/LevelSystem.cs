@@ -27,11 +27,9 @@ namespace Schoolwork.Systems
         private float experienceScaleFactor = 1.1f;
 
         public int attributePoints;
+        public int AttributePoints => attributePoints;
 
         [Header("Player Stats")]
-        public int extraMaxLives;
-        public int extraJump;
-        public int extraSpeed;
 
         private ExpBar expBar;
         private TextMeshProUGUI levelText;
@@ -68,9 +66,12 @@ namespace Schoolwork.Systems
             {
                 level++;
                 attributePoints++;
+                attributePoints++;
                 experience -= experienceToNextLevel;
                 CalculateNextLevel();
                 SetLevelNumber(level);
+                GameManager.UpdateUIElements();
+                GameManager.Instance.healthSystem.AddMaxHealth(level);
                 if (OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
             }
 
@@ -99,9 +100,14 @@ namespace Schoolwork.Systems
 
         public void SpendAttribute()
         {
-            attributePoints--;
-            if(OnAttributeSpent != null) OnAttributeSpent(this, EventArgs.Empty);
-            if(OnAllAttributesSpent != null && attributePoints == 0) OnAllAttributesSpent(this, EventArgs.Empty);
+            if (attributePoints > 0)
+			{
+                attributePoints--;
+                if (OnAttributeSpent != null) OnAttributeSpent(this, EventArgs.Empty);
+                if (OnAllAttributesSpent != null && attributePoints == 0) OnAllAttributesSpent(this, EventArgs.Empty);
+                if (attributePoints == 0)
+                    GameManager.Instance.uiManager.ToggleLevelUp();
+            }
         }
         private	void SetLevelNumber (int levelNumber)
         {

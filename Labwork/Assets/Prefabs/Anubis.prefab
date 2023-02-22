@@ -187,12 +187,12 @@ MonoBehaviour:
   player: {fileID: 0}
   experienceDrop: {fileID: 5175686087464223680, guid: 2b4d872ba9bca374cbb9d6d96deaf6d9, type: 3}
   experienceDropValue: 20
-  attackCollider: {fileID: 6700907329327724254}
-  m_damage: 10
+  m_damage: 30
+  m_AttackCollider: {fileID: 358559056404495087}
   playerLayerMask:
     serializedVersion: 2
-    m_Bits: 129
-  chaseDefaultLength: 2
+    m_Bits: 137
+  chaseDefaultLength: 1
   currentState: 1
   vision: 8
   WaypointHolder: {fileID: 5104013536966807393}
@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 7136681805223826066}
   - component: {fileID: 358559056404495087}
   - component: {fileID: 6898112881293965541}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: AttackCollider
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
