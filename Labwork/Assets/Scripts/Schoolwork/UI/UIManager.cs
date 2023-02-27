@@ -36,6 +36,7 @@ namespace Schoolwork.UI
         public GameObject clickEffect;
         [Tooltip("The effect to create when the player is backing out of a Menu page")]
         public GameObject backEffect;
+        public GameObject worldSpaceUICanvas;
 
         // Whether the application is paused
         private bool isPaused = false;

@@ -13,6 +13,7 @@ using UnityEngine.Events;
 /// </summary>\
 namespace Schoolwork.Systems
 {
+	[DefaultExecutionOrder(-1)]
     public class EnemyHealthSystem : MonoBehaviour
     {
         public static event Action<EnemyHealthSystem> OnEnemyHealthSystemAdded = delegate { }; 
@@ -125,7 +126,7 @@ namespace Schoolwork.Systems
                 if (hitEffect != null) {
                     var go = Instantiate(hitEffect, transform.position + Vector3.up * 1.5f, transform.rotation, null);
                     go.GetComponent<DamageNumberIndicator>().Initialize(damageAmount);
-                    go.transform.SetParent(null);
+                    go.transform.SetParent(GameManager.Instance.uiManager.worldSpaceUICanvas.transform);
                 }
 
                 eventsOnHit?.Invoke();

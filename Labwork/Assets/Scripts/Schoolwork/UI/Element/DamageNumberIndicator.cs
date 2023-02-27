@@ -38,6 +38,7 @@ namespace Schoolwork.UI.Element
                 transform.position += new Vector3(0f, 0.3f, 0f) * Time.deltaTime;
                 numberTMP.fontSize = sizeCurve.Evaluate(currentLifeTime / destroyTime);
             }
+            transform.LookAt(2 * transform.position - GameManager.Instance.mainCamera.transform.position);
         }
     }
 }

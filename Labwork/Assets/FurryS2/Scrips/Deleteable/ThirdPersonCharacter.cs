@@ -375,7 +375,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				GetComponent<Rigidbody>().isKinematic = true;
 				isAlive = false;
 				if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
-				Destroy(transform.parent, 3);
+				Destroy(transform.parent.gameObject, 3);
 		}
 		public void IncreaseAttackAnimationSpeed()
 		{

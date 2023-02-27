@@ -13,6 +13,7 @@ namespace Schoolwork.UI.Element
         [SerializeField] private float positionOffset;
         [SerializeField] private Image maskImage;
         [SerializeField] private LayerMask layerMask;
+        private Renderer renderer;
 
         private EnemyHealthSystem health;
 
@@ -26,6 +27,7 @@ namespace Schoolwork.UI.Element
         {
             this.health = health;
             this.health.OnEnemyHealthPctChanged += HandleHealthChanged;
+            renderer = health.GetComponentInChildren<Renderer>();
         }
 
         private void HandleHealthChanged(float pct)
@@ -49,19 +51,22 @@ namespace Schoolwork.UI.Element
         private void LateUpdate()
         {
 
-            Vector3 targetViewportPos = GameManager.Instance.mainCamera.WorldToViewportPoint(health.transform.position);
-            bool targetIsVisible = (targetViewportPos.x > 0 && targetViewportPos.x < 1
-                                && targetViewportPos.y > 0 && targetViewportPos.y < 1
-                                && targetViewportPos.z > 0 && !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask)
-                                && health.CurrentHealth < health.maximumHealth);
+            //Vector3 targetViewportPos = GameManager.Instance.mainCamera.WorldToViewportPoint(health.transform.position);
+            //bool targetIsVisible = (targetViewportPos.x > 0 && targetViewportPos.x < 1
+            //                    && targetViewportPos.y > 0 && targetViewportPos.y < 1
+            //                    && targetViewportPos.z > 0 && !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask)
+            //                    && health.CurrentHealth < health.maximumHealth);
+
+            bool targetIsVisible = !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask);
 
             Color maskColor = maskImage.color;
             maskColor.a = targetIsVisible ? 1f : 0f;
             maskImage.color = maskColor;
 
-            if (targetIsVisible)
+            if (targetIsVisible && renderer.isVisible)
             {
-                transform.position = GameManager.Instance.mainCamera.WorldToScreenPoint(health.transform.position + Vector3.up * positionOffset);
+                transform.position = (health.transform.position + Vector3.up * positionOffset);
+                transform.LookAt(2 * transform.position - GameManager.Instance.mainCamera.transform.position);
             }
         }
 
