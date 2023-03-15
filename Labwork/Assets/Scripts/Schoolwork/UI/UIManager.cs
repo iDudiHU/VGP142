@@ -41,6 +41,8 @@ namespace Schoolwork.UI
         // Whether the application is paused
         private bool isPaused = false;
 
+        public bool isLoading = false;
+
         // A list of all UI element classes
         private List<UIelement> UIelements;
 
@@ -197,7 +199,7 @@ namespace Schoolwork.UI
                 else
                 {
                     CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
-                    GoToPage(pausePageIndex);
+                    GoToPageByName("PausePage", false);
                     Time.timeScale = 0;
                     isPaused = true;
                 }
@@ -365,7 +367,24 @@ namespace Schoolwork.UI
                 isLevelingUp = true;
             }
         }
-
+        public void ToggleLoadScreen()
+        {
+            isLoading = !isLoading;
+            if (isLoading)
+            {
+                CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
+                allowPause = false;
+                GoToPageByName("LoadPage", false);
+                Time.timeScale = 0.0f;
+            }
+            else
+            {
+                CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.FPS);
+                allowPause = true;
+                GoToPageByName("GameplayPage", false);
+                Time.timeScale = 1.0f;
+            }
+        }
         public void ToggleDeathScreen()
         {
             CursorManager.instance.ChangeCursorMode(CursorManager.CursorState.Menu);
@@ -405,12 +424,12 @@ namespace Schoolwork.UI
 
         public void Save()
 		{
-            SaveSystem.SaveGameData(GameManager.Instance.player.gameObject, GameManager.Instance.enemySystem.Enemies);
+            GameManager.Instance.saveSystem.SaveGameData(GameManager.Instance.player.gameObject, GameManager.Instance.enemySystem.Enemies);
 		}
 
 		public void Load()
 		{
-            SaveSystem.LoadGame();
+            GameManager.Instance.saveSystem.LoadGame();
         }
 	}
 }

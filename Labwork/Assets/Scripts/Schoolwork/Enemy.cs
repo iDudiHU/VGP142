@@ -282,19 +282,42 @@ namespace Schoolwork
 		{
 			enemyHealthSystem.TakeDamage(damageAmount);
 		}
-		public void Load(EnemyData enemyData)
+		public void Load(GameData.EnemyData data)
 		{
-			transform.position = enemyData.transformData.position;
-			transform.rotation = enemyData.transformData.rotation;
-			GetComponent<HealthSystem>().Load(enemyData.healthData);
-			currentState = enemyData.currentState;
+			// Else load enemy data
+			currentState = data.currentState;
+
+			//Set position
+			transform.position = new Vector3(data.transformData.posX, data.transformData.posY, data.transformData.posZ);
+			//Set rotation
+			transform.localRotation = Quaternion.Euler(data.transformData.rotX, data.transformData.rotY, data.transformData.rotZ);
+			//Set scale
+			transform.localScale = new Vector3(data.transformData.scaleX, data.transformData.scaleY, data.transformData.scaleZ);
+			//Set health
+			GetComponent<EnemyHealthSystem>().Load(ref data);
 		}
-		public EnemyData Save()
+		public void Save(ref GameData data)
 		{
-			TransformData transformData = new TransformData(transform.position, transform.rotation);
-			HealthData healthData = GetComponent<EnemyHealthSystem>().Save();
-			EnemyData playerData = new EnemyData(Id, enemyType, transformData, healthData, currentState);
-			return playerData;
+			GameData.EnemyData enemyData = new GameData.EnemyData();
+			//Enemy Data
+			enemyData.Id = Id;
+			enemyData.enemyType = enemyType;
+			//TransformData
+			enemyData.transformData.posX = transform.position.x;
+			enemyData.transformData.posY = transform.position.y;
+			enemyData.transformData.posZ = transform.position.z;
+
+			enemyData.transformData.rotX = transform.rotation.x;
+			enemyData.transformData.rotY = transform.rotation.y;
+			enemyData.transformData.rotZ = transform.rotation.z;
+
+			enemyData.transformData.scaleX = transform.localScale.x;
+			enemyData.transformData.scaleY = transform.localScale.y;
+			enemyData.transformData.scaleZ = transform.localScale.z;
+			//HealthData
+			GetComponent<EnemyHealthSystem>().Save(ref enemyData.healthData);
+			//Add to the list
+			data.enemyDataList.Add(enemyData);
 		}
 	}
 }

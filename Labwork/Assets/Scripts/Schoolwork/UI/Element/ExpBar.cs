@@ -14,6 +14,7 @@ namespace Schoolwork.UI.Element
         private LevelSystem _LevelSystem;
         public TextMeshProUGUI currentExpTMP;
         public TextMeshProUGUI maxExpTMP;
+        public TextMeshProUGUI currentLevel;
         public float updateSpeedSeconds = 0.5f;
         private void Awake()
         {
@@ -35,6 +36,7 @@ namespace Schoolwork.UI.Element
             {
                 SetExperienceBarSize(_LevelSystem.GetExperienceNormalized());
                 SetExperienceNumber(_LevelSystem.Experience, _LevelSystem.ExperienceToNextLevel);
+                currentLevel.text = (_LevelSystem._currentLevel + 1).ToString();
             }
         }
         private void SetExperienceBarSize(float experienceNormalized)

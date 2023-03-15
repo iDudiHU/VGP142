@@ -422,20 +422,40 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		{
 			GameManager.Instance.healthSystem.TakeDamage(damageAmount);
 		}
-		public void Load(PlayerData playerData)
+		public void Load(GameData data)
 		{
-			transform.position = playerData.transformData.position;
-			transform.rotation = playerData.transformData.rotation;
+			GameData.PlayerData playerData = data.player;
+			//Set position
+			transform.position = new Vector3(playerData.transformData.posX, playerData.transformData.posY, playerData.transformData.posZ);
+			//Set rotation
+			transform.localRotation = Quaternion.Euler(playerData.transformData.rotX, playerData.transformData.rotY, playerData.transformData.rotZ);
+			//Set scale
+			transform.localScale = new Vector3(playerData.transformData.scaleX, playerData.transformData.scaleY, playerData.transformData.scaleZ);
+			//Set health
 			GetComponent<HealthSystem>().Load(playerData.healthData);
+			//Set level
 			GetComponent<LevelSystem>().Load(playerData.levelData);
 		}
-		public PlayerData Save()
+		public void Save(ref GameData data)
 		{
-			TransformData transformData = new TransformData(transform.position, transform.rotation);
-			HealthData healthData = GetComponent<HealthSystem>().Save();
-			LevelData levelData = GetComponent<LevelSystem>().Save();
-			PlayerData playerData = new PlayerData(transformData, healthData, levelData);
-			return playerData;
+			//TransformData
+			data.player.transformData.posX = transform.position.x;
+			data.player.transformData.posY = transform.position.y;
+			data.player.transformData.posZ = transform.position.z;
+
+			data.player.transformData.rotX = transform.rotation.x;
+			data.player.transformData.rotY = transform.rotation.y;
+			data.player.transformData.rotZ = transform.rotation.z;
+
+			data.player.transformData.scaleX = transform.localScale.x;
+			data.player.transformData.scaleY = transform.localScale.y;
+			data.player.transformData.scaleZ = transform.localScale.z;
+			//HealthData
+			GetComponent<HealthSystem>().Save(ref data);
+			//playerData.healthData._currentHealth = GetComponent<HealthSystem>().currentHealth;
+			//playerData.healthData._maxHealth = GetComponent<HealthSystem>().maximumHealth;
+			//LevelData
+			GetComponent<LevelSystem>().Save(ref data);
 		}
 	}
 }

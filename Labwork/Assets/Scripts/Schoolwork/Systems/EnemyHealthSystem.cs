@@ -238,16 +238,16 @@ namespace Schoolwork.Systems
 			OnEnemyHealthSystemRemoved(this);
 
 		}
-		public void Load(HealthData healthData)
+		public void Load(ref GameData.EnemyData data)
 		{
-			CurrentHealth = healthData._currentHealth;
-			maximumHealth = healthData._maxHealth;
+			CurrentHealth = data.healthData._currentHealth;
+			maximumHealth = data.healthData._maxHealth;
 		}
 
-		public HealthData Save()
+		public void Save(ref GameData.HealthData data)
 		{
-			HealthData healthData = new HealthData(CurrentHealth, maximumHealth);
-			return healthData;
+			data._currentHealth = CurrentHealth;
+			data._maxHealth = maximumHealth;
 		}
 	}
 }

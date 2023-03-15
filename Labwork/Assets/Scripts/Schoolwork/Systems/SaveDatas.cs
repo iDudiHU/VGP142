@@ -5,79 +5,52 @@ using static Schoolwork.Enemy;
 [System.Serializable]
 public class GameData
 {
-    public PlayerData playerData;
-    public List<EnemyData> enemyDataList;
-
-    public GameData(PlayerData playerData, List<EnemyData> enemyDataList)
+    [System.Serializable]
+    public struct TransformData
     {
-        this.playerData = playerData;
-        this.enemyDataList = enemyDataList;
+        public float posX;
+        public float posY;
+        public float posZ;
+        public float rotX;
+        public float rotY;
+        public float rotZ;
+        public float scaleX;
+        public float scaleY;
+        public float scaleZ;
     }
-}
-[System.Serializable]
-public class PlayerData
-{
-    public TransformData transformData;
-    public HealthData healthData;
-    public LevelData levelData;
-
-    public PlayerData(TransformData transformData, HealthData healthData , LevelData levelData)
+    [System.Serializable]
+    public struct HealthData
     {
-        this.healthData = healthData;
-        this.levelData = levelData;
+        public float _currentHealth;
+        public float _maxHealth;
     }
-}
-public class TransformData
-{
-    public Vector3 position;
-    public Quaternion rotation;
-
-    public TransformData(Vector3 position, Quaternion rotation)
-	{
-        this.position = position;
-        this.rotation = rotation;
+    [System.Serializable]
+    public struct LevelData
+    {
+        public int _level;
+        public float _currentExperience;
+        public float _experienceNeededForNextLevel;
+        public int _attributePoints;
     }
-}
-public class HealthData
-{
-    public float _currentHealth;
-    public float _maxHealth;
+    [System.Serializable]
+    public class PlayerData
+    {
+        public TransformData transformData;
+        public HealthData healthData;
+        public LevelData levelData;
 
-    public HealthData(float currentHealth, float maxHealth)
-	{
-        this._currentHealth = currentHealth;
-        this._maxHealth = maxHealth;
-	}
-}
-public class LevelData
-{
-    public int _level;
-    public float _currentExperience;
-    public float _experienceNeededForNextLevel;
-
-    public LevelData(int level, float currentExperience, float experienceNeededForNextLevel)
-	{
-        this._level = level;
-        this._currentExperience = currentExperience;
-        this._experienceNeededForNextLevel = experienceNeededForNextLevel;
     }
+    [System.Serializable]
+    public class EnemyData
+    {
+        public string Id;
+        public EnemyTypes enemyType;
+        public TransformData transformData;
+        public HealthData healthData;
+        public EnemyState currentState;
+    }
+    public PlayerData player = new PlayerData();
+    public List<EnemyData> enemyDataList = new List<EnemyData>();
 }
-[System.Serializable]
-public class EnemyData
-{
-    public string Id;
-    public EnemyTypes enemyType;
-    public TransformData transformData;
-    public HealthData healthData;
-    public EnemyState currentState;
 
-	public EnemyData(string id, EnemyTypes enemyType, TransformData transformData, HealthData healthData, EnemyState currentState)
-	{
-		Id = id;
-		this.enemyType = enemyType;
-		this.transformData = transformData;
-		this.healthData = healthData;
-		this.currentState = currentState;
-	}
-}
 

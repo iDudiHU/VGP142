@@ -16,11 +16,13 @@ namespace Schoolwork.Systems
         [Header("Systems")]
         public int _currentLevel = 0;
         [Tooltip("The current experience of the player")]
+        [SerializeField]
         private float _currentExperience;
         public float Experience => _currentExperience;
 
 
         [Tooltip("The experience needed for the next level")]
+        [SerializeField]
         private float _experienceNeededForNextLevel = 100.0f;
         public float ExperienceToNextLevel => _experienceNeededForNextLevel;
         [Tooltip("The experience scale factor")]
@@ -29,16 +31,8 @@ namespace Schoolwork.Systems
         public int attributePoints;
         public int AttributePoints => attributePoints;
 
-        [Header("Player Stats")]
-
-        private ExpBar expBar;
-        private TextMeshProUGUI levelText;
-
         private void Awake()
         {
-            expBar = FindObjectOfType<ExpBar>();
-            levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
-            SetLevelNumber(_currentLevel);
         }
         private void OnEnable()
         {
@@ -69,10 +63,8 @@ namespace Schoolwork.Systems
                 attributePoints++;
                 _currentExperience -= _experienceNeededForNextLevel;
                 CalculateNextLevel();
-                SetLevelNumber(_currentLevel);
                 GameManager.UpdateUIElements();
                 GameManager.Instance.healthSystem.AddMaxHealth(_currentLevel);
-                if (OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
             }
 
             GameManager.Instance.uiManager.ToggleLevelUp();
@@ -109,25 +101,21 @@ namespace Schoolwork.Systems
                     GameManager.Instance.uiManager.ToggleLevelUp();
             }
         }
-        private	void SetLevelNumber (int levelNumber)
-        {
-            levelText.text = (levelNumber + 1).ToString();
-        }
 
-		public void Load(LevelData levelData)
+		public void Load(GameData.LevelData levelData)
 		{
             _currentLevel = levelData._level;
             _currentExperience = levelData._currentExperience;
             _experienceNeededForNextLevel = levelData._experienceNeededForNextLevel;
+            attributePoints = levelData._attributePoints;
         }
 
-        public LevelData Save()
+        public void Save(ref GameData data)
 		{
-            LevelData levelData = new LevelData(0, 0, 0);
-            levelData._level = _currentLevel;
-            levelData._currentExperience = _currentExperience;
-            levelData._experienceNeededForNextLevel = _experienceNeededForNextLevel;
-            return levelData;
+            data.player.levelData._level = _currentLevel;
+            data.player.levelData._currentExperience = _currentExperience;
+            data.player.levelData._experienceNeededForNextLevel = _experienceNeededForNextLevel;
+            data.player.levelData._attributePoints = attributePoints;
         }
 	}
 }

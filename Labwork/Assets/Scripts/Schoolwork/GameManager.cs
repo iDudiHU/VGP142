@@ -22,6 +22,8 @@ namespace Schoolwork
 		public LevelSystem levelSystem = null;
 		[Tooltip("The HealthSystem component which manages the current players health")]
 		public EnemySystem enemySystem = null;
+		[Tooltip("The HealthSystem component which manages the current players health")]
+		public SaveSystem saveSystem = null;
 
 		[FormerlySerializedAs("m_mainCamera")] public Camera mainCamera = null;
 		

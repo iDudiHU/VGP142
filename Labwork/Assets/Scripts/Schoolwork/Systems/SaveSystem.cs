@@ -1,29 +1,41 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using static Schoolwork.Enemy;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace Schoolwork.Systems
 {
-	public static class SaveSystem
+	public class SaveSystem: MonoBehaviour
 	{
-		static readonly string SAVE_FOLDER = Application.persistentDataPath + "/Saves/";
-		static readonly string savePath = SAVE_FOLDER + "/savegame.json";
-		public static void SaveGame(PlayerData playerData, List<EnemyData> enemyDataList)
+		public GameData gameData;
+		string savePath;
+
+		public void Awake()
 		{
+			SetupGameManagerSaveSystem();
+			savePath = Application.persistentDataPath + "/Saves/savegame.json";
+		}
+		private void SetupGameManagerSaveSystem()
+		{
+			if (GameManager.Instance != null && GameManager.Instance.saveSystem == null)
+			{
+				GameManager.Instance.saveSystem = this;
+			}
+		}
+		public void SaveGame()
+		{
+			string SAVE_FOLDER = Application.persistentDataPath + "/Saves/";
 			if (!Directory.Exists(SAVE_FOLDER))
 			{
 				Directory.CreateDirectory(SAVE_FOLDER);
 			}
-			GameData gameData = new GameData(playerData, enemyDataList);
 			string json = JsonUtility.ToJson(gameData, true);
 			File.WriteAllText(savePath, json);
 			Debug.Log(savePath);
 			Debug.Log(json);
 		}
 
-		public static GameData LoadGameData()
+		public GameData LoadGameData()
 		{
 			if (File.Exists(savePath))
 			{
@@ -36,19 +48,19 @@ namespace Schoolwork.Systems
 				return null;
 			}
 		}
-		public static void SaveGameData(GameObject player, List<Enemy> enemies)
+		public void SaveGameData(GameObject player, List<Enemy> enemies)
 		{
-			PlayerData playerData = player.GetComponent<ThirdPersonCharacter>().Save();
-
-			List<EnemyData> enemyDataList = new List<EnemyData>();
+			gameData = new GameData();
+			player.GetComponent<ThirdPersonCharacter>().Save(ref gameData);
+			List<GameData.EnemyData> enemyDataList = new List<GameData.EnemyData>();
 			foreach (Enemy enemy in enemies)
 			{
-				enemyDataList.Add(enemy.Save());
+				enemy.Save(ref gameData);
 			}
-			SaveGame(playerData, enemyDataList);
+			SaveGame();
 		}
 
-		public static void LoadGame()
+		public void LoadGame()
 		{
 			GameData gameData = LoadGameData();
 			if (gameData == null)
@@ -56,9 +68,9 @@ namespace Schoolwork.Systems
 				Debug.Log("No saved game data found.");
 				return;
 			}
-			GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().Load(gameData.playerData);
-			List<EnemyData> enemyDataList = gameData.enemyDataList;
-			foreach (EnemyData enemyData in enemyDataList)
+			GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().Load(gameData);
+			List<GameData.EnemyData> enemyDataList = gameData.enemyDataList;
+			foreach (GameData.EnemyData enemyData in enemyDataList)
 			{
 				int enemyIndex = GameManager.Instance.enemySystem.EnemiesGuids.IndexOf(enemyData.Id);
 				if (enemyIndex != -1)
@@ -72,9 +84,7 @@ namespace Schoolwork.Systems
 					GameManager.Instance.enemySystem.SpawnEnemy(enemyData);
 				}
 			}
+			GameManager.UpdateUIElements();
 		}
 	}
 }
-
-
-

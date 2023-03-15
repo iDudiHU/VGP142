@@ -344,16 +344,16 @@ namespace Schoolwork.Systems
 				GameManager.GameOver();
 			}
 		}
-		public void Load(HealthData healthData)
+		public void Load(GameData.HealthData healthData)
 		{
 			currentHealth = healthData._currentHealth;
 			maximumHealth = healthData._maxHealth;
 		}
 
-		public HealthData Save()
+		public void Save(ref GameData data)
 		{
-			HealthData healthData = new HealthData(currentHealth, maximumHealth);
-			return healthData;
+			data.player.healthData._currentHealth = currentHealth;
+			data.player.healthData._maxHealth =	maximumHealth;
 		}
 	}
 }
