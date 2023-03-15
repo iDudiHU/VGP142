@@ -8828,6 +8828,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6baffa3ecfab846ae030635d60cfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 
+  enemyType: 2
   target: {fileID: 0}
   deathEffect: {fileID: 1651363388222792, guid: a32d87b33cadfed4b83eeaa564eb7724, type: 3}
   player: {fileID: 0}

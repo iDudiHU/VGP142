@@ -14,15 +14,15 @@ namespace Schoolwork.Systems
         public event EventHandler OnAllAttributesSpent;
 
         [Header("Systems")]
-        public int level = 0;
+        public int _currentLevel = 0;
         [Tooltip("The current experience of the player")]
-        private float experience;
-        public float Experience => experience;
+        private float _currentExperience;
+        public float Experience => _currentExperience;
 
 
         [Tooltip("The experience needed for the next level")]
-        private float experienceToNextLevel = 100.0f;
-        public float ExperienceToNextLevel => experienceToNextLevel;
+        private float _experienceNeededForNextLevel = 100.0f;
+        public float ExperienceToNextLevel => _experienceNeededForNextLevel;
         [Tooltip("The experience scale factor")]
         private float experienceScaleFactor = 1.1f;
 
@@ -38,7 +38,7 @@ namespace Schoolwork.Systems
         {
             expBar = FindObjectOfType<ExpBar>();
             levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
-            SetLevelNumber(level);
+            SetLevelNumber(_currentLevel);
         }
         private void OnEnable()
         {
@@ -53,25 +53,25 @@ namespace Schoolwork.Systems
         }
         public void AddExperience(float enemyExperience)
         {
-            experience += enemyExperience * Mathf.Pow(experienceScaleFactor, level/2.0f);
+            _currentExperience += enemyExperience * Mathf.Pow(experienceScaleFactor, _currentLevel/2.0f);
             GameManager.UpdateUIElements();
-            if (experience >= experienceToNextLevel) {
+            if (_currentExperience >= _experienceNeededForNextLevel) {
                 LevelUp();
             }
         }
 
         void LevelUp()
         {
-            while (experience >= experienceToNextLevel)
+            while (_currentExperience >= _experienceNeededForNextLevel)
             {
-                level++;
+                _currentLevel++;
                 attributePoints++;
                 attributePoints++;
-                experience -= experienceToNextLevel;
+                _currentExperience -= _experienceNeededForNextLevel;
                 CalculateNextLevel();
-                SetLevelNumber(level);
+                SetLevelNumber(_currentLevel);
                 GameManager.UpdateUIElements();
-                GameManager.Instance.healthSystem.AddMaxHealth(level);
+                GameManager.Instance.healthSystem.AddMaxHealth(_currentLevel);
                 if (OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
             }
 
@@ -81,12 +81,12 @@ namespace Schoolwork.Systems
         void CalculateNextLevel()
         {
 
-            experienceToNextLevel *= Mathf.Pow(experienceScaleFactor, (level + 1));
+            _experienceNeededForNextLevel *= Mathf.Pow(experienceScaleFactor, (_currentLevel + 1));
         }
 
         public int GetLevelNumber()
         {
-            return level;
+            return _currentLevel;
         }
         public int GetAttributePoints()
         {
@@ -95,7 +95,7 @@ namespace Schoolwork.Systems
 
         public float GetExperienceNormalized()
         {
-            return experience / experienceToNextLevel;
+            return _currentExperience / _experienceNeededForNextLevel;
         }
 
         public void SpendAttribute()
@@ -113,5 +113,21 @@ namespace Schoolwork.Systems
         {
             levelText.text = (levelNumber + 1).ToString();
         }
-    }
+
+		public void Load(LevelData levelData)
+		{
+            _currentLevel = levelData._level;
+            _currentExperience = levelData._currentExperience;
+            _experienceNeededForNextLevel = levelData._experienceNeededForNextLevel;
+        }
+
+        public LevelData Save()
+		{
+            LevelData levelData = new LevelData(0, 0, 0);
+            levelData._level = _currentLevel;
+            levelData._currentExperience = _currentExperience;
+            levelData._experienceNeededForNextLevel = _experienceNeededForNextLevel;
+            return levelData;
+        }
+	}
 }

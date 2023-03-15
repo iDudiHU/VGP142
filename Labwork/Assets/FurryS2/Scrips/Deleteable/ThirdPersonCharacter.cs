@@ -422,5 +422,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		{
 			GameManager.Instance.healthSystem.TakeDamage(damageAmount);
 		}
+		public void Load(PlayerData playerData)
+		{
+			transform.position = playerData.transformData.position;
+			transform.rotation = playerData.transformData.rotation;
+			GetComponent<HealthSystem>().Load(playerData.healthData);
+			GetComponent<LevelSystem>().Load(playerData.levelData);
+		}
+		public PlayerData Save()
+		{
+			TransformData transformData = new TransformData(transform.position, transform.rotation);
+			HealthData healthData = GetComponent<HealthSystem>().Save();
+			LevelData levelData = GetComponent<LevelSystem>().Save();
+			PlayerData playerData = new PlayerData(transformData, healthData, levelData);
+			return playerData;
+		}
 	}
 }

@@ -30,16 +30,15 @@ namespace Schoolwork.UI.Element
             displayedHealth = GameManager.Instance.healthSystem;
             UpdateUI();
         }
-
-        /// <summary>
-        /// Description:
-        /// Upadates this UI element
-        /// Input: 
-        /// none
-        /// Return: 
-        /// void (no return)
-        /// </summary>
-        public override void UpdateUI()
+		/// <summary>
+		/// Description:
+		/// Upadates this UI element
+		/// Input: 
+		/// none
+		/// Return: 
+		/// void (no return)
+		/// </summary>
+		public override void UpdateUI()
         {
             //if (GameManager.instance != null && GameManager.instance.player != null)
             //{

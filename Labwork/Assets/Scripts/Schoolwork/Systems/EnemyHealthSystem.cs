@@ -14,218 +14,241 @@ using UnityEngine.Events;
 namespace Schoolwork.Systems
 {
 	[DefaultExecutionOrder(-1)]
-    public class EnemyHealthSystem : MonoBehaviour
-    {
-        public static event Action<EnemyHealthSystem> OnEnemyHealthSystemAdded = delegate { }; 
-        public static event Action<EnemyHealthSystem> OnEnemyHealthSystemRemoved = delegate { };
-        [Header("Team Settings")] [Tooltip("The team associated with this damage")]
-        public int teamId = 1;
+	public class EnemyHealthSystem : MonoBehaviour
+	{
+		public static event Action<EnemyHealthSystem> OnEnemyHealthSystemAdded = delegate { };
+		public static event Action<EnemyHealthSystem> OnEnemyHealthSystemRemoved = delegate { };
+		[Header("Team Settings")]
+		[Tooltip("The team associated with this damage")]
+		public int teamId = 1;
 
-        [Header("Health Settings")] [Tooltip("The default health value")]
-        public float defaultHealth = 100.0f;
+		[Header("Health Settings")]
+		[Tooltip("The default health value")]
+		public float defaultHealth = 100.0f;
 
-        [Tooltip("The maximum health value")] public float maximumHealth = 100.0f;
+		[Tooltip("The maximum health value")] public float maximumHealth = 100.0f;
 
-        [Tooltip("The current in game health value")]
-        [SerializeField]
-        private float m_CurrentHealth = 100.0f;
+		[Tooltip("The current in game health value")]
+		[SerializeField]
+		private float m_CurrentHealth = 100.0f;
 
-        public float CurrentHealth
+		public float CurrentHealth
 		{
 			get
 			{
-                return m_CurrentHealth;
+				return m_CurrentHealth;
 			}
 			set
 			{
-                m_CurrentHealth = value;
+				m_CurrentHealth = value;
 			}
 		}
-        public event Action<float> OnEnemyHealthPctChanged = delegate { };
+		public event Action<float> OnEnemyHealthPctChanged = delegate { };
 
-            [Tooltip("Invulnerability duration, in seconds, after taking damage")]
-        public float invincibilityTime = 0.5f;
+		[Tooltip("Invulnerability duration, in seconds, after taking damage")]
+		public float invincibilityTime = 0.5f;
 
-        [Tooltip("Whether or not this health is always invincible")]
-        public bool isAlwaysInvincible = false;
-        
+		[Tooltip("Whether or not this health is always invincible")]
+		public bool isAlwaysInvincible = false;
 
-        /// <summary>
-        /// Description:
-        /// Standard Unity function called once before the first Update call
-        /// Input:
-        /// none
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        void Start()
-        {
-            HealthSetup();
-        }
 
-        private void OnEnable()
-        {
-        }
-
-        private void HealthSetup()
+		/// <summary>
+		/// Description:
+		/// Standard Unity function called once before the first Update call
+		/// Input:
+		/// none
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		void Start()
 		{
-            CurrentHealth = maximumHealth;
-            OnEnemyHealthSystemAdded(this);
-        }
+			HealthSetup();
+		}
 
-        /// <summary>
-        /// Description:
-        /// Standard Unity function called once very frame
-        /// Input:
-        /// none
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        void Update()
-        {
-            InvincibilityCheck();
-        }
+		private void OnEnable()
+		{
+		}
 
-        // The specific game time when the health can be damged again
-        private float timeToBecomeDamagableAgain = 0;
+		private void HealthSetup()
+		{
+			CurrentHealth = maximumHealth;
+			OnEnemyHealthSystemAdded(this);
+		}
 
-        // Whether or not the health is invincible
-        private bool isInvincableFromDamage = false;
+		/// <summary>
+		/// Description:
+		/// Standard Unity function called once very frame
+		/// Input:
+		/// none
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		void Update()
+		{
+			InvincibilityCheck();
+		}
 
-        /// <summary>
-        /// Description:
-        /// Checks against the current time and the time when the health can be damaged again.
-        /// Removes invicibility if the time frame has passed
-        /// Input:
-        /// none
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        private void InvincibilityCheck()
-        {
-            if (timeToBecomeDamagableAgain <= Time.time) {
-                isInvincableFromDamage = false;
-            }
-        }
+		// The specific game time when the health can be damged again
+		private float timeToBecomeDamagableAgain = 0;
 
-        /// <summary>
-        /// Description:
-        /// Applies damage to the health unless the health is invincible.
-        /// Input:
-        /// int damageAmount
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        /// <param name="damageAmount">The amount of damage to take</param>
-        public void TakeDamage(float damageAmount)
-        {
-            if (isInvincableFromDamage || m_CurrentHealth <= 0 || isAlwaysInvincible) {
-                return;
-            }
-            else {
-                if (hitEffect != null) {
-                    var go = Instantiate(hitEffect, transform.position + Vector3.up * 1.5f, transform.rotation, null);
-                    go.GetComponent<DamageNumberIndicator>().Initialize(damageAmount);
-                    go.transform.SetParent(GameManager.Instance.uiManager.worldSpaceUICanvas.transform);
-                }
+		// Whether or not the health is invincible
+		private bool isInvincableFromDamage = false;
 
-                eventsOnHit?.Invoke();
-                timeToBecomeDamagableAgain = Time.time + invincibilityTime;
-                isInvincableFromDamage = true;
-                m_CurrentHealth = Mathf.Clamp(m_CurrentHealth - damageAmount, 0, maximumHealth);
-                float currentHealthPct = m_CurrentHealth / maximumHealth;
-                OnEnemyHealthPctChanged(currentHealthPct);
-                CheckDeath();
-            }
-        }
+		/// <summary>
+		/// Description:
+		/// Checks against the current time and the time when the health can be damaged again.
+		/// Removes invicibility if the time frame has passed
+		/// Input:
+		/// none
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		private void InvincibilityCheck()
+		{
+			if (timeToBecomeDamagableAgain <= Time.time)
+			{
+				isInvincableFromDamage = false;
+			}
+		}
 
-        /// <summary>
-        /// Description:
-        /// Applies healing to the health, capped out at the maximum health.
-        /// Input:
-        /// int healingAmount
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        /// <param name="healingAmount">How much healing to apply</param>
-        public void ReceiveHealing(float healingAmount)
-        {
-            m_CurrentHealth += healingAmount;
-            if (m_CurrentHealth > maximumHealth) {
-                m_CurrentHealth = maximumHealth;
-            }
+		/// <summary>
+		/// Description:
+		/// Applies damage to the health unless the health is invincible.
+		/// Input:
+		/// int damageAmount
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		/// <param name="damageAmount">The amount of damage to take</param>
+		public void TakeDamage(float damageAmount)
+		{
+			if (isInvincableFromDamage || m_CurrentHealth <= 0 || isAlwaysInvincible)
+			{
+				return;
+			}
+			else
+			{
+				if (hitEffect != null)
+				{
+					var go = Instantiate(hitEffect, transform.position + Vector3.up * 1.5f, transform.rotation, null);
+					go.GetComponent<DamageNumberIndicator>().Initialize(damageAmount);
+					go.transform.SetParent(GameManager.Instance.uiManager.worldSpaceUICanvas.transform);
+				}
 
-            GameManager.UpdateUIElements();
-            CheckDeath();
-        }
+				eventsOnHit?.Invoke();
+				timeToBecomeDamagableAgain = Time.time + invincibilityTime;
+				isInvincableFromDamage = true;
+				m_CurrentHealth = Mathf.Clamp(m_CurrentHealth - damageAmount, 0, maximumHealth);
+				float currentHealthPct = m_CurrentHealth / maximumHealth;
+				OnEnemyHealthPctChanged?.Invoke(currentHealthPct);
+				CheckDeath();
+			}
+		}
 
-        /// <summary>
-        /// Description:
-        /// Gives the health script more lives if the health is using lives
-        /// Input:
-        /// int bonusLives
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        /// <param name="bonusLives">The number of lives to add</param>
+		/// <summary>
+		/// Description:
+		/// Applies healing to the health, capped out at the maximum health.
+		/// Input:
+		/// int healingAmount
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		/// <param name="healingAmount">How much healing to apply</param>
+		public void ReceiveHealing(float healingAmount)
+		{
+			m_CurrentHealth += healingAmount;
+			if (m_CurrentHealth > maximumHealth)
+			{
+				m_CurrentHealth = maximumHealth;
+			}
 
-        [Header("Effects & Polish")] [Tooltip("The effect to create when this health dies")]
-        public GameObject deathEffect;
+			GameManager.UpdateUIElements();
+			CheckDeath();
+		}
 
-        [Tooltip("The effect to create when this health is damaged (but does not die)")]
-        public GameObject hitEffect;
+		/// <summary>
+		/// Description:
+		/// Gives the health script more lives if the health is using lives
+		/// Input:
+		/// int bonusLives
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		/// <param name="bonusLives">The number of lives to add</param>
 
-        [Tooltip("A list of events that occur when the health becomes 0 or lower")]
-        public UnityEvent eventsOnDeath;
+		[Header("Effects & Polish")]
+		[Tooltip("The effect to create when this health dies")]
+		public GameObject deathEffect;
 
-        [Tooltip("A list of events that occur when the health becomes 0 or lower")]
-        public UnityEvent eventsOnHit;
+		[Tooltip("The effect to create when this health is damaged (but does not die)")]
+		public GameObject hitEffect;
 
-        /// <summary>
-        /// Description:
-        /// Checks if the health is dead or not. If it is, true is returned, false otherwise.
-        /// Calls Die() if the health is dead.
-        /// Input:
-        /// none
-        /// Return:
-        /// bool
-        /// </summary>
-        /// <returns>bool: A boolean value representing if the health has died or not (true for dead)</returns>
-        bool CheckDeath()
-        {
-            if (m_CurrentHealth <= 0) {
-                Die();
-                return true;
-            }
+		[Tooltip("A list of events that occur when the health becomes 0 or lower")]
+		public UnityEvent eventsOnDeath;
 
-            return false;
-        }
+		[Tooltip("A list of events that occur when the health becomes 0 or lower")]
+		public UnityEvent eventsOnHit;
 
-        /// <summary>
-        /// Description:
-        /// Handles the death of the health. If a death effect is set, it is created. If lives are being used, the health is respawned.
-        /// If lives are not being used or the lives are 0 then the health's game object is destroyed.
-        /// Input:
-        /// none
-        /// Return:
-        /// void (no return)
-        /// </summary>
-        void Die()
-        {
-            if (deathEffect != null) {
-                if (deathEffect != null) {
-                    Instantiate(deathEffect, transform.position, transform.rotation, null);
-                }
-            }
+		/// <summary>
+		/// Description:
+		/// Checks if the health is dead or not. If it is, true is returned, false otherwise.
+		/// Calls Die() if the health is dead.
+		/// Input:
+		/// none
+		/// Return:
+		/// bool
+		/// </summary>
+		/// <returns>bool: A boolean value representing if the health has died or not (true for dead)</returns>
+		bool CheckDeath()
+		{
+			if (m_CurrentHealth <= 0)
+			{
+				Die();
+				return true;
+			}
 
-            // Do on death events
-            if (eventsOnDeath != null) {
-                eventsOnDeath.Invoke();
-            }
-            
-            OnEnemyHealthSystemRemoved(this);
+			return false;
+		}
 
-        }
-    }
+		/// <summary>
+		/// Description:
+		/// Handles the death of the health. If a death effect is set, it is created. If lives are being used, the health is respawned.
+		/// If lives are not being used or the lives are 0 then the health's game object is destroyed.
+		/// Input:
+		/// none
+		/// Return:
+		/// void (no return)
+		/// </summary>
+		void Die()
+		{
+			if (deathEffect != null)
+			{
+				if (deathEffect != null)
+				{
+					Instantiate(deathEffect, transform.position, transform.rotation, null);
+				}
+			}
+
+			// Do on death events
+			if (eventsOnDeath != null)
+			{
+				eventsOnDeath.Invoke();
+			}
+
+			OnEnemyHealthSystemRemoved(this);
+
+		}
+		public void Load(HealthData healthData)
+		{
+			CurrentHealth = healthData._currentHealth;
+			maximumHealth = healthData._maxHealth;
+		}
+
+		public HealthData Save()
+		{
+			HealthData healthData = new HealthData(CurrentHealth, maximumHealth);
+			return healthData;
+		}
+	}
 }
 

@@ -402,5 +402,15 @@ namespace Schoolwork.UI
                 }
             }
         }
-    }
+
+        public void Save()
+		{
+            SaveSystem.SaveGameData(GameManager.Instance.player.gameObject, GameManager.Instance.enemySystem.Enemies);
+		}
+
+		public void Load()
+		{
+            SaveSystem.LoadGame();
+        }
+	}
 }

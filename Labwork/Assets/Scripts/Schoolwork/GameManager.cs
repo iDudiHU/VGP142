@@ -20,6 +20,8 @@ namespace Schoolwork
 		public WeaponSystem weaponSystem = null;
 		[Tooltip("The HealthSystem component which manages the current players health")]
 		public LevelSystem levelSystem = null;
+		[Tooltip("The HealthSystem component which manages the current players health")]
+		public EnemySystem enemySystem = null;
 
 		[FormerlySerializedAs("m_mainCamera")] public Camera mainCamera = null;
 		
