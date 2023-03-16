@@ -1,75 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Schoolwork.Helpers
+/// <summary>
+/// Based on the Unity Community Singleton code sample, but adjusted to work
+/// with MonoBehaviors.
+/// Inherit from this with the pattern NewClass : SingletonMB<NewClass>
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public abstract class PersistentSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    /// <summary>
-    /// A static instance is similar to a singleton, but instead of destroying any new
-    /// instances, it overrides the current instance. This is handy for resetting the state
-    /// and saves you doing it manually
-    /// </summary>
-    public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
-    {
-        private static T _instance;
+    // check to see if we're about to be destroyed
+    private static bool _shuttingDown = false;
+    private static object _lock = new object();
 
-        public static T Instance
+    private static T _instance;
+    // access singleton instance through this property
+    // Lazy Instantiation!
+    public static T Instance
+    {
+        get
         {
-            get
+            // if we're already shutting down, return null
+            if (_shuttingDown)
+            {
+                Debug.LogWarning("[Singleton] Instance '" + typeof(T)
+                    + "'already destroyed. Returning null.");
+                return null;
+            }
+            // ensure only one instance completes the code block, so we can assign the first instance safely
+            lock (_lock)
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<T>();
+                    // search for existing instance.
+                    _instance = (T)FindObjectOfType(typeof(T));
+                    // create new instance if one doesn't already exist
                     if (_instance == null)
                     {
-                        GameObject singleton = new GameObject();
-                        _instance = singleton.AddComponent<T>();
-                        singleton.name = typeof(T).ToString() + " (Singleton)";
+                        // need to create a new GameObject to attach Singleton component to
+                        GameObject singletonGameObject = new GameObject();
+                        _instance = singletonGameObject.AddComponent<T>();
+                        singletonGameObject.name = typeof(T).ToString() + " (Singleton)";
+                        // make instance persistent
+                        DontDestroyOnLoad(singletonGameObject);
                     }
                 }
+
                 return _instance;
             }
         }
-
-        protected virtual void Awake()
-        {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            _instance = this as T;
-            DontDestroyOnLoad(gameObject);
-        }
-
-        protected virtual void OnApplicationQuit()
-        {
-            _instance = null;
-        }
     }
 
-    /// <summary>
-    /// This transforms the static instance into a basic singleton. This will destroy any new
-    /// versions created, leaving the original instance intact
-    /// </summary>
-    public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
+    private void OnApplicationQuit()
     {
-        protected override void Awake()
-        {
-            if (Instance != null && Instance != this) Destroy(gameObject);
-            base.Awake();
-        }
+        _shuttingDown = true;
     }
 
-    /// <summary>
-    /// Finally we have a persistent version of the singleton. This will survive through scene
-    /// loads. Perfect for system classes which require stateful, persistent data. Or audio sources
-    /// where music plays through loading screens, etc
-    /// </summary>
-    public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
+    private void OnDestroy()
     {
-        protected override void Awake()
-        {
-            base.Awake();
-            DontDestroyOnLoad(gameObject);
-        }
+        _shuttingDown = true;
     }
 }

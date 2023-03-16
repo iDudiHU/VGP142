@@ -3,7 +3,7 @@ using Schoolwork.Helpers;
 
 namespace Schoolwork
 {
-    public class KickStarter : Singleton<KickStarter>
+    public class KickStarter : PersistentSingleton<KickStarter>
     {
         public GameObject globalPlayer;
         // Start is called before the first frame update
