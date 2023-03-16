@@ -9,13 +9,40 @@ namespace Schoolwork.Helpers
     /// </summary>
     public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public static T Instance { get; set; }
-        protected virtual void Awake() => Instance = this as T;
+        private static T _instance;
+
+        public static T Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<T>();
+                    if (_instance == null)
+                    {
+                        GameObject singleton = new GameObject();
+                        _instance = singleton.AddComponent<T>();
+                        singleton.name = typeof(T).ToString() + " (Singleton)";
+                    }
+                }
+                return _instance;
+            }
+        }
+
+        protected virtual void Awake()
+        {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
 
         protected virtual void OnApplicationQuit()
         {
-            Instance = null;
-            Destroy(gameObject);
+            _instance = null;
         }
     }
 
@@ -27,7 +54,7 @@ namespace Schoolwork.Helpers
     {
         protected override void Awake()
         {
-            if (Instance != null) Destroy(gameObject);
+            if (Instance != null && Instance != this) Destroy(gameObject);
             base.Awake();
         }
     }
@@ -46,5 +73,3 @@ namespace Schoolwork.Helpers
         }
     }
 }
-
-

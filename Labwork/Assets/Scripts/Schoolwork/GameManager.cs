@@ -41,6 +41,7 @@ namespace Schoolwork
 			Cursor.visible = false;
 			KeyRing.ClearKeyRing();
 			SceneLoadSystem.SceneLoaded += OnSceneLoaded;
+			mainCamera = Camera.main;
 		}
 
 		private void OnSceneLoaded()
