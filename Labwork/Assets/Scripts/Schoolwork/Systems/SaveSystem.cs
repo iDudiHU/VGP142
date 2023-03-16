@@ -85,10 +85,8 @@ namespace Schoolwork.Systems
 					int enemyIndex = GameManager.Instance.enemySystem.EnemiesGuids.IndexOf(enemyData.Id);
 					if (enemyIndex != -1)
 					{
-						// Load the enemy's data
-						GameObject.Destroy(GameManager.Instance.enemySystem.Enemies[enemyIndex].gameObject, 1.0f);
-						//GameManager.Instance.enemySystem.Enemies[enemyIndex].Load(enemyData);
-						GameManager.Instance.enemySystem.SpawnEnemy(enemyData);
+						GameManager.Instance.enemySystem.Enemies[enemyIndex].Load(enemyData);
+						//GameManager.Instance.enemySystem.SpawnEnemy(enemyData);
 					}
 					else
 					{

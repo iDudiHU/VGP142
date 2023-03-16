@@ -22,7 +22,7 @@ namespace Schoolwork
 		public string Id => id;
 
 		[ContextMenu("Generate id")]
-		private void GenerateId()
+		public void GenerateId()
 		{
 			if (String.IsNullOrEmpty(id))
 			{
@@ -79,7 +79,6 @@ namespace Schoolwork
 		private bool isPlayerDead;
 		void Start()
 		{
-			GenerateId();
 			navMeshAgent = GetComponent<NavMeshAgent>();
 			player = GameObject.FindGameObjectWithTag("Player");
 			TPC = GameManager.Instance.player.GetComponent<ThirdPersonCharacter>();
