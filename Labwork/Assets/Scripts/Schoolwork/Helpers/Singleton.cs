@@ -2,35 +2,47 @@ using UnityEngine;
 
 namespace Schoolwork.Helpers
 {
-    public abstract class Singleton<T> : MonoBehaviour where T : Component
+    /// <summary>
+    /// A static instance is similar to a singleton, but instead of destroying any new
+    /// instances, it overrides the current instance. This is handy for resetting the state
+    /// and saves you doing it manually
+    /// </summary>
+    public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     {
-        static T instance;
+        public static T Instance { get; set; }
+        protected virtual void Awake() => Instance = this as T;
 
-        public static T Instance
+        protected virtual void OnApplicationQuit()
         {
-            get
-            {
-                if (!instance)
-                    instance = FindObjectOfType<T>();
-
-                if (!instance) {
-                    GameObject obj = new GameObject();
-                    obj.name = typeof(T).Name;
-                    instance = obj.AddComponent<T>();
-                }
-
-                return instance;
-            }
+            Instance = null;
+            Destroy(gameObject);
         }
+    }
 
-        protected virtual void Awake()
+    /// <summary>
+    /// This transforms the static instance into a basic singleton. This will destroy any new
+    /// versions created, leaving the original instance intact
+    /// </summary>
+    public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
+    {
+        protected override void Awake()
         {
-            if (!instance) {
-                instance = this as T;
-                DontDestroyOnLoad(gameObject);
-            } else {
-                Destroy(gameObject);
-            }
+            if (Instance != null) Destroy(gameObject);
+            base.Awake();
+        }
+    }
+
+    /// <summary>
+    /// Finally we have a persistent version of the singleton. This will survive through scene
+    /// loads. Perfect for system classes which require stateful, persistent data. Or audio sources
+    /// where music plays through loading screens, etc
+    /// </summary>
+    public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
+    {
+        protected override void Awake()
+        {
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
         }
     }
 }

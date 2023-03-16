@@ -4,15 +4,37 @@ using UnityEngine.SceneManagement;
 
 namespace Schoolwork.Systems 
 {
-    public class SceneLoadSystem : MonoBehaviour
+    public static class SceneLoadSystem
     {
-		public void LoadLevel1()
+		public static string SceneToLoad;
+		public static string LoadingScreen = "LoadScene";
+		public static AsyncOperation LoadSceneAsync(string levelName, bool loadFromSave)
 		{
-			LoadScene("Level1");
+			GameManager.LoadedFromSave = loadFromSave;
+			return SceneManager.LoadSceneAsync(levelName);
 		}
-		public void LoadScene(string levelName)
+		public static AsyncOperation LoadSceneAsync(string levelName)
 		{
-			SceneManager.LoadScene(levelName);
+			return LoadSceneAsync(levelName, false);
+		}
+		public static void LoadScene(string levelName, bool loadFromSave)
+		{
+			LoadLoadingScreen(levelName, loadFromSave);
+		}
+		public static void LoadScene(string levelName)
+		{
+			LoadLoadingScreen(levelName, false);
+		}
+		private static void LoadLoadingScreen(string levelName, bool loadFromSave)
+		{
+			GameManager.LoadedFromSave = loadFromSave;
+			SceneToLoad = levelName;
+			SceneManager.LoadScene(LoadingScreen);
+		}
+		public static void LoadSceneButton(string levelName)
+		{
+			SceneToLoad = levelName;
+			LoadScene(LoadingScreen, false);
 		}
 	}
 }

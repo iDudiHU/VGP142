@@ -33,17 +33,11 @@ namespace Schoolwork.Systems
 
         private void Awake()
         {
+            SetupGameManagerReference();
         }
-        private void OnEnable()
+        private void SetupGameManagerReference()
         {
-            SetupGameManagerLevelSystem();
-        }
-        private void SetupGameManagerLevelSystem()
-        {
-            if (GameManager.Instance != null && GameManager.Instance.levelSystem == null)
-            {
-                GameManager.Instance.levelSystem = this;
-            }
+            GameManager.Instance.levelSystem = this;
         }
         public void AddExperience(float enemyExperience)
         {

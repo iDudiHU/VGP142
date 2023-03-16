@@ -2,27 +2,21 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.SceneManagement;
 
 namespace Schoolwork.Systems
 {
-	public class SaveSystem: MonoBehaviour
+	public static class SaveSystem
 	{
-		public GameData gameData;
-		string savePath;
+		static GameData gameData;
+		static string savePath;
 
-		public void Awake()
+		static SaveSystem()
 		{
-			SetupGameManagerSaveSystem();
 			savePath = Application.persistentDataPath + "/Saves/savegame.json";
 		}
-		private void SetupGameManagerSaveSystem()
-		{
-			if (GameManager.Instance != null && GameManager.Instance.saveSystem == null)
-			{
-				GameManager.Instance.saveSystem = this;
-			}
-		}
-		public void SaveGame()
+
+		private static void SaveGameFile()
 		{
 			string SAVE_FOLDER = Application.persistentDataPath + "/Saves/";
 			if (!Directory.Exists(SAVE_FOLDER))
@@ -35,7 +29,7 @@ namespace Schoolwork.Systems
 			Debug.Log(json);
 		}
 
-		public GameData LoadGameData()
+		private static GameData LoadGameData()
 		{
 			if (File.Exists(savePath))
 			{
@@ -48,43 +42,67 @@ namespace Schoolwork.Systems
 				return null;
 			}
 		}
-		public void SaveGameData(GameObject player, List<Enemy> enemies)
+
+		public static void SaveGame()
 		{
+			string currentSceneName = SceneManager.GetActiveScene().name;
+			GameObject player = GameManager.Instance.player.gameObject;
+			List<Enemy> enemies = GameManager.Instance.enemySystem.Enemies;
 			gameData = new GameData();
+			gameData.sceneToLoad = currentSceneName;
 			player.GetComponent<ThirdPersonCharacter>().Save(ref gameData);
 			List<GameData.EnemyData> enemyDataList = new List<GameData.EnemyData>();
 			foreach (Enemy enemy in enemies)
 			{
 				enemy.Save(ref gameData);
 			}
-			SaveGame();
+			SaveGameFile();
 		}
-
-		public void LoadGame()
+		public static void LoadGame()
 		{
 			GameData gameData = LoadGameData();
+			SceneLoadSystem.LoadScene(gameData.sceneToLoad, true);
+		}
+
+		public static void OnSceneLoaded()
+		{
+			string currentSceneName = SceneManager.GetActiveScene().name;
+			GameData gameData = LoadGameData();
+			if (gameData.sceneToLoad != currentSceneName) return;
 			if (gameData == null)
 			{
 				Debug.Log("No saved game data found.");
 				return;
 			}
-			GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().Load(gameData);
-			List<GameData.EnemyData> enemyDataList = gameData.enemyDataList;
-			foreach (GameData.EnemyData enemyData in enemyDataList)
+			if (GameManager.Instance.player != null)
 			{
-				int enemyIndex = GameManager.Instance.enemySystem.EnemiesGuids.IndexOf(enemyData.Id);
-				if (enemyIndex != -1)
-				{
-					// Load the enemy's data
-					GameManager.Instance.enemySystem.Enemies[enemyIndex].Load(enemyData);
-				}
-				else
-				{
-					// Create a new enemy based on the saved data
-					GameManager.Instance.enemySystem.SpawnEnemy(enemyData);
-				}
+				GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().Load(gameData);
 			}
-			GameManager.UpdateUIElements();
+			List<GameData.EnemyData> enemyDataList = gameData.enemyDataList;
+			if (GameManager.Instance.enemySystem != null && GameManager.Instance.enemySystem.EnemiesGuids.Count > 0)
+			{
+				foreach (GameData.EnemyData enemyData in enemyDataList)
+				{
+					int enemyIndex = GameManager.Instance.enemySystem.EnemiesGuids.IndexOf(enemyData.Id);
+					if (enemyIndex != -1)
+					{
+						// Load the enemy's data
+						GameObject.Destroy(GameManager.Instance.enemySystem.Enemies[enemyIndex].gameObject, 1.0f);
+						//GameManager.Instance.enemySystem.Enemies[enemyIndex].Load(enemyData);
+						GameManager.Instance.enemySystem.SpawnEnemy(enemyData);
+					}
+					else
+					{
+						// Create a new enemy based on the saved data
+						GameManager.Instance.enemySystem.SpawnEnemy(enemyData);
+					}
+				}
+				GameManager.UpdateUIElements();
+			}
+			else
+			{
+				Debug.Log("No player/enemies to load");
+			}
 		}
 	}
 }

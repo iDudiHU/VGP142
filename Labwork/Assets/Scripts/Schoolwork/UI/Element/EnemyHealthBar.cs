@@ -56,17 +56,19 @@ namespace Schoolwork.UI.Element
             //                    && targetViewportPos.y > 0 && targetViewportPos.y < 1
             //                    && targetViewportPos.z > 0 && !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask)
             //                    && health.CurrentHealth < health.maximumHealth);
+            if (health)
+			{
+                bool targetIsVisible = !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask);
 
-            bool targetIsVisible = !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask);
+                Color maskColor = maskImage.color;
+                maskColor.a = targetIsVisible ? 1f : 0f;
+                maskImage.color = maskColor;
 
-            Color maskColor = maskImage.color;
-            maskColor.a = targetIsVisible ? 1f : 0f;
-            maskImage.color = maskColor;
-
-            if (targetIsVisible && renderer.isVisible)
-            {
-                transform.position = (health.transform.position + Vector3.up * positionOffset);
-                transform.LookAt(2 * transform.position - GameManager.Instance.mainCamera.transform.position);
+                if (targetIsVisible && renderer.isVisible)
+                {
+                    transform.position = (health.transform.position + Vector3.up * positionOffset);
+                    transform.LookAt(2 * transform.position - GameManager.Instance.mainCamera.transform.position);
+                }
             }
         }
 

@@ -1,15 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Schoolwork.Helpers;
 using Schoolwork.Systems;
 using Schoolwork.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace Schoolwork
 {
-	public class GameManager : Singleton<GameManager>
+	[DefaultExecutionOrder(-1)]
+	public class GameManager : PersistentSingleton<GameManager>
 	{
 		[Header("References:")]
 		[Tooltip("The UIManager component which manages the current scene's UI")]
@@ -22,25 +25,36 @@ namespace Schoolwork
 		public LevelSystem levelSystem = null;
 		[Tooltip("The HealthSystem component which manages the current players health")]
 		public EnemySystem enemySystem = null;
-		[Tooltip("The HealthSystem component which manages the current players health")]
-		public SaveSystem saveSystem = null;
 
-		[FormerlySerializedAs("m_mainCamera")] public Camera mainCamera = null;
+		public static bool LoadedFromSave = false;
+
+		public Camera mainCamera = null;
 		
 		[Tooltip("The player gameobject")]
 		public GameObject player = null;
     
 		// Start is called before the first frame update
-		void Start()
+		protected override void Awake()
 		{
+			base.Awake();
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			KeyRing.ClearKeyRing();
-			if (mainCamera == null) {
-				mainCamera = Camera.main;
+			LoadingScreen.SceneLoaded += OnSceneLoaded;
+		}
+
+		private void OnSceneLoaded()
+		{
+			Debug.Log("SceneLoadDetected");
+			mainCamera = Camera.main;
+			if (LoadedFromSave)
+			{
+				SaveSystem.OnSceneLoaded();
 			}
 		}
-		
+
+
+
 
 		// Update is called once per frame
 		void Update()
@@ -96,6 +110,10 @@ namespace Schoolwork
 				Instance.uiManager.GoToPageByName("LosePage");
 				Instance.player.GetComponent<ThirdPersonCharacter>().Die();
 			}
+		}
+		private void OnApplicationQuit()
+		{
+			LoadingScreen.SceneLoaded -= OnSceneLoaded;
 		}
 	}	
 }

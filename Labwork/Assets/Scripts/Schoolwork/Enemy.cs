@@ -38,7 +38,7 @@ namespace Schoolwork
 		public Transform target; // The player's transform
 		public GameObject deathEffect;
 		public GameObject player;
-		private ThirdPersonCharacter TPC;
+		public ThirdPersonCharacter TPC;
 		public GameObject experienceDrop;
 		[SerializeField]
 		private float experienceDropValue;
@@ -273,9 +273,12 @@ namespace Schoolwork
 			m_AttackCollider.gameObject.SetActive(false);
 		}
 
-		private void OnDestroy()
+		public void OnDestroy()
 		{
-			TPC.OnPlayerDeath -= TPCOnPlayerDeath;
+			if (TPC)
+			{
+				TPC.OnPlayerDeath -= TPCOnPlayerDeath;
+			}
 		}
 
 		public void OnDamage(float damageAmount)

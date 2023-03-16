@@ -1,4 +1,5 @@
 using Schoolwork;
+using Schoolwork.Helpers;
 using Schoolwork.Systems;
 using System;
 using System.Collections;
@@ -28,14 +29,11 @@ public class EnemySystem : MonoBehaviour
 	}
 	public void OnEnable()
 	{
-		SetupGameManagerEnemySystem();
+		SetupGameManagerReference();
 	}
-	private void SetupGameManagerEnemySystem()
+	private void SetupGameManagerReference()
 	{
-		if (GameManager.Instance != null && GameManager.Instance.enemySystem == null)
-		{
-			GameManager.Instance.enemySystem = this;
-		}
+		GameManager.Instance.enemySystem = this;
 	}
 
 	public void SpawnEnemy(GameData.EnemyData enemyData)

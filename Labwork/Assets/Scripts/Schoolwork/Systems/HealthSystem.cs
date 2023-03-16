@@ -57,15 +57,12 @@ namespace Schoolwork.Systems
 		{
 			if (gameObject.CompareTag("Player"))
 			{
-				SetupGameManagerHealthSystem();
+				SetupGameManagerReference();
 			}
 		}
-		private void SetupGameManagerHealthSystem()
+		private void SetupGameManagerReference()
 		{
-			if (GameManager.Instance != null && GameManager.Instance.healthSystem == null)
-			{
-				GameManager.Instance.healthSystem = this;
-			}
+			GameManager.Instance.healthSystem = this;
 		}
 
 		/// <summary>

@@ -72,7 +72,7 @@ namespace Schoolwork.Systems
 		private void HealthSetup()
 		{
 			CurrentHealth = maximumHealth;
-			OnEnemyHealthSystemAdded(this);
+			OnEnemyHealthSystemAdded?.Invoke(this);
 		}
 
 		/// <summary>
@@ -249,6 +249,6 @@ namespace Schoolwork.Systems
 			data._currentHealth = CurrentHealth;
 			data._maxHealth = maximumHealth;
 		}
-	}
+}
 }
 

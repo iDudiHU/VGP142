@@ -5,6 +5,7 @@ using static Schoolwork.Enemy;
 [System.Serializable]
 public class GameData
 {
+    public string sceneToLoad;
     [System.Serializable]
     public struct TransformData
     {

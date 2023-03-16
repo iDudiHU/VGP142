@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Schoolwork.Systems;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
@@ -21,7 +22,7 @@ namespace Schoolwork.Helpers
         public void LoadLevelByName(string levelToLoadName)
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene(levelToLoadName);
+            SceneLoadSystem.LoadScene(levelToLoadName);
         }
     }
 }
