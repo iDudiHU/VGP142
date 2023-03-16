@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Schoolwork.Helpers;
+using Schoolwork.Music;
 using Schoolwork.Systems;
 using Schoolwork.UI;
 using UnityEngine;
@@ -12,7 +13,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 namespace Schoolwork
 {
 	[DefaultExecutionOrder(-1)]
-	public class GameManager : PersistentSingleton<GameManager>
+	public class GameManager : Singelton<GameManager>
 	{
 		[Header("References:")]
 		[Tooltip("The UIManager component which manages the current scene's UI")]
@@ -37,6 +38,7 @@ namespace Schoolwork
 		protected override void Awake()
 		{
 			base.Awake();
+			MusicManager.Instance?.Play();
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			KeyRing.ClearKeyRing();
