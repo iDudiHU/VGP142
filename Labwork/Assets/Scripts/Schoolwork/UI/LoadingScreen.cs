@@ -26,9 +26,9 @@ namespace Schoolwork.UI
 
 		private IEnumerator LoadSceneAsync()
 		{
-			AsyncOperation asyncLoad = SceneLoadSystem.LoadSceneAsync(SceneLoadSystem.SceneToLoad);
+			AsyncOperation asyncLoad = SceneLoadSystem.LoadSceneAsync(SceneLoadSystem.SceneToLoad, GameManager.LoadedFromSave);
 			//This is to make the load take longer 
-			//asyncLoad.allowSceneActivation = false;
+			asyncLoad.allowSceneActivation = false;
 
 			// Initialize timer variables
 			float timer = 0f;
@@ -54,12 +54,12 @@ namespace Schoolwork.UI
 					timer += Time.deltaTime;
 				}
 
-				// Allow scene activation after waiting for the specified time
-				//if (timer >= waitTime)
-				//{
-				//	asyncLoad.allowSceneActivation = true;
-				//}
-				Time.timeScale = 1.0f;
+				//Allow scene activation after waiting for the specified time
+				if (timer >= waitTime)
+					{
+						asyncLoad.allowSceneActivation = true;
+						Time.timeScale = 1.0f;
+				}
 				yield return null;
 			}
 		}

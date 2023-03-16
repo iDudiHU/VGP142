@@ -40,17 +40,17 @@ namespace Schoolwork
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			KeyRing.ClearKeyRing();
-			LoadingScreen.SceneLoaded += OnSceneLoaded;
+			SceneLoadSystem.SceneLoaded += OnSceneLoaded;
 		}
 
 		private void OnSceneLoaded()
 		{
-			Debug.Log("SceneLoadDetected");
 			mainCamera = Camera.main;
 			if (LoadedFromSave)
 			{
 				SaveSystem.OnSceneLoaded();
 			}
+			UpdateUIElements();
 		}
 
 
@@ -113,7 +113,7 @@ namespace Schoolwork
 		}
 		private void OnApplicationQuit()
 		{
-			LoadingScreen.SceneLoaded -= OnSceneLoaded;
+			SceneLoadSystem.SceneLoaded -= OnSceneLoaded;
 		}
 	}	
 }

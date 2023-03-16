@@ -25,7 +25,6 @@ namespace Schoolwork.Systems
 			}
 			string json = JsonUtility.ToJson(gameData, true);
 			File.WriteAllText(savePath, json);
-			Debug.Log(savePath);
 			Debug.Log(json);
 		}
 

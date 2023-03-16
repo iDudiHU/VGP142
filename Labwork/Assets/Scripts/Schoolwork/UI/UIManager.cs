@@ -122,7 +122,6 @@ namespace Schoolwork.UI
 		private void SetupGameManagerReference()
 		{
 			GameManager.Instance.uiManager = this;
-			Debug.Log($"I triggered in scene {SceneManager.GetActiveScene().name}");
 		}
 
 		/// <summary>

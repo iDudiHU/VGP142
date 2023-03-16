@@ -56,7 +56,7 @@ namespace Schoolwork.UI.Element
             //                    && targetViewportPos.y > 0 && targetViewportPos.y < 1
             //                    && targetViewportPos.z > 0 && !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask)
             //                    && health.CurrentHealth < health.maximumHealth);
-            if (health)
+            if (health && GameManager.Instance.mainCamera != null)
 			{
                 bool targetIsVisible = !Physics.Linecast(GameManager.Instance.mainCamera.transform.position, health.transform.position, layerMask);
 
