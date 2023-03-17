@@ -460,6 +460,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_MoveSpeedMultiplier = data.player.leveledStats.walkSpeed;
 			m_SprintSpeedMultiplier = data.player.leveledStats.printSpeed;
 			m_AnimSpeedMultiplier = data.player.leveledStats.attackSpeed;
+			m_Animator.SetFloat("AttackSpeed", m_AttackAnimSpeedMultiplier);
 			m_JumpPower = data.player.leveledStats.jumpHeight;
 
 		}

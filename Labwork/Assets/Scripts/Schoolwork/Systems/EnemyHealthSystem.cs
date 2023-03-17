@@ -18,6 +18,7 @@ namespace Schoolwork.Systems
 	{
 		public static event Action<EnemyHealthSystem> OnEnemyHealthSystemAdded = delegate { };
 		public static event Action<EnemyHealthSystem> OnEnemyHealthSystemRemoved = delegate { };
+		public static event Action OnHealthLost;
 		[Header("Team Settings")]
 		[Tooltip("The team associated with this damage")]
 		public int teamId = 1;
@@ -134,7 +135,7 @@ namespace Schoolwork.Systems
 					go.GetComponent<DamageNumberIndicator>().Initialize(damageAmount);
 					go.transform.SetParent(GameManager.Instance.uiManager.worldSpaceUICanvas.transform);
 				}
-
+				OnHealthLost?.Invoke();
 				eventsOnHit?.Invoke();
 				timeToBecomeDamagableAgain = Time.time + invincibilityTime;
 				isInvincableFromDamage = true;

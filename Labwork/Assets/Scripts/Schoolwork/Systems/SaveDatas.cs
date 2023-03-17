@@ -6,6 +6,7 @@ using static Schoolwork.Enemy;
 public class GameData
 {
     public string sceneToLoad;
+    public int enemySpawned;
     [System.Serializable]
     public struct TransformData
     {

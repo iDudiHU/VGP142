@@ -41,16 +41,16 @@ namespace Schoolwork.Music
 		}
 		public void SwitchToIdle()
 		{
-			if (audioSource == null || soundtrack == null)
+			if (audioSource != null || soundtrack != null && audioSource.clip != soundtrack.tracks[1])
 				StartCoroutine(FadeOutAndIn(soundtrack.tracks[1]));
 		}
 		public void SwitchToCombat()
 		{
-			if (audioSource == null || soundtrack == null)
+			if (audioSource != null || soundtrack != null && audioSource.clip != soundtrack.tracks[2])
 				StartCoroutine(FadeOutAndIn(soundtrack.tracks[2]));
 		}
 
-		private IEnumerator FadeOutAndIn(AudioClip newTrack, float fadeTime = 1.0f)
+		private IEnumerator FadeOutAndIn(AudioClip newTrack, float fadeTime = 0.5f)
 		{
 			float startingVolume = audioSource.volume;
 			float targetVolume = 0.0f;

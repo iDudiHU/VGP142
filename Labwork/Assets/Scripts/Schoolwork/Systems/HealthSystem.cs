@@ -15,6 +15,7 @@ namespace Schoolwork.Systems
 {
 	public class HealthSystem : MonoBehaviour
 	{
+		public static Action OnHealthLost;
 		[Header("Team Settings")]
 		[Tooltip("The team associated with this damage")]
 		public int teamId = 0;
@@ -184,6 +185,7 @@ namespace Schoolwork.Systems
 				{
 					Instantiate(hitEffect, transform.position, transform.rotation, null);
 				}
+				OnHealthLost?.Invoke();
 				eventsOnHit?.Invoke();
 				timeToBecomeDamagableAgain = Time.time + invincibilityTime;
 				isInvincableFromDamage = true;

@@ -31,6 +31,9 @@ namespace Schoolwork
 		public CollectibleSystem collectibleSystem = null;
 		public CheckpointleSystem checkpointSystem = null;
 
+		private float lastCombatTime = 0f;
+		private float combatTimeout = 10f;
+
 		public static bool LoadedFromSave = false;
 
 		public Camera mainCamera = null;
@@ -47,6 +50,8 @@ namespace Schoolwork
 			Cursor.visible = false;
 			KeyRing.ClearKeyRing();
 			SceneLoadSystem.SceneLoaded += OnSceneLoaded;
+			EnemyHealthSystem.OnHealthLost += OnHealthLost;
+			HealthSystem.OnHealthLost += OnHealthLost;
 			mainCamera = Camera.main;
 			gameState = GameState.Menu;
 		}
@@ -61,14 +66,20 @@ namespace Schoolwork
 			MusicManager.Instance.SwitchToIdle();
 			UpdateUIElements();
 		}
-
+		private void OnHealthLost()
+		{
+			SwitchState(GameState.Combat);
+		}
 
 
 
 		// Update is called once per frame
 		void Update()
 		{
-        
+			if (gameState == GameState.Combat && Time.time - lastCombatTime > combatTimeout)
+			{
+				SwitchState(GameState.Idle);
+			}
 		}
 		/// <summary>
 		/// Description:
@@ -166,9 +177,11 @@ namespace Schoolwork
 					break;
 				case GameState.Idle:
 					MusicManager.Instance.SwitchToIdle();
+					lastCombatTime = Time.time;
 					break;
 				case GameState.Combat:
 					MusicManager.Instance.SwitchToCombat();
+					lastCombatTime = Time.time;
 					break;
 				default:
 					Debug.LogError("Invalid game state");

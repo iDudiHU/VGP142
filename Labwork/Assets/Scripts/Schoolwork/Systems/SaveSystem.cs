@@ -45,11 +45,13 @@ namespace Schoolwork.Systems
 		public static void SaveGame()
 		{
 			string currentSceneName = SceneManager.GetActiveScene().name;
+			int enemiesSpawned = GameManager.Instance.enemySystem.enemySpawned;
 			GameObject player = GameManager.Instance.player.gameObject;
 			List<Enemy> enemies = GameManager.Instance.enemySystem.Enemies;
 			List<Helpers.PickUp> pickups = GameManager.Instance.collectibleSystem.collectibles;
 			gameData = new GameData();
 			gameData.sceneToLoad = currentSceneName;
+			gameData.enemySpawned = enemiesSpawned;
 			player.GetComponent<ThirdPersonCharacter>().Save(ref gameData);
 			List<GameData.EnemyData> enemyDataList = new List<GameData.EnemyData>();
 			foreach (Enemy enemy in enemies)
@@ -74,6 +76,7 @@ namespace Schoolwork.Systems
 			string currentSceneName = SceneManager.GetActiveScene().name;
 			GameData gameData = LoadGameData();
 			if (gameData.sceneToLoad != currentSceneName) return;
+			GameManager.Instance.enemySystem.enemySpawned = gameData.enemySpawned;
 			if (gameData == null)
 			{
 				Debug.Log("No saved game data found.");

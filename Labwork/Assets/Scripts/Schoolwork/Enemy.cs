@@ -77,6 +77,14 @@ namespace Schoolwork
 		public float distThreshhold;
 		public float coneAngle = 120f;
 		private bool isPlayerDead;
+
+		void Awake()
+		{
+			if (String.IsNullOrEmpty(Id))
+			{
+				GenerateId();
+			}
+		}
 		void Start()
 		{
 			navMeshAgent = GetComponent<NavMeshAgent>();

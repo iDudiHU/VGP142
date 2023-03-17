@@ -7,27 +7,11 @@ namespace Schoolwork
 	public class EnemySpawner : MonoBehaviour
 	{
 		public GameObject[] enemyPrefabs;
-		public float spawnInterval = 5f;
-		private int m_EnemySpawned = 0;
-		public int MaxEnemyToSpawn = 5;
 
-		private float lastSpawnTime;
-
-		void Update()
-		{
-			if (Time.time - lastSpawnTime > spawnInterval) {
-				lastSpawnTime = Time.time;
-				SpawnEnemy();
-				if (m_EnemySpawned > MaxEnemyToSpawn)
-					Destroy(gameObject);
-			}
-		}
-
-		void SpawnEnemy()
+		public void SpawnEnemy()
 		{
 			Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-.5f, .5f), 0, Random.Range(-.5f, .5f));
-			Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
-			m_EnemySpawned++;
+			GameObject go = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
 		}
 
 		private void OnDrawGizmos()
