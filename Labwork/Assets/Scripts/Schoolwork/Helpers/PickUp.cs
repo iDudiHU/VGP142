@@ -26,7 +26,7 @@ namespace Schoolwork.Helpers
         [Tooltip("The effect to create when this pickup is collected")]
         public GameObject pickUpEffect;
 
-		public void Awake()
+		public virtual void Awake()
 		{
             PickupCreated?.Invoke(this);
         }
@@ -49,17 +49,9 @@ namespace Schoolwork.Helpers
             //Collectible Data
             collectibleData.Id = Id;
             //TransformData
-            collectibleData.transformData.posX = transform.position.x;
-            collectibleData.transformData.posY = transform.position.y;
-            collectibleData.transformData.posZ = transform.position.z;
-
-            collectibleData.transformData.rotX = transform.rotation.x;
-            collectibleData.transformData.rotY = transform.rotation.y;
-            collectibleData.transformData.rotZ = transform.rotation.z;
-
-            collectibleData.transformData.scaleX = transform.localScale.x;
-            collectibleData.transformData.scaleY = transform.localScale.y;
-            collectibleData.transformData.scaleZ = transform.localScale.z;
+            collectibleData.transformData.position = transform.position;
+            collectibleData.transformData.rotation = transform.rotation;
+            collectibleData.transformData.scale = transform.localScale;
 
             data.collectibleDataList.Add(collectibleData);
         }
@@ -75,11 +67,11 @@ namespace Schoolwork.Helpers
             // Else load enemy data
             GameData.CollectibleData matchingCollectible = data.collectibleDataList.FirstOrDefault(c => c.Id == this.Id);
             //Set position
-            transform.position = new Vector3(matchingCollectible.transformData.posX, matchingCollectible.transformData.posY, matchingCollectible.transformData.posZ);
+            transform.position = matchingCollectible.transformData.position;
             //Set rotation
-            transform.localRotation = Quaternion.Euler(matchingCollectible.transformData.rotX, matchingCollectible.transformData.rotY, matchingCollectible.transformData.rotZ);
+            transform.localRotation = matchingCollectible.transformData.rotation;
             //Set scale
-            transform.localScale = new Vector3(matchingCollectible.transformData.scaleX, matchingCollectible.transformData.scaleY, matchingCollectible.transformData.scaleZ);
+            transform.localScale = matchingCollectible.transformData.scale;
         }
 
 		public void OnDestroy()

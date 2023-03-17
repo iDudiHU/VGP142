@@ -9,21 +9,17 @@ public class GameData
     [System.Serializable]
     public struct TransformData
     {
-        public float posX;
-        public float posY;
-        public float posZ;
-        public float rotX;
-        public float rotY;
-        public float rotZ;
-        public float scaleX;
-        public float scaleY;
-        public float scaleZ;
+        public Vector3 position;
+        public Quaternion rotation;
+        public Vector3 scale;
     }
     [System.Serializable]
     public struct HealthData
     {
         public float _currentHealth;
         public float _maxHealth;
+        public int _currentLives;
+        public TransformData respawnPoint;
     }
     [System.Serializable]
     public struct LevelData
@@ -34,11 +30,20 @@ public class GameData
         public int _attributePoints;
     }
     [System.Serializable]
+    public struct LeveledStats
+	{
+        public float walkSpeed;
+        public float printSpeed;
+        public float attackSpeed;
+        public float jumpHeight;
+	}
+    [System.Serializable]
     public class PlayerData
     {
         public TransformData transformData;
         public HealthData healthData;
         public LevelData levelData;
+        public LeveledStats leveledStats;
         public string currentWeapon;
         public HashSet<int> keyRing;
 

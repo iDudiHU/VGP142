@@ -10,7 +10,7 @@ namespace Schoolwork.Helpers
     public static class KeyRing
     {
         // The IDs of the keys held by the player
-        private static HashSet<int> keyIDs = new HashSet<int>() { };
+        public static HashSet<int> keyIDs = new HashSet<int>() { };
 
         /// <summary>
         /// Description:
@@ -50,14 +50,14 @@ namespace Schoolwork.Helpers
             keyIDs.Clear();
         }
 
-        public static void Save(ref GameData data)
-		{
-            data.player.keyRing = keyIDs;
-        }
-        public static void Load(ref GameData data)
-        {
-            keyIDs = data.player.keyRing;
-        }
+  //      public static void Save(ref GameData data)
+		//{
+  //          data.player.keyRing = keyIDs;
+  //      }
+  //      public static void Load(ref GameData data)
+  //      {
+  //          keyIDs = data.player.keyRing;
+  //      }
     }
 }
 

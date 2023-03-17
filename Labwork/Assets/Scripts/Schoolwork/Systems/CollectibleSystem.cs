@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Schoolwork.Systems
 {
+	[DefaultExecutionOrder(-1)]
 	public class CollectibleSystem : MonoBehaviour
 	{
 		public List<PickUp> collectibles = new List<PickUp>();

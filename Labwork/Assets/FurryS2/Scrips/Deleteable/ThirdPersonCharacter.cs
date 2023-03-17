@@ -381,10 +381,18 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		public void Die()
 		{
 				m_Animator.SetTrigger("Death");
-				GetComponent<Rigidbody>().isKinematic = true;
+				//GetComponent<Rigidbody>().isKinematic = true;
 				isAlive = false;
 				if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
-				Destroy(transform.parent.gameObject, 3);
+				//Destroy(transform.parent.gameObject, 3);
+		}
+		public void Respawn()
+		{
+			m_Animator.Rebind();
+			//GetComponent<Rigidbody>().isKinematic = true;
+			isAlive = true;
+			if (OnPlayerDeath != null) OnPlayerDeath(this, EventArgs.Empty);
+			//Destroy(transform.parent.gameObject, 3);
 		}
 		public void IncreaseAttackAnimationSpeed()
 		{
@@ -435,34 +443,32 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		{
 			GameData.PlayerData playerData = data.player;
 			//Set position
-			transform.position = new Vector3(playerData.transformData.posX, playerData.transformData.posY, playerData.transformData.posZ);
+			transform.position = playerData.transformData.position;
 			//Set rotation
-			transform.localRotation = Quaternion.Euler(playerData.transformData.rotX, playerData.transformData.rotY, playerData.transformData.rotZ);
+			transform.localRotation = playerData.transformData.rotation;
 			//Set scale
-			transform.localScale = new Vector3(playerData.transformData.scaleX, playerData.transformData.scaleY, playerData.transformData.scaleZ);
+			transform.localScale = playerData.transformData.scale;
 			//Set health
 			GetComponent<HealthSystem>().Load(playerData.healthData);
 			//Set level
 			GetComponent<LevelSystem>().Load(playerData.levelData);
 			//Set weapon
 			GameManager.Instance.weaponSystem.Load(ref playerData);
-			KeyRing.Load(ref data);
+			//KeyRing.Load(ref data);
 			GameManager.UpdateUIElements();
+			//Load leveled stats
+			m_MoveSpeedMultiplier = data.player.leveledStats.walkSpeed;
+			m_SprintSpeedMultiplier = data.player.leveledStats.printSpeed;
+			m_AnimSpeedMultiplier = data.player.leveledStats.attackSpeed;
+			m_JumpPower = data.player.leveledStats.jumpHeight;
+
 		}
 		public void Save(ref GameData data)
 		{
 			//TransformData
-			data.player.transformData.posX = transform.position.x;
-			data.player.transformData.posY = transform.position.y;
-			data.player.transformData.posZ = transform.position.z;
-
-			data.player.transformData.rotX = transform.rotation.x;
-			data.player.transformData.rotY = transform.rotation.y;
-			data.player.transformData.rotZ = transform.rotation.z;
-
-			data.player.transformData.scaleX = transform.localScale.x;
-			data.player.transformData.scaleY = transform.localScale.y;
-			data.player.transformData.scaleZ = transform.localScale.z;
+			data.player.transformData.position = transform.position;
+			data.player.transformData.rotation = transform.rotation;
+			data.player.transformData.scale = transform.localScale;
 			//HealthData
 			GetComponent<HealthSystem>().Save(ref data);
 			//playerData.healthData._currentHealth = GetComponent<HealthSystem>().currentHealth;
@@ -470,7 +476,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			//LevelData
 			GetComponent<LevelSystem>().Save(ref data);
 			GameManager.Instance.weaponSystem.Save(ref data);
-			KeyRing.Save(ref data);
+			//KeyRing.Save(ref data);
+			//Save Leveled data;
+			data.player.leveledStats.walkSpeed = m_MoveSpeedMultiplier;
+			data.player.leveledStats.printSpeed = m_SprintSpeedMultiplier;
+			data.player.leveledStats.attackSpeed = m_AnimSpeedMultiplier;
+			data.player.leveledStats.jumpHeight = m_JumpPower;
 		}
 	}
 }

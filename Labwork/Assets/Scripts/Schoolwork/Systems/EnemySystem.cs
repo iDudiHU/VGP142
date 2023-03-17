@@ -38,7 +38,7 @@ public class EnemySystem : MonoBehaviour
 
 	public void SpawnEnemy(GameData.EnemyData enemyData)
 	{
-		GameObject enemyObject = Instantiate(GetEnemyPrefab(enemyData.enemyType), new Vector3(enemyData.transformData.posX, enemyData.transformData.posY, enemyData.transformData.posZ), Quaternion.Euler(enemyData.transformData.rotX, enemyData.transformData.rotY, enemyData.transformData.posZ));
+		GameObject enemyObject = Instantiate(GetEnemyPrefab(enemyData.enemyType), enemyData.transformData.position, Quaternion.Euler(enemyData.transformData.rotation.x, enemyData.transformData.rotation.y, enemyData.transformData.rotation.z));
 		enemyObject.GetComponentInChildren<Enemy>().Load(enemyData);
 	}
 	public GameObject GetEnemyPrefab(EnemyTypes enemyType)

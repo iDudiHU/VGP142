@@ -8,11 +8,8 @@ namespace Schoolwork.Helpers
         public UnityEvent onPlayerEnter;
         void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
-            {
                 onPlayerEnter.Invoke();
                 Time.timeScale = 0;
-            }
         }
     }
 }

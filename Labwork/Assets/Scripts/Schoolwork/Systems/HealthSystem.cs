@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 /// <summary>
 /// This class handles the health state of a game object.
@@ -32,13 +33,13 @@ namespace Schoolwork.Systems
 
 		[Header("Lives settings")]
 		[Tooltip("Whether or not to use lives")]
-		public bool useLives = false;
+		public bool useLives = true;
 		[Tooltip("Current number of lives this health has")]
 		public int currentLives = 3;
 		[Tooltip("The maximum number of lives this health has")]
 		public int maximumLives = 5;
 		[Tooltip("The amount of time to wait before respawning")]
-		public float respawnWaitTime = 3f;
+		public float respawnWaitTime = 1f;
 
 		/// <summary>
 		/// Description:
@@ -50,7 +51,7 @@ namespace Schoolwork.Systems
 		/// </summary>
 		void Start()
 		{
-			SetRespawnPoint(transform.position);
+			SetRespawnPoint(transform.position, transform.rotation);
 		}
 
 		private void OnEnable()
@@ -124,6 +125,7 @@ namespace Schoolwork.Systems
 
 		// The position that the health's gameobject will respawn at
 		private Vector3 respawnPosition;
+		private Quaternion respawnRotation;
 		/// <summary>
 		/// Description:
 		/// Changes the respawn position to a new position
@@ -133,9 +135,10 @@ namespace Schoolwork.Systems
 		/// void (no return)
 		/// </summary>
 		/// <param name="newRespawnPosition">The new position to respawn at</param>
-		public void SetRespawnPoint(Vector3 newRespawnPosition)
+		public void SetRespawnPoint(Vector3 newRespawnPosition, Quaternion newRespawnRotation)
 		{
-			//respawnPosition = newRespawnPosition;
+			respawnPosition = newRespawnPosition;
+			respawnRotation = newRespawnRotation;
 		}
 
 		/// <summary>
@@ -148,7 +151,16 @@ namespace Schoolwork.Systems
 		/// </summary>
 		void Respawn()
 		{
-
+			if (GetComponent<ThirdPersonCharacter>() != null)
+			{
+				GetComponent<ThirdPersonCharacter>().enabled = false;
+				transform.position = respawnPosition;
+				transform.rotation = respawnRotation;
+				GetComponent<ThirdPersonCharacter>().enabled = true;
+				GetComponent<ThirdPersonCharacter>().Respawn();
+			}
+			currentHealth = maximumHealth;
+			GameManager.UpdateUIElements();
 		}
 
 		/// <summary>
@@ -295,7 +307,7 @@ namespace Schoolwork.Systems
 			{
 				eventsOnDeath.Invoke();
 			}
-
+			GetComponent<ThirdPersonCharacter>().Die();
 			if (useLives)
 			{
 				currentLives -= 1;
@@ -336,21 +348,24 @@ namespace Schoolwork.Systems
 		/// </summary>
 		public void GameOver()
 		{
-			if (GameManager.Instance != null && gameObject.tag == "Player")
-			{
-				GameManager.GameOver();
-			}
+			GameManager.GameOver();
 		}
 		public void Load(GameData.HealthData healthData)
 		{
 			currentHealth = healthData._currentHealth;
 			maximumHealth = healthData._maxHealth;
+			currentLives = healthData._currentLives;
+			//Set RespawnPoint
+			SetRespawnPoint(healthData.respawnPoint.position, healthData.respawnPoint.rotation);
 		}
 
 		public void Save(ref GameData data)
 		{
 			data.player.healthData._currentHealth = currentHealth;
 			data.player.healthData._maxHealth =	maximumHealth;
+			data.player.healthData._currentLives = currentLives;
+			data.player.healthData.respawnPoint.position = respawnPosition;
+			data.player.healthData.respawnPoint.rotation = respawnRotation;
 		}
 	}
 }

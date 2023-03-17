@@ -125,11 +125,9 @@ namespace Schoolwork
 		private void TPCOnPlayerDeath(object sender, EventArgs e)
 		{
 			navMeshAgent.ResetPath();
-			isPlayerDead = true;
 			target = null;
 			currentState = EnemyState.Patrol;
 			target = path[0].transform;
-			TPC.OnPlayerDeath -= TPCOnPlayerDeath;
 
 		}
 
@@ -290,11 +288,11 @@ namespace Schoolwork
 			currentState = data.currentState;
 
 			//Set position
-			transform.position = new Vector3(data.transformData.posX, data.transformData.posY, data.transformData.posZ);
+			transform.position = data.transformData.position;
 			//Set rotation
-			transform.localRotation = Quaternion.Euler(data.transformData.rotX, data.transformData.rotY, data.transformData.rotZ);
+			transform.localRotation = data.transformData.rotation;
 			//Set scale
-			transform.localScale = new Vector3(data.transformData.scaleX, data.transformData.scaleY, data.transformData.scaleZ);
+			transform.localScale = data.transformData.scale;
 			//Set health
 			GetComponent<EnemyHealthSystem>().Load(ref data);
 		}
@@ -305,17 +303,9 @@ namespace Schoolwork
 			enemyData.Id = Id;
 			enemyData.enemyType = enemyType;
 			//TransformData
-			enemyData.transformData.posX = transform.position.x;
-			enemyData.transformData.posY = transform.position.y;
-			enemyData.transformData.posZ = transform.position.z;
-
-			enemyData.transformData.rotX = transform.rotation.x;
-			enemyData.transformData.rotY = transform.rotation.y;
-			enemyData.transformData.rotZ = transform.rotation.z;
-
-			enemyData.transformData.scaleX = transform.localScale.x;
-			enemyData.transformData.scaleY = transform.localScale.y;
-			enemyData.transformData.scaleZ = transform.localScale.z;
+			enemyData.transformData.position = transform.position;
+			enemyData.transformData.rotation = transform.rotation;
+			enemyData.transformData.scale = transform.localScale;
 			//HealthData
 			GetComponent<EnemyHealthSystem>().Save(ref enemyData.healthData);
 			//Add to the list

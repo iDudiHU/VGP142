@@ -29,6 +29,7 @@ namespace Schoolwork
 		[Tooltip("The HealthSystem component which manages the current players health")]
 		public EnemySystem enemySystem = null;
 		public CollectibleSystem collectibleSystem = null;
+		public CheckpointleSystem checkpointSystem = null;
 
 		public static bool LoadedFromSave = false;
 

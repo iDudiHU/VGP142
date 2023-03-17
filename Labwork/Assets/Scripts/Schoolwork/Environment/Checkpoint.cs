@@ -35,24 +35,26 @@ namespace Schoolwork
         if (collision.tag == "Player" && collision.gameObject.GetComponent<HealthSystem>() != null)
         {
             HealthSystem playerHealth = collision.gameObject.GetComponent<HealthSystem>();
-            playerHealth.SetRespawnPoint(respawnLocation.position);
+            respawnLocation = playerHealth.transform;
+            playerHealth.SetRespawnPoint(respawnLocation.position, respawnLocation.rotation);
+            SaveSystem.SaveGame();
 
             // Reset the last checkpoint if it exists
-            if (CheckpointTracker.currentCheckpoint != null)
+            if (CheckpointleSystem.currentCheckpoint != null)
             {
-                if (CheckpointTracker.currentCheckpoint.checkpointAnimator != null)
+                if (CheckpointleSystem.currentCheckpoint.checkpointAnimator != null)
                 {
-                    CheckpointTracker.currentCheckpoint.checkpointAnimator.SetBool(animatorActiveParameter, false);
+                        CheckpointleSystem.currentCheckpoint.checkpointAnimator.SetBool(animatorActiveParameter, false);
                 }
             }
 
-            if (CheckpointTracker.currentCheckpoint != this && checkpointActivationEffect != null)
+            if (CheckpointleSystem.currentCheckpoint != this && checkpointActivationEffect != null)
             {
                 Instantiate(checkpointActivationEffect, transform.position, Quaternion.identity, null);
             }
 
             // Set current checkpoint to this and set up its animation
-            CheckpointTracker.currentCheckpoint = this;
+            CheckpointleSystem.currentCheckpoint = this;
             if (checkpointAnimator != null)
             {
                 checkpointAnimator.SetBool(animatorActiveParameter, true);
