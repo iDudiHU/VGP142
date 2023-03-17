@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Soundtrack
   m_EditorClassIdentifier: 
   tracks:
-  - {fileID: 8300000, guid: ebc4bf488bf1fbf488b0f9a8dc7e846f, type: 3}
+  - {fileID: 8300000, guid: bdbd6ba4d8ad841cf9f349bf625566db, type: 3}
+  - {fileID: 8300000, guid: 247a4fd1957c64f2dacda97ece667b9a, type: 3}
+  - {fileID: 8300000, guid: a5e781efd4f6e4309b0367131a10893d, type: 3}

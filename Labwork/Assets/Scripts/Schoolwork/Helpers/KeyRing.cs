@@ -49,6 +49,15 @@ namespace Schoolwork.Helpers
         {
             keyIDs.Clear();
         }
+
+        public static void Save(ref GameData data)
+		{
+            data.player.keyRing = keyIDs;
+        }
+        public static void Load(ref GameData data)
+        {
+            keyIDs = data.player.keyRing;
+        }
     }
 }
 

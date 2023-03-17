@@ -18,15 +18,12 @@ namespace Schoolwork.UI.Element
         public float updateSpeedSeconds = 0.5f;
         private void Awake()
         {
-            _LevelSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<LevelSystem>();
             expSlider = GetComponent<Slider>();
+            _LevelSystem = GameManager.Instance.levelSystem;
         }
         private void Start()
         {
-            if (_LevelSystem == null && (GameManager.Instance != null && GameManager.Instance.player != null))
-            {
-                _LevelSystem = GameManager.Instance.player.GetComponent<LevelSystem>();
-            }
+            _LevelSystem = GameManager.Instance.levelSystem;
             UpdateUI();
         }
         
@@ -52,7 +49,8 @@ namespace Schoolwork.UI.Element
         {
             float startExp;
             float currentExp;
-            float.TryParse(currentExpTMP.text, out startExp);
+            bool parseSuccess = float.TryParse(currentExpTMP.text, out startExp);
+            startExp = parseSuccess ? startExp : 0f;
             float elapsed = .0f;
             while (elapsed < updateSpeedSeconds) {
                 elapsed += Time.deltaTime;

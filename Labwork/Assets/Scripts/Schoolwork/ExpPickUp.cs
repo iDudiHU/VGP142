@@ -12,15 +12,10 @@ namespace Schoolwork
         public float experienceValue;
         [SerializeField]
         private float lerpDuration = 1.5f;
-        private GameObject player;
         private bool isPickedUp;
         public AnimationCurve animCurve;
         public LayerMask layerMask;
 
-        private void Awake()
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-        }
 
         public void Init(float expValue)
         {
@@ -41,12 +36,12 @@ namespace Schoolwork
         {
             float time = 0;
             Vector3 startPosition = transform.position;
-            Vector3 targetPosition = player.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
+            Vector3 targetPosition = GameManager.Instance.player.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
             while (time < duration)
             {
                 float t = time / lerpDuration;
                 t = animCurve.Evaluate(t);
-                targetPosition = player.transform.position + new Vector3(0.0f, 1.0f, 0.0f); // update target position
+                targetPosition = GameManager.Instance.player.transform.position + new Vector3(0.0f, 1.0f, 0.0f); // update target position
                 transform.position = Vector3.Lerp(startPosition, targetPosition, t);
                 time += Time.deltaTime;
                 yield return null;

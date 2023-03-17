@@ -36,7 +36,7 @@ namespace Schoolwork.Systems
             }
         }
 
-        public void ChangeWeapon(WeaponTypes weaponTypeToChangeTo)
+        public void ChangeWeapon(WeaponTypes weaponTypeToChangeTo, bool useAnim = true)
         {
             switch (weaponTypeToChangeTo)
             {
@@ -48,17 +48,17 @@ namespace Schoolwork.Systems
                 case WeaponTypes.Bow:
                     currentWeapon = WeaponTypes.Bow;
                     displaySprite = bowSprite;
-                    GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().PickupBow();
+                    GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().PickupBow(useAnim);
                     break;
                 case WeaponTypes.Staff:
                     currentWeapon = WeaponTypes.Staff;
                     displaySprite = staffSprite;
-                    GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().PickupUpStaff();
+                    GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().PickupUpStaff(useAnim);
                     break;
                 case WeaponTypes.Combined:
                     currentWeapon = WeaponTypes.Combined;
                     displaySprite = combinedSprite;
-                    GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().EquipAllWeapons();
+                    GameManager.Instance.player.GetComponent<ThirdPersonCharacter>().EquipAllWeapons(useAnim);
                     break;
             }
             GameManager.UpdateUIElements();
@@ -67,6 +67,20 @@ namespace Schoolwork.Systems
         private void Start()
         {
             SetupGameManagerWeaponSystem();
+        }
+
+        public void Save(ref GameData data)
+		{
+            data.player.currentWeapon =  CurrentWeaponName;
+        }
+
+        public void Load(ref GameData.PlayerData data)
+		{
+            WeaponTypes weaponType;
+            if (Enum.TryParse(data.currentWeapon, out weaponType))
+            {
+                ChangeWeapon(weaponType, false);
+            }
         }
     }
 }

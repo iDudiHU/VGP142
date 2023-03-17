@@ -331,19 +331,25 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-		public void PickupBow()
+		public void PickupBow(bool useAnim = true)
 		{
 			UnequipAllWeapons();
-			m_Animator.Play("Pickup");
+			if (useAnim)
+			{
+				m_Animator.Play("Pickup");
+			}
 			m_Animator.SetBool("HasBow", true);
 			m_Bow.SetActive(true);
 			m_IsHandEmpty = false;
 		}
 
-		public void PickupUpStaff()
+		public void PickupUpStaff(bool useAnim = true)
 		{
 			UnequipAllWeapons();
-			m_Animator.Play("Pickup");
+			if (useAnim)
+			{
+				m_Animator.Play("Pickup");
+			}
 			m_Animator.SetBool("HasStaff", true);
 			m_Staff.SetActive(true);
 			m_IsHandEmpty = false;
@@ -358,10 +364,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_IsHandEmpty = true;
 		}
 
-		public void EquipAllWeapons()
+		public void EquipAllWeapons(bool useAnim = true)
 		{
 			UnequipAllWeapons();
-			m_Animator.Play("Pickup");
+			if (useAnim)
+			{
+				m_Animator.Play("Pickup");
+			}
 			m_Animator.SetBool("HasBow", true);
 			m_Animator.SetBool("HasStaff", true);
 			m_Bow.SetActive(true);
@@ -435,6 +444,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			GetComponent<HealthSystem>().Load(playerData.healthData);
 			//Set level
 			GetComponent<LevelSystem>().Load(playerData.levelData);
+			//Set weapon
+			GameManager.Instance.weaponSystem.Load(ref playerData);
+			KeyRing.Load(ref data);
+			GameManager.UpdateUIElements();
 		}
 		public void Save(ref GameData data)
 		{
@@ -456,6 +469,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			//playerData.healthData._maxHealth = GetComponent<HealthSystem>().maximumHealth;
 			//LevelData
 			GetComponent<LevelSystem>().Save(ref data);
+			GameManager.Instance.weaponSystem.Save(ref data);
+			KeyRing.Save(ref data);
 		}
 	}
 }

@@ -47,6 +47,7 @@ namespace Schoolwork.Systems
 			string currentSceneName = SceneManager.GetActiveScene().name;
 			GameObject player = GameManager.Instance.player.gameObject;
 			List<Enemy> enemies = GameManager.Instance.enemySystem.Enemies;
+			List<Helpers.PickUp> pickups = GameManager.Instance.collectibleSystem.collectibles;
 			gameData = new GameData();
 			gameData.sceneToLoad = currentSceneName;
 			player.GetComponent<ThirdPersonCharacter>().Save(ref gameData);
@@ -54,6 +55,11 @@ namespace Schoolwork.Systems
 			foreach (Enemy enemy in enemies)
 			{
 				enemy.Save(ref gameData);
+			}
+			List<GameData.CollectibleData> collectibleDataList = new List<GameData.CollectibleData>();
+			foreach (Helpers.PickUp pickup in pickups)
+			{
+				pickup.Save(ref gameData);
 			}
 			SaveGameFile();
 		}
@@ -99,6 +105,21 @@ namespace Schoolwork.Systems
 			else
 			{
 				Debug.Log("No player/enemies to load");
+			}
+			List<GameData.CollectibleData> collectibleDataList = gameData.collectibleDataList;
+			List<Helpers.PickUp> pickups = GameManager.Instance.collectibleSystem.collectibles;
+			if (GameManager.Instance.collectibleSystem != null && GameManager.Instance.collectibleSystem.collectibleGuids.Count > 0)
+			{
+				foreach (Helpers.PickUp pickup in pickups)
+				{
+					//Call this on that Pickup Object that has the same Id as collectible.id
+						pickup.Load(gameData);
+				}
+				GameManager.UpdateUIElements();
+			}
+			else
+			{
+				Debug.Log("No collectibles load");
 			}
 		}
 	}

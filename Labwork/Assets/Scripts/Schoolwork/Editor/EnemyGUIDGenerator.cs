@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System;
+using Schoolwork.Helpers;
 
 namespace Schoolwork.Editor
 {
@@ -17,6 +18,7 @@ namespace Schoolwork.Editor
             if (GUILayout.Button("Generate Enemy GUIDs"))
             {
                 GenerateEnemyGUIDs();
+                GeneratePickupGUIDs();
             }
         }
 
@@ -30,6 +32,22 @@ namespace Schoolwork.Editor
                 {
                     enemy.GenerateId();
                     EditorUtility.SetDirty(enemy);
+                }
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        private void GeneratePickupGUIDs()
+        {
+            var pickups = GameObject.FindObjectsOfType<PickUp>();
+
+            foreach (var pickup in pickups)
+            {
+                if (String.IsNullOrEmpty(pickup.Id))
+                {
+                    pickup.GenerateId();
+                    EditorUtility.SetDirty(pickup);
                 }
             }
 

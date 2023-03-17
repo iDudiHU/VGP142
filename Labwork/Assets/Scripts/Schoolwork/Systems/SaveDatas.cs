@@ -39,6 +39,8 @@ public class GameData
         public TransformData transformData;
         public HealthData healthData;
         public LevelData levelData;
+        public string currentWeapon;
+        public HashSet<int> keyRing;
 
     }
     [System.Serializable]
@@ -50,8 +52,15 @@ public class GameData
         public HealthData healthData;
         public EnemyState currentState;
     }
+    [System.Serializable]
+    public class CollectibleData
+	{
+        public string Id;
+        public TransformData transformData;
+    }
     public PlayerData player = new PlayerData();
     public List<EnemyData> enemyDataList = new List<EnemyData>();
+    public List<CollectibleData> collectibleDataList = new List<CollectibleData>();
 }
 
 

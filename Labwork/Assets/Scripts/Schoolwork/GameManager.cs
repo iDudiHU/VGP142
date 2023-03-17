@@ -15,6 +15,8 @@ namespace Schoolwork
 	[DefaultExecutionOrder(-1)]
 	public class GameManager : Singelton<GameManager>
 	{
+		[Header("GameState:")]
+		public static GameState gameState;
 		[Header("References:")]
 		[Tooltip("The UIManager component which manages the current scene's UI")]
 		public UIManager uiManager = null;
@@ -26,6 +28,7 @@ namespace Schoolwork
 		public LevelSystem levelSystem = null;
 		[Tooltip("The HealthSystem component which manages the current players health")]
 		public EnemySystem enemySystem = null;
+		public CollectibleSystem collectibleSystem = null;
 
 		public static bool LoadedFromSave = false;
 
@@ -44,6 +47,7 @@ namespace Schoolwork
 			KeyRing.ClearKeyRing();
 			SceneLoadSystem.SceneLoaded += OnSceneLoaded;
 			mainCamera = Camera.main;
+			gameState = GameState.Menu;
 		}
 
 		private void OnSceneLoaded()
@@ -53,6 +57,7 @@ namespace Schoolwork
 			{
 				SaveSystem.OnSceneLoaded();
 			}
+			MusicManager.Instance.SwitchToIdle();
 			UpdateUIElements();
 		}
 
@@ -114,9 +119,71 @@ namespace Schoolwork
 				Instance.player.GetComponent<ThirdPersonCharacter>().Die();
 			}
 		}
+		public void SwitchState(GameState newState)
+		{
+			switch (newState)
+			{
+				case GameState.Menu:
+					// Do any necessary setup for the menu state
+					break;
+				case GameState.Idle:
+					// Do any necessary setup for the idle state
+					break;
+				case GameState.Combat:
+					// Do any necessary setup for the combat state
+					break;
+				default:
+					Debug.LogError("Invalid game state");
+					return;
+			}
+
+			// Perform any necessary cleanup for the current state
+			switch (gameState)
+			{
+				case GameState.Menu:
+					// Do any necessary cleanup for the menu state
+					break;
+				case GameState.Idle:
+					// Do any necessary cleanup for the idle state
+					break;
+				case GameState.Combat:
+					// Do any necessary cleanup for the combat state
+					break;
+				default:
+					Debug.LogError("Invalid game state");
+					return;
+			}
+
+			// Set the new game state
+			gameState = newState;
+
+			// Perform any necessary actions for the new state
+			switch (gameState)
+			{
+				case GameState.Menu:
+					// Do any necessary actions for the menu state
+					break;
+				case GameState.Idle:
+					MusicManager.Instance.SwitchToIdle();
+					break;
+				case GameState.Combat:
+					MusicManager.Instance.SwitchToCombat();
+					break;
+				default:
+					Debug.LogError("Invalid game state");
+					return;
+			}
+		}
+
 		private void OnApplicationQuit()
 		{
 			SceneLoadSystem.SceneLoaded -= OnSceneLoaded;
 		}
-	}	
+	}
+	public enum GameState
+	{
+		Menu,
+		Idle,
+		Combat
+	}
 }

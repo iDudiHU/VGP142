@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Schoolwork.Helpers;
+using Schoolwork.Music;
 using Schoolwork.Systems;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,6 +39,11 @@ namespace Schoolwork.UI
 		public GameObject clickEffect;
 		[Tooltip("The effect to create when the player is backing out of a Menu page")]
 		public GameObject backEffect;
+		public GameObject startGameEffect;
+		public GameObject winEffect;
+		public GameObject loseEffect;
+		public GameObject levelUpEffect;
+		public GameObject spendAttributeEffect;
 		public GameObject worldSpaceUICanvas;
 
 		// Whether the application is paused
@@ -72,7 +78,7 @@ namespace Schoolwork.UI
 		/// </summary>
 		public void CreateBackEffect()
 		{
-			if (backEffect)
+			if (backEffect && MusicManager.Instance)
 			{
 				Instantiate(backEffect, transform.position, Quaternion.identity, null);
 			}
@@ -88,9 +94,45 @@ namespace Schoolwork.UI
 		/// </summary>
 		public void CreateClickEffect()
 		{
-			if (clickEffect)
+			if (clickEffect && MusicManager.Instance)
 			{
 				Instantiate(clickEffect, transform.position, Quaternion.identity, null);
+			}
+		}
+
+		public void CreateStartGameEffect()
+		{
+			if (startGameEffect && MusicManager.Instance)
+			{
+				Instantiate(startGameEffect, transform.position, Quaternion.identity, null);
+			}
+		}
+		public void CreateWinEffect()
+		{
+			if (winEffect && MusicManager.Instance)
+			{
+				Instantiate(winEffect, transform.position, Quaternion.identity, null);
+			}
+		}
+		public void CreateLoseEffect()
+		{
+			if (loseEffect && MusicManager.Instance)
+			{
+				Instantiate(loseEffect, transform.position, Quaternion.identity, null);
+			}
+		}
+		public void CreateLevelUpEffect()
+		{
+			if (levelUpEffect && MusicManager.Instance)
+			{
+				Instantiate(levelUpEffect, transform.position, Quaternion.identity, null);
+			}
+		}
+		public void CreateSpendAttributeEffect()
+		{
+			if (spendAttributeEffect && MusicManager.Instance)
+			{
+				Instantiate(spendAttributeEffect, transform.position, Quaternion.identity, null);
 			}
 		}
 
@@ -104,7 +146,7 @@ namespace Schoolwork.UI
 		/// </summary>
 		public void CreateNavigationEffect()
 		{
-			if (navigationEffect)
+			if (navigationEffect && MusicManager.Instance)
 			{
 				Instantiate(navigationEffect, transform.position, Quaternion.identity, null);
 			}
