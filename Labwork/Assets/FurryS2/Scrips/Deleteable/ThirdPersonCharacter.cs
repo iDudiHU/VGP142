@@ -149,7 +149,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public void ItemInRangeCollision(Collider other)
 		{
-			other.gameObject.GetComponent<IPickupable>().DoInRange();
+			IPickupable pickupable = other.gameObject.GetComponent<IPickupable>();
+			if(pickupable != null){
+				other.gameObject.GetComponent<IPickupable>().DoInRange();
+			}
 		}
 
 		public void PickUpItem(Collider other)

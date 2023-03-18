@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Schoolwork.Enemy;
+using static Schoolwork.Enemies.Enemy;
 
 [System.Serializable]
 public class GameData

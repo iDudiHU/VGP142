@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.SceneManagement;
+using Schoolwork.Enemies;
 
 namespace Schoolwork.Systems
 {

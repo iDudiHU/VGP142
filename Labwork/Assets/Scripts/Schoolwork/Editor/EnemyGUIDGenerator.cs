@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using Schoolwork.Helpers;
+using Schoolwork.Enemies;
 
 namespace Schoolwork.Editor
 {

@@ -8730,29 +8730,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 8936569896815075770}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a6baffa3ecfab846ae030635d60cfa9, type: 3}
+  m_Script: {fileID: 11500000, guid: 628aaa708a914d647854d69873d45ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 
-  enemyType: 2
-  target: {fileID: 0}
+  enemyType: 0
+  target: {x: 0, y: 0, z: 0}
   deathEffect: {fileID: 1651363388222792, guid: a32d87b33cadfed4b83eeaa564eb7724, type: 3}
   player: {fileID: 0}
   TPC: {fileID: 0}
   experienceDrop: {fileID: 5175686087464223680, guid: 2b4d872ba9bca374cbb9d6d96deaf6d9, type: 3}
   experienceDropValue: 10
-  m_damage: 3
+  m_damage: 5
   m_AttackCollider: {fileID: 3988962520406659489}
   playerLayerMask:
     serializedVersion: 2
-    m_Bits: 137
-  chaseDefaultLength: 1
+    m_Bits: 128
+  chaseDefaultLength: 2
   currentState: 1
   vision: 8
   path: []
   pathIndex: 0
   distThreshhold: 0
-  coneAngle: 60
+  coneAngle: 120
 --- !u!136 &4253489865265014796
 CapsuleCollider:
   m_ObjectHideFlags: 0
