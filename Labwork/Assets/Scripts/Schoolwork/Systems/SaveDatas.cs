@@ -53,6 +53,9 @@ public class GameData
     public class EnemyData
     {
         public string Id;
+        public List<Vector3> patrolPaths;
+        public int patrolIndex;
+        public Vector3 target;
         public EnemyTypes enemyType;
         public TransformData transformData;
         public HealthData healthData;

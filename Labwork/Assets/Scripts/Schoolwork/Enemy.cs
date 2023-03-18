@@ -35,7 +35,7 @@ namespace Schoolwork
 			Anubis, Demon, Fishman
 		}
 		public EnemyTypes enemyType = EnemyTypes.Anubis;
-		public Transform target; // The player's transform
+		public Vector3 target; // The player's transform
 		public GameObject deathEffect;
 		public GameObject player;
 		public ThirdPersonCharacter TPC;
@@ -69,10 +69,8 @@ namespace Schoolwork
 		private float timeSinceLastAttack;
 		public EnemyState currentState = EnemyState.Patrol;
 		public float vision = 8f;
-		[SerializeField]
-		private GameObject WaypointHolder;
 
-		public List<GameObject> path = new List<GameObject>();
+		public List<Vector3> path = new List<Vector3>();
 		public int pathIndex;
 		public float distThreshhold;
 		public float coneAngle = 120f;
@@ -89,6 +87,7 @@ namespace Schoolwork
 		{
 			navMeshAgent = GetComponent<NavMeshAgent>();
 			player = GameObject.FindGameObjectWithTag("Player");
+			target = transform.position;
 			TPC = GameManager.Instance.player.GetComponent<ThirdPersonCharacter>();
 			TPC.OnPlayerDeath += TPCOnPlayerDeath;
 			m_Animator = GetComponentInChildren<Animator>();
@@ -104,23 +103,23 @@ namespace Schoolwork
 				throw;
 			}
 
-			if (path.Count <= 0)
-			{
-				Transform parentTransform = WaypointHolder.transform;
+			//if (path.Count <= 0)
+			//{
+			//	Transform parentTransform = WaypointHolder.transform;
 
-				// Iterate over all of the child transforms
-				for (int i = 0; i < parentTransform.childCount; i++)
-				{
-					Transform childTransform = parentTransform.GetChild(i);
+			//	// Iterate over all of the child transforms
+			//	for (int i = 0; i < parentTransform.childCount; i++)
+			//	{
+			//		Transform childTransform = parentTransform.GetChild(i);
 
-					// Check if the child has the "patrol" tag
-					if (childTransform.CompareTag("Patrol"))
-					{
-						GameObject patrolObject = childTransform.gameObject;
-						path.Add(patrolObject);
-					}
-				}
-			}
+			//		// Check if the child has the "patrol" tag
+			//		if (childTransform.CompareTag("Patrol"))
+			//		{
+			//			GameObject patrolObject = childTransform.gameObject;
+			//			path.Add(patrolObject);
+			//		}
+			//	}
+			//}
 
 			if (distThreshhold <= 0)
 			{
@@ -133,9 +132,9 @@ namespace Schoolwork
 		private void TPCOnPlayerDeath(object sender, EventArgs e)
 		{
 			navMeshAgent.ResetPath();
-			target = null;
+			target = transform.position;
 			currentState = EnemyState.Patrol;
-			target = path[0].transform;
+			target = path[0];
 
 		}
 
@@ -167,16 +166,16 @@ namespace Schoolwork
 			if (currentState == EnemyState.Die)
 			{
 				navMeshAgent.ResetPath();
-				target = null;
+				target = transform.position;
 			}
 			if (currentState == EnemyState.Patrol)
 			{
-				if (navMeshAgent.remainingDistance < distThreshhold && !navMeshAgent.pathPending)
+				if (navMeshAgent.remainingDistance < distThreshhold && !navMeshAgent.pathPending || (navMeshAgent.velocity.magnitude < 1 && navMeshAgent.remainingDistance < distThreshhold + 1))
 				{
-					pathIndex++;
+					pathIndex = Random.Range(0, path.Count);
 					pathIndex %= path.Count;
 
-					target = path[pathIndex].transform;
+					target = path[pathIndex];
 				}
 				if (navMeshAgent.velocity.magnitude > 0 && !isPlayerDead)
 				{
@@ -188,7 +187,7 @@ namespace Schoolwork
 			{
 				if (currentState == EnemyState.Chase)
 				{
-					target = player.transform;
+					target = player.transform.position;
 					if (Vector3.Distance(player.transform.position, transform.position) <= 2 && (Time.time - timeSinceLastAttack > m_attackDelay))
 					{
 						StartCoroutine(AttackCoroutine("attack" + Random.Range(1, 4).ToString()));
@@ -206,23 +205,23 @@ namespace Schoolwork
 					if (Time.time - timeSinceLastChase > chaseDefaultLength)
 					{
 						currentState = EnemyState.Patrol;
-						target = path[pathIndex].transform;
+						target = path[pathIndex];
 					}
 				}
 				else
 				{
 					currentState = EnemyState.Patrol;
-					target = path[pathIndex].transform;
+					target = path[pathIndex];
 				}
 			}
 			else
 			{
 				currentState = EnemyState.Patrol;
-				target = path[pathIndex].transform;
+				target = path[pathIndex];
 			}
 
-			if (target)
-				navMeshAgent.SetDestination(target.position);
+			if (target != transform.position)
+				navMeshAgent.SetDestination(target);
 		}
 
 		private bool IsPlayerVisible()
@@ -294,6 +293,8 @@ namespace Schoolwork
 		{
 			// Else load enemy data
 			currentState = data.currentState;
+			path = data.patrolPaths;
+			pathIndex = data.patrolIndex;
 
 			//Set position
 			transform.position = data.transformData.position;
@@ -316,6 +317,9 @@ namespace Schoolwork
 			enemyData.transformData.scale = transform.localScale;
 			//HealthData
 			GetComponent<EnemyHealthSystem>().Save(ref enemyData.healthData);
+			//Save Patrol Path and current path index
+			enemyData.patrolPaths = path;
+			enemyData.patrolIndex = pathIndex;
 			//Add to the list
 			data.enemyDataList.Add(enemyData);
 		}

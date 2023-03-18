@@ -4832,7 +4832,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 85455188b71fea741bd0b80cbe893384, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9733,7 +9732,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 0ae5b07cb509ca04ab936aa7e86e8ce9, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14571,7 +14569,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c10ff1214bc1c924182ac2e22d4f5cda, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19454,7 +19451,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 38f885e4ae2b4e74b85ed321e5394417, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -24292,7 +24288,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c10ff1214bc1c924182ac2e22d4f5cda, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29130,7 +29125,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c10ff1214bc1c924182ac2e22d4f5cda, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29192,8 +29186,8 @@ GameObject:
   - component: {fileID: 4655547709252508}
   - component: {fileID: 198845406268734442}
   - component: {fileID: 199192043801697384}
-  - component: {fileID: 82453843726367806}
-  - component: {fileID: 114204700283069442}
+  - component: {fileID: 6046725425689227500}
+  - component: {fileID: 3079987343840228655}
   m_Layer: 0
   m_Name: Magic hit
   m_TagString: Untagged
@@ -34042,7 +34036,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ffbf1de599dba82428751c025f3668d9, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -34093,7 +34086,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!82 &82453843726367806
+--- !u!82 &6046725425689227500
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -34102,10 +34095,10 @@ AudioSource:
   m_GameObject: {fileID: 1651363388222792}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6075567143583930134, guid: 2f0802fe0ba5dbb4d894549c17555b39, type: 2}
   m_audioClip: {fileID: 8300000, guid: 80a04f4eb8c56a24c82b1f4314f0ba78, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -34113,7 +34106,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 3
+  MinDistance: 5
   MaxDistance: 50
   Pan2D: 0
   rolloffMode: 0
@@ -34126,12 +34119,12 @@ AudioSource:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -2.5890806
+      outSlope: -2.5890806
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.109433964
     - serializedVersion: 3
       time: 1
       value: 0
@@ -34164,7 +34157,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.041666668
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -34189,7 +34182,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114204700283069442
+--- !u!114 &3079987343840228655
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -34201,12 +34194,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79ba5bb0b3780b4a98ce45e779b6441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Repeating: 0
-  RepeatTime: 2
+  Repeating: 1
+  RepeatTime: 3.5
   StartTime: 0
-  RandomVolume: 1
-  minVolume: 0.2
-  maxVolume: 0.6
+  RandomVolume: 0
+  minVolume: 0.4
+  maxVolume: 1
 --- !u!1 &1654754376462968
 GameObject:
   m_ObjectHideFlags: 0
@@ -39039,7 +39032,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ad117d9f7f62bb94690a823d11b394ad, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -43922,7 +43914,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f70cc5513449bfb4cb538cf5118a4189, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -48805,7 +48796,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 630ddcbab420440459087f91bcd9f4c6, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -68,7 +68,8 @@ namespace Schoolwork
 		}
 		private void OnHealthLost()
 		{
-			SwitchState(GameState.Combat);
+			if(gameState != GameState.Combat)
+				SwitchState(GameState.Combat);
 		}
 
 

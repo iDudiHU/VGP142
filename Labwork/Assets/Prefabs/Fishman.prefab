@@ -59,37 +59,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 8936569896815075769}
---- !u!1 &4537017369594656222
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3497800877989548215}
-  m_Layer: 0
-  m_Name: Patrol (1)
-  m_TagString: Patrol
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3497800877989548215
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4537017369594656222}
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8525756736245861171}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &5222075503489963008
 GameObject:
   m_ObjectHideFlags: 0
@@ -8582,70 +8551,6 @@ Transform:
   m_Father: {fileID: 5222075503490255196}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5711438794124410628
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8525756736245861171}
-  m_Layer: 0
-  m_Name: Patrols
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8525756736245861171
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5711438794124410628}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6452440389133478345}
-  - {fileID: 3497800877989548215}
-  m_Father: {fileID: 8215855449284701440}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6816770607304433544
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6452440389133478345}
-  m_Layer: 0
-  m_Name: Patrol
-  m_TagString: Patrol
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6452440389133478345
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6816770607304433544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8525756736245861171}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6989932672773728056
 GameObject:
   m_ObjectHideFlags: 0
@@ -8752,7 +8657,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8936569896815075775}
-  - {fileID: 8525756736245861171}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8769,6 +8673,7 @@ GameObject:
   - component: {fileID: 8936569896815075769}
   - component: {fileID: 4253489865265014796}
   - component: {fileID: 6686765190126051044}
+  - component: {fileID: 8199809411598444490}
   m_Layer: 6
   m_Name: EnemyFishmanLP
   m_TagString: Untagged
@@ -8804,11 +8709,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_AngularSpeed: 3000
+  m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -8833,6 +8738,7 @@ MonoBehaviour:
   target: {fileID: 0}
   deathEffect: {fileID: 1651363388222792, guid: a32d87b33cadfed4b83eeaa564eb7724, type: 3}
   player: {fileID: 0}
+  TPC: {fileID: 0}
   experienceDrop: {fileID: 5175686087464223680, guid: 2b4d872ba9bca374cbb9d6d96deaf6d9, type: 3}
   experienceDropValue: 10
   m_damage: 3
@@ -8843,7 +8749,6 @@ MonoBehaviour:
   chaseDefaultLength: 1
   currentState: 1
   vision: 8
-  WaypointHolder: {fileID: 5711438794124410628}
   path: []
   pathIndex: 0
   distThreshhold: 0
@@ -8899,4 +8804,29 @@ MonoBehaviour:
         m_CallState: 2
   eventsOnHit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8199809411598444490}
+        m_TargetAssemblyTypeName: CreatePrefabOnEvent, Assembly-CSharp
+        m_MethodName: CreatePrefab
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8199809411598444490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8936569896815075770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba0a879d6162824fb3c77317a6438aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabToCreate: {fileID: 6961012567796429387, guid: b9a66ddfcf6159d4ea4b5ab98c5ecc72, type: 3}

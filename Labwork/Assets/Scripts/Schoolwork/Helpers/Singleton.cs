@@ -14,13 +14,13 @@ public abstract class Singelton<T> : MonoBehaviour where T : Component
         get
         {
             if (!instance)
+			{
                 instance = (T)FindObjectOfType(typeof(T));
-
-            if (!instance)
-            {
-                instance = new GameObject(typeof(T).Name).AddComponent<T>();
-            }
-
+				if (!instance)
+				{
+                    instance = new GameObject(typeof(T).Name).AddComponent<T>();
+				}
+			}
             return instance;
         }
     }

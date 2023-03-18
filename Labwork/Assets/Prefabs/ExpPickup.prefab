@@ -151,7 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70f59d5683fb8c4a985ba85bce4e91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickUpEffect: {fileID: 0}
+  id: 
+  pickUpEffect: {fileID: 6961012567796429387, guid: d56161803cc159048a60dc86c0714371, type: 3}
   experienceValue: 30
   lerpDuration: 1.3
   animCurve:

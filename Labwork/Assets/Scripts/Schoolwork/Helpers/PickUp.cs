@@ -64,7 +64,7 @@ namespace Schoolwork.Helpers
                 Destroy(gameObject);
                 return;
             }
-            // Else load enemy data
+            // Else load pickup data
             GameData.CollectibleData matchingCollectible = data.collectibleDataList.FirstOrDefault(c => c.Id == this.Id);
             //Set position
             transform.position = matchingCollectible.transformData.position;

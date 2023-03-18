@@ -7,11 +7,13 @@ namespace Schoolwork
 	public class EnemySpawner : MonoBehaviour
 	{
 		public GameObject[] enemyPrefabs;
+		public WaypointPath waypoint;
 
 		public void SpawnEnemy()
 		{
 			Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-.5f, .5f), 0, Random.Range(-.5f, .5f));
 			GameObject go = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
+			go.GetComponentInChildren<Enemy>().path = waypoint.PathPoints;
 		}
 
 		private void OnDrawGizmos()

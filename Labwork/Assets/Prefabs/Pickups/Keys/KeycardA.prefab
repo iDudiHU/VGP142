@@ -130,7 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec6de4e84095bd042b0ab8458dff79a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickUpEffect: {fileID: 803067414467860148, guid: 8f97e313230451e40bba76901fdb6947, type: 3}
+  id: 
+  pickUpEffect: {fileID: 6961012567796429387, guid: a3ce0cdb06abe91468008d56ed23520b, type: 3}
   keyID: 0
 --- !u!65 &646776788273526496
 BoxCollider:

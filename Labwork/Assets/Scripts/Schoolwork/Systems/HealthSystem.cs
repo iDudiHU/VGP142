@@ -359,6 +359,7 @@ namespace Schoolwork.Systems
 			currentLives = healthData._currentLives;
 			//Set RespawnPoint
 			SetRespawnPoint(healthData.respawnPoint.position, healthData.respawnPoint.rotation);
+			GameManager.UpdateUIElements();
 		}
 
 		public void Save(ref GameData data)
